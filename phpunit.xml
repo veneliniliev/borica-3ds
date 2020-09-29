@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2020. Venelin Iliev.
+  -->
+
+<phpunit bootstrap="vendor/autoload.php" backupGlobals="false" colors="true">
+    <testsuites>
+        <testsuite name="Borica3ds">
+            <directory>./tests/</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

@@ -1,0 +1,35 @@
+{
+  "name": "veneliniliev/borica-3ds",
+  "description": "Borica 3DS payments gateway",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Venelin Iliev",
+      "email": "venelin@provision.bg"
+    }
+  ],
+  "require": {
+    "php": "^7.1",
+    "ext-mbstring": "*",
+    "ext-openssl": "*",
+    "myclabs/php-enum": "^1.7",
+    "guzzlehttp/guzzle": "^7.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0|^8.0|^9.0",
+    "squizlabs/php_codesniffer": "^3.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "VenelinIliev\\Borica3ds\\": "src/Borica"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "VenelinIliev\\Borica3ds\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  }
+}
