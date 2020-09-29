@@ -1,5 +1,7 @@
 # PHP Borica EMV 3DS
 
+[![Build Status](https://travis-ci.org/veneliniliev/borica-3ds.svg?branch=master)](https://travis-ci.org/veneliniliev/borica-3ds)
+
 ## Requirements
 
 - PHP >= 7.1
