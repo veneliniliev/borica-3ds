@@ -13,7 +13,7 @@
     "ext-mbstring": "*",
     "ext-openssl": "*",
     "myclabs/php-enum": "^1.7",
-    "guzzlehttp/guzzle": "^7.0"
+    "guzzlehttp/guzzle": "^6.0|^7.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0|^8.0|^9.0",

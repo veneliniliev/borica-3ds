@@ -7,13 +7,14 @@ namespace VenelinIliev\Borica3ds\Tests;
 
 use PHPUnit\Framework\TestCase;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
+use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 use VenelinIliev\Borica3ds\Sale;
 
 class SaleTest extends TestCase
 {
     /**
      * @return void
-     * @throws ParameterValidationException
+     * @throws ParameterValidationException|SignatureException
      */
     public function testSignature(): void
     {
