@@ -317,7 +317,7 @@ abstract class Request
             throw new SignatureException(openssl_error_string());
         }
 
-        openssl_free_key($privateKey);
+        openssl_pkey_free($privateKey);
 
         return strtoupper(bin2hex($signature));
     }
