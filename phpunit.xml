@@ -4,9 +4,16 @@
   -->
 
 <phpunit bootstrap="vendor/autoload.php" backupGlobals="false" colors="true">
+    <filter>
+        <whitelist
+                addUncoveredFilesFromWhitelist="true"
+                processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./tests/</directory>
+        </whitelist>
+    </filter>
     <testsuites>
         <testsuite name="Borica3ds">
-            <directory>./tests/</directory>
+            <directory suffix=".php">./tests/</directory>
         </testsuite>
     </testsuites>
 </phpunit>

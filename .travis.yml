@@ -26,4 +26,4 @@ install:
 
 script:
   - vendor/bin/phpcs
-  - vendor/bin/phpunit --coverage-text
+  - travis_retry composer test
