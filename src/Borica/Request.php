@@ -48,16 +48,17 @@ abstract class Request
      * @var string
      */
     private $backRefUrl;
-    /**
-     * @var float
-     */
 
+    /**
+     * @var string|float|integer
+     */
     private $amount = null;
+
     /**
      * @var string
      */
-
     private $currency = 'BGN';
+
     /**
      * @var string
      */
@@ -213,12 +214,12 @@ abstract class Request
     }
 
     /**
-     * @param float $amount
+     * @param string|float|integer $amount
      * @return Request
      */
     public function setAmount($amount)
     {
-        $this->amount = floatval($amount);
+        $this->amount = number_format($amount, 2, '.', '');
         return $this;
     }
 
@@ -319,11 +320,11 @@ abstract class Request
 
         if (PHP_MAJOR_VERSION < 8) {
             /**
-             * deprecated in php 8.0
-             *
+             * @deprecated in PHP 8.0
              * @note The openssl_pkey_free() function is deprecated and no longer has an effect,
              * instead the OpenSSLAsymmetricKey instance is automatically destroyed if it is no
              * longer referenced.
+             * @see https://github.com/php/php-src/blob/master/UPGRADING#L397
              */
             openssl_pkey_free($privateKey);
         }
@@ -341,7 +342,7 @@ abstract class Request
 
     /**
      * @param string $privateKeyPath
-     * @param null $password
+     * @param null   $password
      * @return Request
      */
     public function setPrivateKey($privateKeyPath, $password = null)

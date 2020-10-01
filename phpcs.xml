@@ -25,4 +25,5 @@
     </rule>
     <rule ref="Squiz.Commenting.VariableComment"/>
     <exclude-pattern>vendor</exclude-pattern>
+    <exclude-pattern>tests</exclude-pattern>
 </ruleset>

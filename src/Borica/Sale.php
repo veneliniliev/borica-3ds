@@ -41,6 +41,11 @@ class Sale extends Request implements RequestInterface
     protected $merchantGMT;
 
     /**
+     * @var string
+     */
+    protected $adCustBorOrderId;
+
+    /**
      * Sale constructor.
      */
     public function __construct()
@@ -183,25 +188,24 @@ class Sale extends Request implements RequestInterface
     public function getData()
     {
         return [
-            'NONCE' => strtoupper(bin2hex(openssl_random_pseudo_bytes(16))),
-            'P_SIGN' => $this->generateSignature(),
+                'NONCE' => strtoupper(bin2hex(openssl_random_pseudo_bytes(16))),
+                'P_SIGN' => $this->generateSignature(),
 
-            'TRTYPE' => $this->getTransactionType(),
-            'COUNTRY' => $this->getCountryCode(),
-            'CURRENCY' => $this->getCurrency(),
-            //'ADDENDUM' => '',
-            'MERCH_GMT' => $this->getMerchantGMT(),
+                'TRTYPE' => $this->getTransactionType()->getValue(),
+                'COUNTRY' => $this->getCountryCode(),
+                'CURRENCY' => $this->getCurrency(),
 
-            'ORDER' => $this->getOrder(),
-            'AMOUNT' => $this->getAmount(),
-            'DESC' => $this->getDescription(),
-            'TIMESTAMP' => $this->getSignatureTimestamp(),
+                'MERCH_GMT' => $this->getMerchantGMT(),
 
-            'TERMINAL' => $this->getTerminalID(),
-            'MERCH_URL' => $this->getMerchantUrl(),
-            'BACKREF' => $this->getBackRefUrl(),
-            //'AD.CUST_BOR_ORDER_ID' => '',
-        ];
+                'ORDER' => $this->getOrder(),
+                'AMOUNT' => $this->getAmount(),
+                'DESC' => $this->getDescription(),
+                'TIMESTAMP' => $this->getSignatureTimestamp(),
+
+                'TERMINAL' => $this->getTerminalID(),
+                'MERCH_URL' => $this->getMerchantUrl(),
+                'BACKREF' => $this->getBackRefUrl(),
+            ] + $this->generateAdCustBorOrderId();
     }
 
     /**
@@ -212,7 +216,7 @@ class Sale extends Request implements RequestInterface
     {
         return $this->getSignature([
             $this->getTerminalID(),
-            $this->getTransactionType(),
+            $this->getTransactionType()->getValue(),
             $this->getAmount(),
             $this->getCurrency(),
             $this->getSignatureTimestamp()
@@ -256,6 +260,46 @@ class Sale extends Request implements RequestInterface
     public function setMerchantGMT($merchantGMT)
     {
         $this->merchantGMT = $merchantGMT;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    private function generateAdCustBorOrderId()
+    {
+        $orderString = $this->getOrder();
+
+        if (!empty($this->getAdCustBorOrderId())) {
+            $orderString .= $this->getAdCustBorOrderId();
+        }
+
+        /*
+         * полето не трябва да съдържа символ “;”
+         */
+        $orderString .= str_ireplace(';', '', $orderString);
+
+        return [
+            'AD.CUST_BOR_ORDER_ID' => mb_substr($orderString, 0, 16),
+            'ADDENDUM' => 'AD,TD',
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdCustBorOrderId()
+    {
+        return $this->adCustBorOrderId;
+    }
+
+    /**
+     * @param string $adCustBorOrderId
+     * @return Sale
+     */
+    public function setAdCustBorOrderId($adCustBorOrderId)
+    {
+        $this->adCustBorOrderId = $adCustBorOrderId;
         return $this;
     }
 }
