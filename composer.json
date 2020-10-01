@@ -24,7 +24,7 @@
   },
   "autoload": {
     "psr-4": {
-      "VenelinIliev\\Borica3ds\\": "src/Borica"
+      "VenelinIliev\\Borica3ds\\": "src"
     }
   },
   "autoload-dev": {
