@@ -317,7 +317,16 @@ abstract class Request
             throw new SignatureException(openssl_error_string());
         }
 
-        openssl_pkey_free($privateKey);
+        if (PHP_MAJOR_VERSION < 8) {
+            /**
+             * deprecated in php 8.0
+             *
+             * @note The openssl_pkey_free() function is deprecated and no longer has an effect,
+             * instead the OpenSSLAsymmetricKey instance is automatically destroyed if it is no
+             * longer referenced.
+             */
+            openssl_pkey_free($privateKey);
+        }
 
         return strtoupper(bin2hex($signature));
     }
@@ -332,7 +341,7 @@ abstract class Request
 
     /**
      * @param string $privateKeyPath
-     * @param null   $password
+     * @param null $password
      * @return Request
      */
     public function setPrivateKey($privateKeyPath, $password = null)
