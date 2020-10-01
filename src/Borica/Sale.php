@@ -5,6 +5,7 @@
 
 namespace VenelinIliev\Borica3ds;
 
+use GuzzleHttp\Exception\GuzzleException;
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 
@@ -36,7 +37,7 @@ class Sale extends Request implements RequestInterface
     protected $countryCode;
 
     /**
-     * @var integer
+     * @var string
      */
     protected $merchantGMT;
 
@@ -62,7 +63,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
-     * @param mixed $merchantId
+     * @param mixed $merchantId Merchant ID.
      * @return Sale
      * @throws ParameterValidationException
      */
@@ -84,7 +85,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
-     * @param string $emailAddress
+     * @param string $emailAddress E-mail адрес за уведомления.
      * @return Sale
      * @throws ParameterValidationException
      */
@@ -99,7 +100,9 @@ class Sale extends Request implements RequestInterface
 
     /**
      * @return void
+     * @throws Exceptions\SignatureException
      * @throws ParameterValidationException
+     * @throws GuzzleException
      */
     public function send()
     {
@@ -167,7 +170,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
-     * @param string $merchantUrl
+     * @param string $merchantUrl URL на web сайта на търговеца.
      * @return Sale
      * @throws ParameterValidationException
      */
@@ -232,7 +235,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
-     * @param string $countryCode
+     * @param string $countryCode Двубуквен код на държавата, където се намира магазинът на търговеца.
      * @return Sale
      * @throws ParameterValidationException
      */
@@ -246,7 +249,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
-     * @return integer|null
+     * @return string|null
      */
     public function getMerchantGMT()
     {
@@ -254,7 +257,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
-     * @param integer $merchantGMT
+     * @param string $merchantGMT Отстояние на часовата зона на търговеца от UTC/GMT  (напр. +03).
      * @return Sale
      */
     public function setMerchantGMT($merchantGMT)
@@ -294,7 +297,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
-     * @param string $adCustBorOrderId
+     * @param string $adCustBorOrderId Идентификатор на поръчката за Банката на търговеца във финансовите файлове.
      * @return Sale
      */
     public function setAdCustBorOrderId($adCustBorOrderId)

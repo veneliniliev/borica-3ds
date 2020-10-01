@@ -83,7 +83,7 @@ abstract class Request
     }
 
     /**
-     * @param string $description
+     * @param string $description Описание на поръчката.
      * @return Request
      * @throws ParameterValidationException
      */
@@ -105,7 +105,7 @@ abstract class Request
     }
 
     /**
-     * @param string $backRefUrl
+     * @param string $backRefUrl URL на търговеца за изпращане на резултата от авторизацията.
      * @return Request
      */
     public function setBackRefUrl($backRefUrl)
@@ -123,7 +123,7 @@ abstract class Request
     }
 
     /**
-     * @param mixed $order
+     * @param mixed $order Номер на поръчката за търговеца, 6 цифри, който трябва да бъде уникален за деня.
      * @return Request
      * @throws ParameterValidationException
      */
@@ -174,7 +174,7 @@ abstract class Request
     }
 
     /**
-     * @param mixed $terminalID
+     * @param string $terminalID Terminal ID.
      * @return Request
      * @throws ParameterValidationException
      */
@@ -196,10 +196,10 @@ abstract class Request
     }
 
     /**
-     * @param TransactionType $transactionType
+     * @param TransactionType $transactionType Тип на транзакцията.
      * @return Request
      */
-    public function setTransactionType($transactionType)
+    public function setTransactionType(TransactionType $transactionType)
     {
         $this->transactionType = $transactionType;
         return $this;
@@ -214,7 +214,7 @@ abstract class Request
     }
 
     /**
-     * @param string|float|integer $amount
+     * @param string|float|integer $amount Обща стойност на поръчката по стандарт ISO_4217 с десетичен разделител точка.
      * @return Request
      */
     public function setAmount($amount)
@@ -232,7 +232,7 @@ abstract class Request
     }
 
     /**
-     * @param string $currency
+     * @param string $currency Валута на поръчката: три буквен код на валута по стандарт ISO 4217.
      * @return Request
      * @throws ParameterValidationException
      */
@@ -258,7 +258,7 @@ abstract class Request
     }
 
     /**
-     * @param string|null $signatureTimestamp
+     * @param string|null $signatureTimestamp Дата на подпис/изпращане на данните.
      * @return Request
      */
     public function setSignatureTimestamp($signatureTimestamp = null)
@@ -273,10 +273,10 @@ abstract class Request
     }
 
     /**
-     * @param array $options
+     * @param array $options Options for Client.
      * @return Client
      */
-    protected function getGuzzleClient($options = [])
+    protected function getGuzzleClient(array $options = [])
     {
         return new Client($options);
     }
@@ -291,7 +291,7 @@ abstract class Request
     }
 
     /**
-     * @param array $data
+     * @param array $data Данни върху които да генерира подписа.
      * @return string
      * @throws SignatureException
      */
@@ -341,8 +341,8 @@ abstract class Request
     }
 
     /**
-     * @param string $privateKeyPath
-     * @param null   $password
+     * @param string      $privateKeyPath Път до файла на частният ключ.
+     * @param string|null $password       Парола на частният ключ.
      * @return Request
      */
     public function setPrivateKey($privateKeyPath, $password = null)
@@ -365,7 +365,7 @@ abstract class Request
     }
 
     /**
-     * @param string|null $privateKeyPassword
+     * @param string|null $privateKeyPassword Парола на частният ключ.
      * @return Request
      */
     public function setPrivateKeyPassword($privateKeyPassword)

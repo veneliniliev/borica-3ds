@@ -9,8 +9,7 @@
     <rule ref="PSR2"/>
     <file>src/</file>
     <rule ref="Squiz.Commenting.FunctionComment">
-        <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/>
-        <exclude name="Squiz.Commenting.FunctionComment.TypeHintMissing"/>
+        <exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing"/>
     </rule>
     <rule ref="Squiz.Commenting.FunctionCommentThrowTag">
         <exclude name="Squiz.Commenting.FunctionComment.EmptyThrows"/>
