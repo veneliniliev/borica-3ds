@@ -16,23 +16,23 @@ interface RequestInterface
      * Get data with post inputs
      * @return array
      */
-    public function getData(): array;
+    public function getData();
 
     /**
      * Send request
      * @return void
      */
-    public function send(): void;
+    public function send();
 
     /**
      * Sign request
      * @return string
      */
-    public function generateSignature(): string;
+    public function generateSignature();
 
     /**
      * Validate required data before sending
      * @return void
      */
-    public function validateRequiredParameters(): void;
+    public function validateRequiredParameters();
 }

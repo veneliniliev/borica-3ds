@@ -16,7 +16,7 @@ class SaleTest extends TestCase
      * @return void
      * @throws ParameterValidationException|SignatureException
      */
-    public function testSignature(): void
+    public function testSignature()
     {
         $sale = (new Sale())
             ->setAmount(123.32)

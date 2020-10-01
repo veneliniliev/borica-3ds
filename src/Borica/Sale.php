@@ -5,7 +5,6 @@
 
 namespace VenelinIliev\Borica3ds;
 
-use GuzzleHttp\Exception\GuzzleException;
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 
@@ -74,7 +73,7 @@ class Sale extends Request implements RequestInterface
     /**
      * @return string
      */
-    public function getEmailAddress(): string
+    public function getEmailAddress()
     {
         return $this->emailAddress;
     }
@@ -84,7 +83,7 @@ class Sale extends Request implements RequestInterface
      * @return Sale
      * @throws ParameterValidationException
      */
-    public function setEmailAddress(string $emailAddress): Sale
+    public function setEmailAddress($emailAddress)
     {
         if (mb_strlen($emailAddress) > 80) {
             throw new ParameterValidationException('Email address for notifications must be maximum 80 characters');
@@ -96,9 +95,8 @@ class Sale extends Request implements RequestInterface
     /**
      * @return void
      * @throws ParameterValidationException
-     * @throws GuzzleException
      */
-    public function send(): void
+    public function send()
     {
         $this->validateRequiredParameters();
 
@@ -120,7 +118,7 @@ class Sale extends Request implements RequestInterface
      * @return void
      * @throws ParameterValidationException
      */
-    public function validateRequiredParameters(): void
+    public function validateRequiredParameters()
     {
         if (empty($this->getTransactionType())) {
             throw new ParameterValidationException('Transaction type is empty!');
@@ -158,7 +156,7 @@ class Sale extends Request implements RequestInterface
     /**
      * @return string
      */
-    public function getMerchantUrl(): string
+    public function getMerchantUrl()
     {
         return $this->merchantUrl;
     }
@@ -168,7 +166,7 @@ class Sale extends Request implements RequestInterface
      * @return Sale
      * @throws ParameterValidationException
      */
-    public function setMerchantUrl(string $merchantUrl): Sale
+    public function setMerchantUrl($merchantUrl)
     {
         if (mb_strlen($merchantUrl) > 250) {
             throw new ParameterValidationException('Merchant URL must be maximum 250 characters');
@@ -180,14 +178,15 @@ class Sale extends Request implements RequestInterface
 
     /**
      * @return array
+     * @throws Exceptions\SignatureException
      */
-    public function getData(): array
+    public function getData()
     {
         return [
             'NONCE' => strtoupper(bin2hex(openssl_random_pseudo_bytes(16))),
             'P_SIGN' => $this->generateSignature(),
 
-            'TRTYPE' => $this->getTransactionType()->getValue(),
+            'TRTYPE' => $this->getTransactionType(),
             'COUNTRY' => $this->getCountryCode(),
             'CURRENCY' => $this->getCurrency(),
             //'ADDENDUM' => '',
@@ -209,11 +208,11 @@ class Sale extends Request implements RequestInterface
      * @return string
      * @throws Exceptions\SignatureException
      */
-    public function generateSignature(): string
+    public function generateSignature()
     {
         return $this->getSignature([
             $this->getTerminalID(),
-            $this->getTransactionType()->getValue(),
+            $this->getTransactionType(),
             $this->getAmount(),
             $this->getCurrency(),
             $this->getSignatureTimestamp()
@@ -223,7 +222,7 @@ class Sale extends Request implements RequestInterface
     /**
      * @return string
      */
-    public function getCountryCode(): ?string
+    public function getCountryCode()
     {
         return $this->countryCode;
     }
@@ -233,7 +232,7 @@ class Sale extends Request implements RequestInterface
      * @return Sale
      * @throws ParameterValidationException
      */
-    public function setCountryCode(string $countryCode): Sale
+    public function setCountryCode($countryCode)
     {
         if (mb_strlen($countryCode) != 2) {
             throw new ParameterValidationException('Country code must be exact 2 characters (ISO2)');
@@ -243,9 +242,9 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
-     * @return integer
+     * @return integer|null
      */
-    public function getMerchantGMT(): ?int
+    public function getMerchantGMT()
     {
         return $this->merchantGMT;
     }
@@ -254,7 +253,7 @@ class Sale extends Request implements RequestInterface
      * @param integer $merchantGMT
      * @return Sale
      */
-    public function setMerchantGMT(int $merchantGMT): Sale
+    public function setMerchantGMT($merchantGMT)
     {
         $this->merchantGMT = $merchantGMT;
         return $this;

@@ -86,7 +86,7 @@ abstract class Request
      * @return Request
      * @throws ParameterValidationException
      */
-    public function setDescription(string $description): Request
+    public function setDescription($description)
     {
         if (mb_strlen($description) > 50) {
             throw new ParameterValidationException('Description must be max 50 digits');
@@ -98,7 +98,7 @@ abstract class Request
     /**
      * @return string
      */
-    public function getBackRefUrl(): string
+    public function getBackRefUrl()
     {
         return $this->backRefUrl;
     }
@@ -107,7 +107,7 @@ abstract class Request
      * @param string $backRefUrl
      * @return Request
      */
-    public function setBackRefUrl(string $backRefUrl): Request
+    public function setBackRefUrl($backRefUrl)
     {
         $this->backRefUrl = $backRefUrl;
         return $this;
@@ -126,7 +126,7 @@ abstract class Request
      * @return Request
      * @throws ParameterValidationException
      */
-    public function setOrder($order): Request
+    public function setOrder($order)
     {
         if (mb_strlen($order) > 6) {
             throw new ParameterValidationException('Order must be max 6 digits');
@@ -140,7 +140,7 @@ abstract class Request
      * Switch to development mode
      * @return void
      */
-    public function inDevelopment(): void
+    public function inDevelopment()
     {
         $this->environment = 'development';
     }
@@ -148,7 +148,7 @@ abstract class Request
     /**
      * @return boolean
      */
-    public function isProduction(): bool
+    public function isProduction()
     {
         return $this->environment == 'production';
     }
@@ -156,7 +156,7 @@ abstract class Request
     /**
      * @return string
      */
-    public function getEnvironmentUrl(): string
+    public function getEnvironmentUrl()
     {
         if ($this->environment == 'development') {
             return $this->environmentUrls['development'];
@@ -189,7 +189,7 @@ abstract class Request
     /**
      * @return TransactionType
      */
-    public function getTransactionType(): TransactionType
+    public function getTransactionType()
     {
         return $this->transactionType;
     }
@@ -198,16 +198,16 @@ abstract class Request
      * @param TransactionType $transactionType
      * @return Request
      */
-    public function setTransactionType(TransactionType $transactionType): Request
+    public function setTransactionType($transactionType)
     {
         $this->transactionType = $transactionType;
         return $this;
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getAmount(): ?float
+    public function getAmount()
     {
         return $this->amount;
     }
@@ -216,7 +216,7 @@ abstract class Request
      * @param float $amount
      * @return Request
      */
-    public function setAmount(float $amount): Request
+    public function setAmount($amount)
     {
         $this->amount = floatval($amount);
         return $this;
@@ -225,7 +225,7 @@ abstract class Request
     /**
      * @return string
      */
-    public function getCurrency(): string
+    public function getCurrency()
     {
         return $this->currency;
     }
@@ -235,7 +235,7 @@ abstract class Request
      * @return Request
      * @throws ParameterValidationException
      */
-    public function setCurrency(string $currency): Request
+    public function setCurrency($currency)
     {
         if (mb_strlen($currency) != 3) {
             throw new ParameterValidationException('3 character currency code');
@@ -247,7 +247,7 @@ abstract class Request
     /**
      * @return string
      */
-    public function getSignatureTimestamp(): string
+    public function getSignatureTimestamp()
     {
         if (empty($this->signatureTimestamp)) {
             $this->setSignatureTimestamp();
@@ -257,10 +257,10 @@ abstract class Request
     }
 
     /**
-     * @param mixed $signatureTimestamp
-     * @return Sale
+     * @param string|null $signatureTimestamp
+     * @return Request
      */
-    public function setSignatureTimestamp(string $signatureTimestamp = null): Request
+    public function setSignatureTimestamp($signatureTimestamp = null)
     {
         if (empty($signatureTimestamp)) {
             $this->signatureTimestamp = date('YmdHis');
@@ -275,7 +275,7 @@ abstract class Request
      * @param array $options
      * @return Client
      */
-    protected function getGuzzleClient($options = []): Client
+    protected function getGuzzleClient($options = [])
     {
         return new Client($options);
     }
@@ -284,7 +284,7 @@ abstract class Request
      * Switch to production mode
      * @return void
      */
-    protected function inProduction(): void
+    protected function inProduction()
     {
         $this->environment = 'production';
     }
@@ -294,7 +294,7 @@ abstract class Request
      * @return string
      * @throws SignatureException
      */
-    protected function getSignature(array $data): string
+    protected function getSignature(array $data)
     {
         /*
          * generate signature
@@ -325,19 +325,19 @@ abstract class Request
     /**
      * @return string
      */
-    public function getPrivateKey(): string
+    public function getPrivateKey()
     {
         return $this->privateKey;
     }
 
     /**
-     * @param string $privateKey
+     * @param string $privateKeyPath
      * @param null   $password
      * @return Request
      */
-    public function setPrivateKey(string $privateKey, $password = null): Request
+    public function setPrivateKey($privateKeyPath, $password = null)
     {
-        $this->privateKey = $privateKey;
+        $this->privateKey = $privateKeyPath;
 
         if (!empty($password)) {
             $this->setPrivateKeyPassword($password);
@@ -349,7 +349,7 @@ abstract class Request
     /**
      * @return string|null
      */
-    public function getPrivateKeyPassword(): ?string
+    public function getPrivateKeyPassword()
     {
         return $this->privateKeyPassword;
     }
@@ -358,7 +358,7 @@ abstract class Request
      * @param string|null $privateKeyPassword
      * @return Request
      */
-    public function setPrivateKeyPassword(?string $privateKeyPassword): Request
+    public function setPrivateKeyPassword($privateKeyPassword)
     {
         $this->privateKeyPassword = $privateKeyPassword;
         return $this;
