@@ -8,8 +8,6 @@
 
 ## Installation
 
-*Все още библиотеката се разработва! Не е преминала тестване в production среда!*
-
 ```shell script
 composer require veneliniliev/borica-3ds
 ```

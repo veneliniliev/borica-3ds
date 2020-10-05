@@ -5,7 +5,6 @@
 
 namespace VenelinIliev\Borica3ds;
 
-use GuzzleHttp\Exception\GuzzleException;
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 
@@ -99,26 +98,28 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Generate form and submit
      * @return void
      * @throws Exceptions\SignatureException
      * @throws ParameterValidationException
-     * @throws GuzzleException
      */
     public function send()
     {
         $this->validateRequiredParameters();
 
-        $response = $this->getGuzzleClient()
-            ->post(
-                $this->getEnvironmentUrl(),
-                [
-                    'debug' => !$this->isProduction(),
-                    'form_params' => $this->getData(),
-                    'allow_redirects' => true
-                ]
-            );
+        $html = '<form action="' . $this->getEnvironmentUrl() . '" method="POST" id="redirectForm">';
 
-        die(var_dump($response));
+        $inputs = $this->getData();
+        foreach ($inputs as $key => $value) {
+            $html .= '<input type="hidden" id="' . $key . '" name="' . $key . '" value="' . $value . '">';
+        }
+
+        $html .= '</form>
+        <script>
+            document.getElementById("redirectForm").submit()
+        </script>';
+
+        die($html);
     }
 
     /**
