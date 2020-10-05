@@ -46,10 +46,45 @@ $saleRequest = (new Sale())
     ->setMerchantUrl('https://test.com')
     ->setBackRefUrl('https://test.com/back-ref-url')
     ->setTerminalID(12345678)
-    ->setPrivateKey('path to certificate.key')
+    ->setPrivateKey('\<path to certificate.key>')
     ->setPrivateKeyPassword('test')
     ->send();
 ````
+
+### Sale response
+
+Catch response from borica on `BACKREF` url (*$saleRequest->setBackRefUrl('\<url>')*)
+
+```php
+use VenelinIliev\Borica3ds\SaleResponse;
+// ....
+$saleResponse = (new SaleResponse())
+            ->setResponseData($_POST) //Set POST data from borica response
+            ->setPublicKey('<path to public certificate.cer>')
+            ->isSuccess();
+
+```
+
+#### Get response code
+
+```php
+$saleResponse->getResponseCode();
+```
+
+Response codes table
+
+|Response Code (RC)|RC DESCRIPTION |    
+|------------------|---------------|   
+|00                | Sucessfull    |
+|                  | => Timeout |
+|"01"              | Refer to card issuer |
+|"04"              | Pick Up |
+|"05"              | Do not Honour |
+|"13"              | Invalid amount |
+|"30"              | Format error |
+|"65"              | Soft Decline |
+|"91"              | Issuer or switch is inoperative |
+|"96"              | System Malfunction |    
 
 ### Credit cards for testing 
 

@@ -5,15 +5,13 @@
 
 namespace VenelinIliev\Borica3ds;
 
-use GuzzleHttp\Client;
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
-use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 
 /**
  * Borica request
  */
-abstract class Request
+abstract class Request extends Base
 {
     /**
      * @var mixed
@@ -24,26 +22,7 @@ abstract class Request
      * @var string
      */
     private $terminalID;
-    /**
-     * @var string
-     */
-    private $privateKey;
-    /**
-     * @var string|null
-     */
-    private $privateKeyPassword = null;
-    /**
-     * @var string[]
-     */
-    private $environmentUrls = [
-        'development' => 'https://3dsgate-dev.borica.bg/cgi-bin/cgi_link',
-        'production' => 'https://3dsgate.borica.bg/cgi-bin/cgi_link'
-    ];
-    /**
-     * In develop mode of application
-     * @var string
-     */
-    private $environment = 'development';
+
     /**
      * @var string
      */
@@ -133,36 +112,8 @@ abstract class Request
             throw new ParameterValidationException('Order must be max 6 digits');
         }
 
-        $this->order = $order;
+        $this->order = str_pad($order, 6, "0", STR_PAD_LEFT);
         return $this;
-    }
-
-    /**
-     * Switch to development mode
-     * @return void
-     */
-    public function inDevelopment()
-    {
-        $this->environment = 'development';
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isProduction()
-    {
-        return $this->environment == 'production';
-    }
-
-    /**
-     * @return string
-     */
-    public function getEnvironmentUrl()
-    {
-        if ($this->environment == 'development') {
-            return $this->environmentUrls['development'];
-        }
-        return $this->environmentUrls['production'];
     }
 
     /**
@@ -269,108 +220,6 @@ abstract class Request
         }
 
         $this->signatureTimestamp = $signatureTimestamp;
-        return $this;
-    }
-
-    /**
-     * @param array $options Options for Client.
-     * @return Client
-     */
-    protected function getGuzzleClient(array $options = [])
-    {
-        return new Client($options);
-    }
-
-    /**
-     * Switch to production mode
-     * @return void
-     */
-    protected function inProduction()
-    {
-        $this->environment = 'production';
-    }
-
-    /**
-     * @param array $data Данни върху които да генерира подписа.
-     * @return string
-     * @throws SignatureException
-     */
-    protected function getSignature(array $data)
-    {
-        /*
-         * generate signature
-         */
-        $signature = '';
-        foreach ($data as $value) {
-            $signature .= mb_strlen($value) . $value;
-        }
-
-        /*
-         * sign signature
-         */
-        $privateKey = openssl_get_privatekey('file://' . $this->getPrivateKey(), $this->getPrivateKeyPassword());
-        if (!$privateKey) {
-            throw new SignatureException(openssl_error_string());
-        }
-
-        $openSignStatus = openssl_sign($signature, $signature, $privateKey, OPENSSL_ALGO_SHA256);
-        if (!$openSignStatus) {
-            throw new SignatureException(openssl_error_string());
-        }
-
-        if (PHP_MAJOR_VERSION < 8) {
-            /**
-             * @deprecated in PHP 8.0
-             * @note The openssl_pkey_free() function is deprecated and no longer has an effect,
-             * instead the OpenSSLAsymmetricKey instance is automatically destroyed if it is no
-             * longer referenced.
-             * @see https://github.com/php/php-src/blob/master/UPGRADING#L397
-             */
-            openssl_pkey_free($privateKey);
-        }
-
-        return strtoupper(bin2hex($signature));
-    }
-
-    /**
-     * @return string
-     */
-    public function getPrivateKey()
-    {
-        return $this->privateKey;
-    }
-
-    /**
-     * @param string      $privateKeyPath Път до файла на частният ключ.
-     * @param string|null $password       Парола на частният ключ.
-     * @return Request
-     */
-    public function setPrivateKey($privateKeyPath, $password = null)
-    {
-        $this->privateKey = $privateKeyPath;
-
-        if (!empty($password)) {
-            $this->setPrivateKeyPassword($password);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPrivateKeyPassword()
-    {
-        return $this->privateKeyPassword;
-    }
-
-    /**
-     * @param string|null $privateKeyPassword Парола на частният ключ.
-     * @return Request
-     */
-    public function setPrivateKeyPassword($privateKeyPassword)
-    {
-        $this->privateKeyPassword = $privateKeyPassword;
         return $this;
     }
 }

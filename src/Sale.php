@@ -218,7 +218,7 @@ class Sale extends Request implements RequestInterface
      */
     public function generateSignature()
     {
-        return $this->getSignature([
+        return $this->getPrivateSignature([
             $this->getTerminalID(),
             $this->getTransactionType()->getValue(),
             $this->getAmount(),
