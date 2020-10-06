@@ -100,7 +100,6 @@ class SaleResponse extends Response
      * Get response data
      * @note If response data is not set - set data to $_POST
      * @return array
-     * @throws Exceptions\SignatureException|ParameterValidationException
      */
     public function getResponseData()
     {
@@ -114,13 +113,11 @@ class SaleResponse extends Response
      * Set response data
      * @param array $responseData Response data from borica.
      * @return SaleResponse
-     * @throws Exceptions\SignatureException|ParameterValidationException
      */
     public function setResponseData(array $responseData)
     {
         $this->dataIsVerified = false;
         $this->responseData = $responseData;
-        $this->verifyData();
         return $this;
     }
 }
