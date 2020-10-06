@@ -54,6 +54,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Get merchant ID
      * @return mixed
      */
     public function getMerchantId()
@@ -62,6 +63,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Set merchant ID
      * @param mixed $merchantId Merchant ID.
      * @return Sale
      * @throws ParameterValidationException
@@ -76,6 +78,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Get notification email address
      * @return string
      */
     public function getEmailAddress()
@@ -84,6 +87,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Set notification email address
      * @param string $emailAddress E-mail адрес за уведомления.
      * @return Sale
      * @throws ParameterValidationException
@@ -98,7 +102,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
-     * Generate form and submit
+     * Send to borica. Generate form and auto submit with JS.
      * @return void
      * @throws Exceptions\SignatureException
      * @throws ParameterValidationException
@@ -163,6 +167,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Get merchant URL
      * @return string
      */
     public function getMerchantUrl()
@@ -171,6 +176,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Set merchant URL
      * @param string $merchantUrl URL на web сайта на търговеца.
      * @return Sale
      * @throws ParameterValidationException
@@ -186,6 +192,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Get data required for request to borica
      * @return array
      * @throws Exceptions\SignatureException
      */
@@ -213,6 +220,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Generate signature of data
      * @return string
      * @throws Exceptions\SignatureException
      */
@@ -228,6 +236,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Get country code
      * @return string
      */
     public function getCountryCode()
@@ -236,6 +245,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Set country code
      * @param string $countryCode Двубуквен код на държавата, където се намира магазинът на търговеца.
      * @return Sale
      * @throws ParameterValidationException
@@ -250,6 +260,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Get merchant GMT
      * @return string|null
      */
     public function getMerchantGMT()
@@ -258,6 +269,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Set merchant GMT
      * @param string $merchantGMT Отстояние на часовата зона на търговеца от UTC/GMT  (напр. +03).
      * @return Sale
      */
@@ -268,6 +280,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Generate AD.CUST_BOR_ORDER_ID borica field
      * @return array
      */
     private function generateAdCustBorOrderId()
@@ -290,6 +303,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Get 'AD.CUST_BOR_ORDER_ID' field
      * @return string
      */
     public function getAdCustBorOrderId()
@@ -298,6 +312,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Set 'AD.CUST_BOR_ORDER_ID' field
      * @param string $adCustBorOrderId Идентификатор на поръчката за Банката на търговеца във финансовите файлове.
      * @return Sale
      */

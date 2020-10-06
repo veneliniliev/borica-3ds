@@ -16,6 +16,7 @@ abstract class Response extends Base
     protected $publicKey;
 
     /**
+     * Verify data with public certificate
      * @param array  $data            Данни върху които да генерира подписа.
      * @param string $publicSignature Публичен подпис.
      * @return void
@@ -64,6 +65,7 @@ abstract class Response extends Base
     }
 
     /**
+     * Get public key
      * @return string
      */
     public function getPublicKey()
@@ -72,6 +74,7 @@ abstract class Response extends Base
     }
 
     /**
+     * Set public key
      * @param string $publicKey Public key path.
      * @return Response
      */

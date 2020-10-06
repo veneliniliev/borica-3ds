@@ -14,9 +14,6 @@
     <rule ref="Squiz.Commenting.FunctionCommentThrowTag">
         <exclude name="Squiz.Commenting.FunctionComment.EmptyThrows"/>
     </rule>
-    <rule ref="Squiz.Commenting.ClassComment">
-        <severity>0</severity>
-    </rule>
     <rule ref="Generic.Files.LineLength">
         <properties>
             <property name="lineLimit" value="130"/>

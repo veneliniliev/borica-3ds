@@ -23,6 +23,49 @@ abstract class Base
     private $privateKeyPassword = null;
 
     /**
+     * @var string[]
+     */
+    private $environmentUrls = [
+        'development' => 'https://3dsgate-dev.borica.bg/cgi-bin/cgi_link',
+        'production' => 'https://3dsgate.borica.bg/cgi-bin/cgi_link'
+    ];
+
+    /**
+     * In develop mode of application
+     * @var string
+     */
+    private $environment = 'development';
+
+    /**
+     * Switch to development mode
+     * @return void
+     */
+    public function inDevelopment()
+    {
+        $this->environment = 'development';
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isProduction()
+    {
+        return $this->environment == 'production';
+    }
+
+    /**
+     * @return string
+     */
+    public function getEnvironmentUrl()
+    {
+        if ($this->environment == 'development') {
+            return $this->environmentUrls['development'];
+        }
+        return $this->environmentUrls['production'];
+    }
+
+    /**
+     * Generate signature of data with private key
      * @param array $data Данни върху които да генерира подписа.
      * @return string
      * @throws SignatureException
@@ -65,6 +108,7 @@ abstract class Base
     }
 
     /**
+     * Get private key
      * @return string
      */
     public function getPrivateKey()
@@ -73,6 +117,7 @@ abstract class Base
     }
 
     /**
+     * Set private key
      * @param string      $privateKeyPath Път до файла на частният ключ.
      * @param string|null $password       Парола на частният ключ.
      * @return Base
@@ -89,6 +134,7 @@ abstract class Base
     }
 
     /**
+     * Get private key password
      * @return string|null
      */
     public function getPrivateKeyPassword()
@@ -97,6 +143,7 @@ abstract class Base
     }
 
     /**
+     * Set private key password
      * @param string|null $privateKeyPassword Парола на частният ключ.
      * @return Base
      */
@@ -105,48 +152,6 @@ abstract class Base
         $this->privateKeyPassword = $privateKeyPassword;
         return $this;
     }
-
-    /**
-     * @var string[]
-     */
-    private $environmentUrls = [
-        'development' => 'https://3dsgate-dev.borica.bg/cgi-bin/cgi_link',
-        'production' => 'https://3dsgate.borica.bg/cgi-bin/cgi_link'
-    ];
-
-    /**
-     * Switch to development mode
-     * @return void
-     */
-    public function inDevelopment()
-    {
-        $this->environment = 'development';
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isProduction()
-    {
-        return $this->environment == 'production';
-    }
-
-    /**
-     * @return string
-     */
-    public function getEnvironmentUrl()
-    {
-        if ($this->environment == 'development') {
-            return $this->environmentUrls['development'];
-        }
-        return $this->environmentUrls['production'];
-    }
-
-    /**
-     * In develop mode of application
-     * @var string
-     */
-    private $environment = 'development';
 
     /**
      * Switch to production mode

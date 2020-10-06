@@ -25,6 +25,7 @@ class SaleResponse extends Response
     private $dataIsVerified = false;
 
     /**
+     * Is success payment?
      * @return boolean
      * @throws Exceptions\SignatureException|ParameterValidationException|DataMissingException
      */
@@ -34,6 +35,7 @@ class SaleResponse extends Response
     }
 
     /**
+     * Get response code - value of 'RC' field
      * @return string
      * @throws Exceptions\SignatureException|ParameterValidationException|DataMissingException
      */
@@ -43,6 +45,7 @@ class SaleResponse extends Response
     }
 
     /**
+     * Get verified data by key
      * @param string $key Data key.
      * @return mixed
      * @throws Exceptions\SignatureException|ParameterValidationException|DataMissingException
@@ -62,6 +65,7 @@ class SaleResponse extends Response
     }
 
     /**
+     * Verify data with public certificate
      * @return void
      * @throws Exceptions\SignatureException|ParameterValidationException
      */
@@ -93,7 +97,10 @@ class SaleResponse extends Response
     }
 
     /**
+     * Get response data
+     * @note If response data is not set - set data to $_POST
      * @return array
+     * @throws Exceptions\SignatureException|ParameterValidationException
      */
     public function getResponseData()
     {
@@ -104,13 +111,16 @@ class SaleResponse extends Response
     }
 
     /**
+     * Set response data
      * @param array $responseData Response data from borica.
      * @return SaleResponse
+     * @throws Exceptions\SignatureException|ParameterValidationException
      */
     public function setResponseData(array $responseData)
     {
         $this->dataIsVerified = false;
         $this->responseData = $responseData;
+        $this->verifyData();
         return $this;
     }
 }

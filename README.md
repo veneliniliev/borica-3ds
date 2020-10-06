@@ -11,6 +11,9 @@
 ```shell script
 composer require veneliniliev/borica-3ds
 ```
+
+For more methods, read [api documentation](API.md).
+
 ## Certificates
 
 ### Generate private key
