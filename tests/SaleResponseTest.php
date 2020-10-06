@@ -30,8 +30,8 @@ class SaleResponseTest extends TestCase
         ];
 
         $paymentSuccess = (new SaleResponse())
-            ->setResponseData($post)
             ->setPublicKey(__DIR__ . '/certificates/public.cer')
+            ->setResponseData($post)
             ->isSuccess();
 
         $this->assertEquals(false, $paymentSuccess);

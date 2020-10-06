@@ -5,6 +5,7 @@
 
 namespace VenelinIliev\Borica3ds;
 
+use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 
 abstract class Response extends Base
@@ -20,7 +21,7 @@ abstract class Response extends Base
      * @param array  $data            Данни върху които да генерира подписа.
      * @param string $publicSignature Публичен подпис.
      * @return void
-     * @throws SignatureException
+     * @throws ParameterValidationException|SignatureException
      */
     protected function verifyPublicSignature(array $data, $publicSignature)
     {
@@ -67,9 +68,14 @@ abstract class Response extends Base
     /**
      * Get public key
      * @return string
+     * @throws ParameterValidationException
      */
     public function getPublicKey()
     {
+        if (empty($this->publicKey)) {
+            throw new ParameterValidationException('Please set public key first!');
+        }
+
         return $this->publicKey;
     }
 

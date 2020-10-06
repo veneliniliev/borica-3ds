@@ -62,8 +62,8 @@ Catch response from borica on `BACKREF` url (*$saleRequest->setBackRefUrl('\<url
 use VenelinIliev\Borica3ds\SaleResponse;
 // ....
 $saleResponse = (new SaleResponse())
-            ->setResponseData($_POST) //Set POST data from borica response
             ->setPublicKey('<path to public certificate.cer>')
+            ->setResponseData($_POST) //Set POST data from borica response
             ->isSuccess();
 
 ```
