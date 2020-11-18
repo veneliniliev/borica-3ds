@@ -25,6 +25,8 @@ openssl genrsa -out test.key -aes256 2048
 
 ### Generate CSR
 
+**IMPORTANT**: in `Organizational Unit Name (eg, section)` enter your  terminal ID and in `Common Name (eg, fully qualified host name)` enter your domain name.
+
 ```shell script
 openssl req -new -key real.key -out real.csr
 openssl req -new -key test.key -out test.csr
