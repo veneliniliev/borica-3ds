@@ -50,8 +50,11 @@ $saleRequest = (new Sale())
     ->setBackRefUrl('https://test.com/back-ref-url')
     ->setTerminalID(12345678)
     ->setPrivateKey('\<path to certificate.key>')
-    ->setPrivateKeyPassword('test')
-    ->send();
+    ->setPrivateKeyPassword('test');
+
+$formHtml = $saleRequest->generateForm(); // only generate hidden html form with filled inputs 
+// OR
+$saleRequest->send(); // generate and send form with js 
 ````
 
 ### Sale response
@@ -65,7 +68,22 @@ $saleResponse = (new SaleResponse())
             ->setPublicKey('<path to public certificate.cer>')
             ->setResponseData($_POST) //Set POST data from borica response
             ->isSuccess();
+```
 
+### Methods
+
+#### Set environments
+
+Default environment is **production**!
+
+```php
+$saleRequest->setEnvironment(true); // set to production
+$saleRequest->setEnvironment(false); // set to development
+$saleRequest->inDevelopment(); // set to development
+$saleRequest->inProduction(); // set to production
+
+$saleRequest->isProduction(); // check is production environment?
+$saleRequest->isDevelopment(); // check is development environment?
 ```
 
 #### Get response code

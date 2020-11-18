@@ -34,7 +34,7 @@ abstract class Base
      * In develop mode of application
      * @var string
      */
-    private $environment = 'development';
+    private $environment = 'production';
 
     /**
      * Switch to development mode
@@ -54,6 +54,14 @@ abstract class Base
     }
 
     /**
+     * @return boolean
+     */
+    public function isDevelopment()
+    {
+        return $this->environment == 'development';
+    }
+
+    /**
      * @return string
      */
     public function getEnvironmentUrl()
@@ -62,6 +70,21 @@ abstract class Base
             return $this->environmentUrls['development'];
         }
         return $this->environmentUrls['production'];
+    }
+
+    /**
+     * @param boolean $production
+     *
+     * @return Base
+     */
+    public function setEnvironment($production = true)
+    {
+        if ($production) {
+            $this->inProduction();
+            return $this;
+        }
+        $this->inDevelopment();
+        return $this;
     }
 
     /**
@@ -157,7 +180,7 @@ abstract class Base
      * Switch to production mode
      * @return void
      */
-    protected function inProduction()
+    public function inProduction()
     {
         $this->environment = 'production';
     }

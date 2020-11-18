@@ -66,11 +66,13 @@
 | public | <strong>getPrivateKey()</strong> : <em>string</em><br /><em>Get private key</em> |
 | public | <strong>getPrivateKeyPassword()</strong> : <em>string/null</em><br /><em>Get private key password</em> |
 | public | <strong>inDevelopment()</strong> : <em>void</em><br /><em>Switch to development mode</em> |
+| public | <strong>inProduction()</strong> : <em>void</em><br /><em>Switch to production mode</em> |
+| public | <strong>isDevelopment()</strong> : <em>boolean</em> |
 | public | <strong>isProduction()</strong> : <em>boolean</em> |
+| public | <strong>setEnvironment(</strong><em>bool/boolean</em> <strong>$production=true</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Base](#class-venelinilievborica3dsbase-abstract)</em> |
 | public | <strong>setPrivateKey(</strong><em>string</em> <strong>$privateKeyPath</strong>, <em>string/null</em> <strong>$password=null</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Base](#class-venelinilievborica3dsbase-abstract)</em><br /><em>Set private key</em> |
 | public | <strong>setPrivateKeyPassword(</strong><em>string/null</em> <strong>$privateKeyPassword</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Base](#class-venelinilievborica3dsbase-abstract)</em><br /><em>Set private key password</em> |
 | protected | <strong>getPrivateSignature(</strong><em>array</em> <strong>$data</strong>)</strong> : <em>string</em><br /><em>Generate signature of data with private key</em> |
-| protected | <strong>inProduction()</strong> : <em>void</em><br /><em>Switch to production mode</em> |
 
 <hr />
 
@@ -81,6 +83,7 @@
 | Visibility | Function |
 |:-----------|:---------|
 | public | <strong>__construct()</strong> : <em>void</em><br /><em>Sale constructor.</em> |
+| public | <strong>generateForm()</strong> : <em>string</em> |
 | public | <strong>generateSignature()</strong> : <em>string</em><br /><em>Generate signature of data</em> |
 | public | <strong>getAdCustBorOrderId()</strong> : <em>string</em><br /><em>Get 'AD.CUST_BOR_ORDER_ID' field</em> |
 | public | <strong>getCountryCode()</strong> : <em>string</em><br /><em>Get country code</em> |
