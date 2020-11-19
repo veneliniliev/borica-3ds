@@ -4,7 +4,9 @@
 
 ## Requirements
 
-- PHP >= 5.6
+- PHP >= 5.6 (including 8.0)
+- ext-mbstring
+- ext-openssl
 
 ## Installation
 
@@ -67,11 +69,41 @@ Catch response from borica on `BACKREF` url (*$saleRequest->setBackRefUrl('\<url
 ```php
 use VenelinIliev\Borica3ds\SaleResponse;
 // ....
-$saleResponse = (new SaleResponse())
+$isSuccessfulPayment = (new SaleResponse())
             ->setPublicKey('<path to public certificate.cer>')
             ->setResponseData($_POST) //Set POST data from borica response
             ->isSuccessful();
 ```
+
+#### Get response code
+
+```php
+$saleResponse= (new SaleResponse())
+               ->setPublicKey('<path to public certificate.cer>');
+
+// ...
+// automatic fill data from $_POST or can be set by ->setResponseData(<array>)
+// ...
+
+$saleResponse->getResponseCode(); // return RC from response
+$saleResponse->getVerifiedData('<key from post request ex: RC>'); // return verified data from post by key
+$saleResponse->isSuccessful(); // RC === 00 and data is verified
+```
+
+Response codes table
+
+|Response Code (RC)|RC DESCRIPTION |    
+|------------------|---------------|   
+|00                | Sucessfull    |
+|                  | => Timeout |
+|"01"              | Refer to card issuer |
+|"04"              | Pick Up |
+|"05"              | Do not Honour |
+|"13"              | Invalid amount |
+|"30"              | Format error |
+|"65"              | Soft Decline |
+|"91"              | Issuer or switch is inoperative |
+|"96"              | System Malfunction |   
 
 ### Methods
 
@@ -88,27 +120,6 @@ $saleRequest->inProduction(); // set to production
 $saleRequest->isProduction(); // check is production environment?
 $saleRequest->isDevelopment(); // check is development environment?
 ```
-
-#### Get response code
-
-```php
-$saleResponse->getResponseCode();
-```
-
-Response codes table
-
-|Response Code (RC)|RC DESCRIPTION |    
-|------------------|---------------|   
-|00                | Sucessfull    |
-|                  | => Timeout |
-|"01"              | Refer to card issuer |
-|"04"              | Pick Up |
-|"05"              | Do not Honour |
-|"13"              | Invalid amount |
-|"30"              | Format error |
-|"65"              | Soft Decline |
-|"91"              | Issuer or switch is inoperative |
-|"96"              | System Malfunction |    
 
 ### Credit cards for testing 
 
