@@ -18,10 +18,6 @@ abstract class Request extends Base
      */
     private $signatureTimestamp;
 
-    /**
-     * @var string
-     */
-    private $terminalID;
 
     /**
      * @var string
@@ -123,30 +119,6 @@ abstract class Request extends Base
     }
 
     /**
-     * Get terminal ID
-     * @return mixed
-     */
-    public function getTerminalID()
-    {
-        return $this->terminalID;
-    }
-
-    /**
-     * Set terminal ID
-     * @param string $terminalID Terminal ID.
-     * @return Request
-     * @throws ParameterValidationException
-     */
-    public function setTerminalID($terminalID)
-    {
-        if (mb_strlen($terminalID) != 8) {
-            throw new ParameterValidationException('Terminal ID must be exact 8 characters!');
-        }
-        $this->terminalID = $terminalID;
-        return $this;
-    }
-
-    /**
      * Get transaction type
      * @return TransactionType
      */
@@ -206,7 +178,7 @@ abstract class Request extends Base
         if (mb_strlen($currency) != 3) {
             throw new ParameterValidationException('3 character currency code');
         }
-        $this->currency = $currency;
+        $this->currency = mb_strtoupper($currency);
         return $this;
     }
 
@@ -231,7 +203,7 @@ abstract class Request extends Base
     public function setSignatureTimestamp($signatureTimestamp = null)
     {
         if (empty($signatureTimestamp)) {
-            $this->signatureTimestamp = date('YmdHis');
+            $this->signatureTimestamp = gmdate('YmdHis');
             return $this;
         }
 

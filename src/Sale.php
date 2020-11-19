@@ -10,6 +10,7 @@ use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 
 /**
  * Class Sale
+ *
  * @package VenelinIliev\Borica3ds
  */
 class Sale extends Request implements RequestInterface
@@ -23,7 +24,7 @@ class Sale extends Request implements RequestInterface
     /**
      * @var string
      */
-    protected $merchantId;
+    protected $merchantName;
 
     /**
      * @var string
@@ -46,6 +47,11 @@ class Sale extends Request implements RequestInterface
     protected $adCustBorOrderId;
 
     /**
+     * @var string
+     */
+    protected $nonce;
+
+    /**
      * Sale constructor.
      */
     public function __construct()
@@ -54,31 +60,8 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
-     * Get merchant ID
-     * @return mixed
-     */
-    public function getMerchantId()
-    {
-        return $this->merchantId;
-    }
-
-    /**
-     * Set merchant ID
-     * @param mixed $merchantId Merchant ID.
-     * @return Sale
-     * @throws ParameterValidationException
-     */
-    public function setMerchantId($merchantId)
-    {
-        if (mb_strlen($merchantId) != 15) {
-            throw new ParameterValidationException('Merchant ID must be exact 15 characters');
-        }
-        $this->merchantId = $merchantId;
-        return $this;
-    }
-
-    /**
      * Get notification email address
+     *
      * @return string
      */
     public function getEmailAddress()
@@ -88,7 +71,9 @@ class Sale extends Request implements RequestInterface
 
     /**
      * Set notification email address
+     *
      * @param string $emailAddress E-mail адрес за уведомления.
+     *
      * @return Sale
      * @throws ParameterValidationException
      */
@@ -103,31 +88,124 @@ class Sale extends Request implements RequestInterface
 
     /**
      * Send to borica. Generate form and auto submit with JS.
+     *
      * @return void
-     * @throws Exceptions\SignatureException
-     * @throws ParameterValidationException
+     * @throws Exceptions\SignatureException|ParameterValidationException
      */
     public function send()
     {
-        $this->validateRequiredParameters();
+        $html = $this->generateForm();
 
-        $html = '<form action="' . $this->getEnvironmentUrl() . '" method="POST" id="redirectForm">';
-
-        $inputs = $this->getData();
-        foreach ($inputs as $key => $value) {
-            $html .= '<input type="hidden" id="' . $key . '" name="' . $key . '" value="' . $value . '">';
-        }
-
-        $html .= '</form>
-        <script>
-            document.getElementById("redirectForm").submit()
+        $html .= '<script>
+            document.getElementById("borica3dsRedirectForm").submit()
         </script>';
 
         die($html);
     }
 
     /**
+     * Generate HTML hidden form
+     *
+     * @return string
+     * @throws Exceptions\SignatureException|ParameterValidationException
+     */
+    public function generateForm()
+    {
+        $html = '<form 
+	        action="' . $this->getEnvironmentUrl() . '" 
+	        style="display: none;" 
+	        method="POST" 
+	        id="borica3dsRedirectForm"
+        >';
+
+        $inputs = $this->getData();
+        foreach ($inputs as $key => $value) {
+            $html .= '<input type="hidden" name="' . $key . '" value="' . $value . '">';
+        }
+
+        $html .= '</form>';
+
+        return $html;
+    }
+
+    /**
+     * Get data required for request to borica
+     *
+     * @return array
+     * @throws Exceptions\SignatureException|ParameterValidationException
+     */
+    public function getData()
+    {
+        return [
+                'NONCE' => $this->getNonce(),
+                'P_SIGN' => $this->generateSignature(),
+
+                'TRTYPE' => $this->getTransactionType()->getValue(),
+                'COUNTRY' => $this->getCountryCode(),
+                'CURRENCY' => $this->getCurrency(),
+
+                'MERCH_GMT' => $this->getMerchantGMT(),
+                'MERCHANT' => $this->getMerchantId(),
+                'MERCH_NAME' => $this->getMerchantName(),
+                'MERCH_URL' => $this->getMerchantUrl(),
+
+                'ORDER' => $this->getOrder(),
+                'AMOUNT' => $this->getAmount(),
+                'DESC' => $this->getDescription(),
+                'TIMESTAMP' => $this->getSignatureTimestamp(),
+
+                'TERMINAL' => $this->getTerminalID(),
+                'BACKREF' => $this->getBackRefUrl(),
+            ] + $this->generateAdCustBorOrderId();
+    }
+
+    /**
+     * @return string
+     */
+    private function getNonce()
+    {
+        if (!empty($this->nonce)) {
+            return $this->nonce;
+        }
+        $this->setNonce(strtoupper(bin2hex(openssl_random_pseudo_bytes(16))));
+        return $this->nonce;
+    }
+
+    /**
+     * @param string $nonce
+     * @return Sale
+     */
+    public function setNonce($nonce)
+    {
+        $this->nonce = $nonce;
+        return $this;
+    }
+
+    /**
+     * Generate signature of data
+     *
+     * @return string
+     * @throws Exceptions\SignatureException
+     * @throws ParameterValidationException
+     */
+    public function generateSignature()
+    {
+        $this->validateRequiredParameters();
+        return $this->getPrivateSignature([
+            $this->getTerminalID(),
+            $this->getTransactionType()->getValue(),
+            $this->getAmount(),
+            $this->getCurrency(),
+            $this->getOrder(),
+            $this->getMerchantId(),
+            $this->getSignatureTimestamp(),
+            $this->getNonce()
+        ]);
+    }
+
+    /**
      * Validate required fields to post
+     *
      * @return void
      * @throws ParameterValidationException
      */
@@ -153,12 +231,12 @@ class Sale extends Request implements RequestInterface
             throw new ParameterValidationException('Description is empty!');
         }
 
-        if (empty($this->getMerchantUrl())) {
-            throw new ParameterValidationException('Merchant url is empty!');
+        if (empty($this->getBackRefUrl()) && $this->isDevelopment()) {
+            throw new ParameterValidationException('Back ref url is empty! (required in development)');
         }
 
-        if (empty($this->getBackRefUrl())) {
-            throw new ParameterValidationException('Back ref url is empty!');
+        if (empty($this->getMerchantId())) {
+            throw new ParameterValidationException('Merchant ID is empty!');
         }
 
         if (empty($this->getTerminalID())) {
@@ -167,7 +245,80 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
+     * Get country code
+     *
+     * @return string
+     */
+    public function getCountryCode()
+    {
+        return $this->countryCode;
+    }
+
+    /**
+     * Set country code
+     *
+     * @param string $countryCode Двубуквен код на държавата, където се намира магазинът на търговеца.
+     *
+     * @return Sale
+     * @throws ParameterValidationException
+     */
+    public function setCountryCode($countryCode)
+    {
+        if (mb_strlen($countryCode) != 2) {
+            throw new ParameterValidationException('Country code must be exact 2 characters (ISO2)');
+        }
+        $this->countryCode = strtoupper($countryCode);
+        return $this;
+    }
+
+    /**
+     * Get merchant GMT
+     *
+     * @return string|null
+     */
+    public function getMerchantGMT()
+    {
+        if (empty($this->merchantGMT)) {
+            $this->setMerchantGMT(date('O'));
+        }
+        return $this->merchantGMT;
+    }
+
+    /**
+     * Set merchant GMT
+     *
+     * @param string $merchantGMT Отстояние на часовата зона на търговеца от UTC/GMT  (напр. +03).
+     *
+     * @return Sale
+     */
+    public function setMerchantGMT($merchantGMT)
+    {
+        $this->merchantGMT = $merchantGMT;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMerchantName()
+    {
+        return $this->merchantName;
+    }
+
+    /**
+     * @param string $merchantName
+     *
+     * @return Sale
+     */
+    public function setMerchantName($merchantName)
+    {
+        $this->merchantName = $merchantName;
+        return $this;
+    }
+
+    /**
      * Get merchant URL
+     *
      * @return string
      */
     public function getMerchantUrl()
@@ -177,7 +328,9 @@ class Sale extends Request implements RequestInterface
 
     /**
      * Set merchant URL
+     *
      * @param string $merchantUrl URL на web сайта на търговеца.
+     *
      * @return Sale
      * @throws ParameterValidationException
      */
@@ -192,95 +345,8 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
-     * Get data required for request to borica
-     * @return array
-     * @throws Exceptions\SignatureException
-     */
-    public function getData()
-    {
-        return [
-                'NONCE' => strtoupper(bin2hex(openssl_random_pseudo_bytes(16))),
-                'P_SIGN' => $this->generateSignature(),
-
-                'TRTYPE' => $this->getTransactionType()->getValue(),
-                'COUNTRY' => $this->getCountryCode(),
-                'CURRENCY' => $this->getCurrency(),
-
-                'MERCH_GMT' => $this->getMerchantGMT(),
-
-                'ORDER' => $this->getOrder(),
-                'AMOUNT' => $this->getAmount(),
-                'DESC' => $this->getDescription(),
-                'TIMESTAMP' => $this->getSignatureTimestamp(),
-
-                'TERMINAL' => $this->getTerminalID(),
-                'MERCH_URL' => $this->getMerchantUrl(),
-                'BACKREF' => $this->getBackRefUrl(),
-            ] + $this->generateAdCustBorOrderId();
-    }
-
-    /**
-     * Generate signature of data
-     * @return string
-     * @throws Exceptions\SignatureException
-     */
-    public function generateSignature()
-    {
-        return $this->getPrivateSignature([
-            $this->getTerminalID(),
-            $this->getTransactionType()->getValue(),
-            $this->getAmount(),
-            $this->getCurrency(),
-            $this->getSignatureTimestamp()
-        ]);
-    }
-
-    /**
-     * Get country code
-     * @return string
-     */
-    public function getCountryCode()
-    {
-        return $this->countryCode;
-    }
-
-    /**
-     * Set country code
-     * @param string $countryCode Двубуквен код на държавата, където се намира магазинът на търговеца.
-     * @return Sale
-     * @throws ParameterValidationException
-     */
-    public function setCountryCode($countryCode)
-    {
-        if (mb_strlen($countryCode) != 2) {
-            throw new ParameterValidationException('Country code must be exact 2 characters (ISO2)');
-        }
-        $this->countryCode = $countryCode;
-        return $this;
-    }
-
-    /**
-     * Get merchant GMT
-     * @return string|null
-     */
-    public function getMerchantGMT()
-    {
-        return $this->merchantGMT;
-    }
-
-    /**
-     * Set merchant GMT
-     * @param string $merchantGMT Отстояние на часовата зона на търговеца от UTC/GMT  (напр. +03).
-     * @return Sale
-     */
-    public function setMerchantGMT($merchantGMT)
-    {
-        $this->merchantGMT = $merchantGMT;
-        return $this;
-    }
-
-    /**
      * Generate AD.CUST_BOR_ORDER_ID borica field
+     *
      * @return array
      */
     private function generateAdCustBorOrderId()
@@ -304,6 +370,7 @@ class Sale extends Request implements RequestInterface
 
     /**
      * Get 'AD.CUST_BOR_ORDER_ID' field
+     *
      * @return string
      */
     public function getAdCustBorOrderId()
@@ -313,7 +380,9 @@ class Sale extends Request implements RequestInterface
 
     /**
      * Set 'AD.CUST_BOR_ORDER_ID' field
+     *
      * @param string $adCustBorOrderId Идентификатор на поръчката за Банката на търговеца във финансовите файлове.
+     *
      * @return Sale
      */
     public function setAdCustBorOrderId($adCustBorOrderId)

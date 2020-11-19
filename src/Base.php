@@ -5,6 +5,7 @@
 
 namespace VenelinIliev\Borica3ds;
 
+use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 
 /**
@@ -12,6 +13,17 @@ use VenelinIliev\Borica3ds\Exceptions\SignatureException;
  */
 abstract class Base
 {
+
+    /**
+     * @var string
+     */
+    protected $merchantId;
+
+    /**
+     * @var string
+     */
+    private $terminalID;
+
     /**
      * @var string
      */
@@ -35,15 +47,6 @@ abstract class Base
      * @var string
      */
     private $environment = 'production';
-
-    /**
-     * Switch to development mode
-     * @return void
-     */
-    public function inDevelopment()
-    {
-        $this->environment = 'development';
-    }
 
     /**
      * @return boolean
@@ -73,7 +76,8 @@ abstract class Base
     }
 
     /**
-     * @param boolean $production
+     * Switch environment to development/production
+     * @param boolean $production True - production / false - development.
      *
      * @return Base
      */
@@ -88,6 +92,77 @@ abstract class Base
     }
 
     /**
+     * Switch to production mode
+     * @return Base
+     */
+    public function inProduction()
+    {
+        $this->environment = 'production';
+        return $this;
+    }
+
+    /**
+     * Switch to development mode
+     * @return Base
+     */
+    public function inDevelopment()
+    {
+        $this->environment = 'development';
+        return $this;
+    }
+
+    /**
+     * Get terminal ID
+     * @return mixed
+     */
+    public function getTerminalID()
+    {
+        return $this->terminalID;
+    }
+
+    /**
+     * Set terminal ID
+     * @param string $terminalID Terminal ID.
+     * @return Base
+     * @throws ParameterValidationException
+     */
+    public function setTerminalID($terminalID)
+    {
+        if (mb_strlen($terminalID) != 8) {
+            throw new ParameterValidationException('Terminal ID must be exact 8 characters!');
+        }
+        $this->terminalID = $terminalID;
+        return $this;
+    }
+
+    /**
+     * Get merchant ID
+     *
+     * @return mixed
+     */
+    public function getMerchantId()
+    {
+        return $this->merchantId;
+    }
+
+    /**
+     * Set merchant ID
+     *
+     * @param mixed $merchantId Merchant ID.
+     *
+     * @return Base
+     * @throws ParameterValidationException
+     */
+    public function setMerchantId($merchantId)
+    {
+        if (mb_strlen($merchantId) < 10 || mb_strlen($merchantId) > 15) {
+            throw new ParameterValidationException('Merchant ID must be 10-15 characters');
+        }
+        $this->merchantId = $merchantId;
+        return $this;
+    }
+
+    /**
      * Generate signature of data with private key
      * @param array $data Данни върху които да генерира подписа.
      * @return string
@@ -95,13 +170,7 @@ abstract class Base
      */
     protected function getPrivateSignature(array $data)
     {
-        /*
-         * generate signature
-         */
-        $signature = '';
-        foreach ($data as $value) {
-            $signature .= mb_strlen($value) . $value;
-        }
+        $signature = $this->getSignatureSource($data);
 
         /*
          * sign signature
@@ -128,6 +197,20 @@ abstract class Base
         }
 
         return strtoupper(bin2hex($signature));
+    }
+
+    /**
+     * Generate signature source
+     * @param array $data
+     * @return string
+     */
+    private function getSignatureSource(array $data)
+    {
+        $signature = '';
+        foreach ($data as $value) {
+            $signature .= mb_strlen($value) . $value;
+        }
+        return $signature;
     }
 
     /**
@@ -174,14 +257,5 @@ abstract class Base
     {
         $this->privateKeyPassword = $privateKeyPassword;
         return $this;
-    }
-
-    /**
-     * Switch to production mode
-     * @return void
-     */
-    public function inProduction()
-    {
-        $this->environment = 'production';
     }
 }

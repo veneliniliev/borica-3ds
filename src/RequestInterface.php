@@ -19,10 +19,16 @@ interface RequestInterface
     public function getData();
 
     /**
-     * Send request
+     * Generate html form and send request with js
      * @return void
      */
     public function send();
+
+    /**
+     * Generate hidden html form without submit
+     * @return mixed
+     */
+    public function generateForm();
 
     /**
      * Sign request

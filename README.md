@@ -48,10 +48,11 @@ $saleRequest = (new Sale())
     ->setAmount(123.32)
     ->setOrder(123456)
     ->setDescription('test')
-    ->setMerchantUrl('https://test.com')
-    ->setBackRefUrl('https://test.com/back-ref-url')
-    ->setTerminalID(12345678)
-    ->setPrivateKey('\<path to certificate.key>')
+    ->setMerchantUrl('https://test.com') // optional
+    ->setBackRefUrl('https://test.com/back-ref-url') // optional / required for development
+    ->setTerminalID('<TID - V*******>')
+    ->setMerchantId('<MID - 15 chars>')
+    ->setPrivateKey('\<path to certificate.key>', '<password / or use method from bottom>')
     ->setPrivateKeyPassword('test');
 
 $formHtml = $saleRequest->generateForm(); // only generate hidden html form with filled inputs 
