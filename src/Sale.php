@@ -172,7 +172,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
-     * @param string $nonce
+     * @param string $nonce Nonce.
      * @return Sale
      */
     public function setNonce($nonce)
@@ -306,7 +306,7 @@ class Sale extends Request implements RequestInterface
     }
 
     /**
-     * @param string $merchantName
+     * @param string $merchantName Merchant name.
      *
      * @return Sale
      */

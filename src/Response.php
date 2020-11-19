@@ -28,10 +28,7 @@ abstract class Response extends Base
         /*
          * generate signature
          */
-        $signature = '';
-        foreach ($data as $value) {
-            $signature .= mb_strlen($value) . $value;
-        }
+        $signature = $this->getSignatureSource($data, true);
 
         /*
          * Open certificate file
@@ -41,13 +38,16 @@ abstract class Response extends Base
         fclose($fp);
 
         /*
-         * sign signature
+         * get public key
          */
         $publicKey = openssl_get_publickey($publicKeyContent);
         if (!$publicKey) {
             throw new SignatureException(openssl_error_string());
         }
 
+        /*
+         * verifying
+         */
         $verifyStatus = openssl_verify($signature, hex2bin($publicSignature), $publicKey, OPENSSL_ALGO_SHA256);
         if ($verifyStatus !== 1) {
             throw new SignatureException(openssl_error_string());

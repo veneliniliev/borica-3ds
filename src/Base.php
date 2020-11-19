@@ -201,13 +201,18 @@ abstract class Base
 
     /**
      * Generate signature source
-     * @param array $data
+     * @param array   $data       Data of signature.
+     * @param boolean $isResponse Generate signature from response.
      * @return string
      */
-    private function getSignatureSource(array $data)
+    protected function getSignatureSource(array $data, $isResponse = false)
     {
         $signature = '';
         foreach ($data as $value) {
+            if ($isResponse && mb_strlen($value) == 0) {
+                $signature .= '-';
+                continue;
+            }
             $signature .= mb_strlen($value) . $value;
         }
         return $signature;

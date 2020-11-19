@@ -27,9 +27,11 @@ class SaleResponse extends Response
     /**
      * Is success payment?
      * @return boolean
-     * @throws Exceptions\SignatureException|ParameterValidationException|DataMissingException
+     * @throws DataMissingException
+     * @throws ParameterValidationException
+     * @throws Exceptions\SignatureException
      */
-    public function isSuccess()
+    public function isSuccessful()
     {
         return $this->getResponseCode() === '00';
     }
@@ -77,21 +79,38 @@ class SaleResponse extends Response
 
         $responseData = $this->getResponseData();
 
+        $verifyingFields = [
+            'ACTION',
+            'RC',
+            'APPROVAL',
+            'TERMINAL',
+            'TRTYPE',
+            'AMOUNT',
+            'CURRENCY',
+            'ORDER',
+            'RRN',
+            'INT_REF',
+            'PARES_STATUS',
+            'ECI',
+            'TIMESTAMP',
+            'NONCE',
+        ];
+
+        $dateToVerify = [];
+
         /*
          * Check required data
          */
-        foreach (['TERMINAL', 'TRTYPE', 'AMOUNT', 'TIMESTAMP', 'P_SIGN', 'RC'] as $key) {
+        foreach (array_merge($verifyingFields, ['P_SIGN']) as $key) {
             if (!array_key_exists($key, $responseData)) {
                 throw new ParameterValidationException($key . ' is missing in response data!');
             }
+            if ($key != 'P_SIGN') {
+                $dateToVerify[] = $responseData[$key];
+            }
         }
 
-        $this->verifyPublicSignature([
-            $responseData['TERMINAL'],
-            $responseData['TRTYPE'],
-            $responseData['AMOUNT'],
-            $responseData['TIMESTAMP'],
-        ], $responseData['P_SIGN']);
+        $this->verifyPublicSignature($dateToVerify, $responseData['P_SIGN']);
 
         $this->dataIsVerified = true;
     }

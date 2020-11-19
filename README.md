@@ -70,7 +70,7 @@ use VenelinIliev\Borica3ds\SaleResponse;
 $saleResponse = (new SaleResponse())
             ->setPublicKey('<path to public certificate.cer>')
             ->setResponseData($_POST) //Set POST data from borica response
-            ->isSuccess();
+            ->isSuccessful();
 ```
 
 ### Methods
