@@ -13,7 +13,7 @@ use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
  *
  * @package VenelinIliev\Borica3ds
  */
-class Sale extends Request implements RequestInterface
+class SaleRequest extends Request implements RequestInterface
 {
 
     /**
@@ -74,7 +74,7 @@ class Sale extends Request implements RequestInterface
      *
      * @param string $emailAddress E-mail адрес за уведомления.
      *
-     * @return Sale
+     * @return SaleRequest
      * @throws ParameterValidationException
      */
     public function setEmailAddress($emailAddress)
@@ -173,7 +173,8 @@ class Sale extends Request implements RequestInterface
 
     /**
      * @param string $nonce Nonce.
-     * @return Sale
+     *
+     * @return SaleRequest
      */
     public function setNonce($nonce)
     {
@@ -259,7 +260,7 @@ class Sale extends Request implements RequestInterface
      *
      * @param string $countryCode Двубуквен код на държавата, където се намира магазинът на търговеца.
      *
-     * @return Sale
+     * @return SaleRequest
      * @throws ParameterValidationException
      */
     public function setCountryCode($countryCode)
@@ -289,7 +290,7 @@ class Sale extends Request implements RequestInterface
      *
      * @param string $merchantGMT Отстояние на часовата зона на търговеца от UTC/GMT  (напр. +03).
      *
-     * @return Sale
+     * @return SaleRequest
      */
     public function setMerchantGMT($merchantGMT)
     {
@@ -308,7 +309,7 @@ class Sale extends Request implements RequestInterface
     /**
      * @param string $merchantName Merchant name.
      *
-     * @return Sale
+     * @return SaleRequest
      */
     public function setMerchantName($merchantName)
     {
@@ -331,7 +332,7 @@ class Sale extends Request implements RequestInterface
      *
      * @param string $merchantUrl URL на web сайта на търговеца.
      *
-     * @return Sale
+     * @return SaleRequest
      * @throws ParameterValidationException
      */
     public function setMerchantUrl($merchantUrl)
@@ -383,7 +384,7 @@ class Sale extends Request implements RequestInterface
      *
      * @param string $adCustBorOrderId Идентификатор на поръчката за Банката на търговеца във финансовите файлове.
      *
-     * @return Sale
+     * @return SaleRequest
      */
     public function setAdCustBorOrderId($adCustBorOrderId)
     {

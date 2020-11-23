@@ -44,9 +44,9 @@ openssl req -new -key test.key -out test.csr
 ### Sale request
 
 ````php
-use VenelinIliev\Borica3ds\Sale;
+use VenelinIliev\Borica3ds\SaleRequest;
 // ...
-$saleRequest = (new Sale())
+$saleRequest = (new SaleRequest())
     ->setAmount(123.32)
     ->setOrder(123456)
     ->setDescription('test')

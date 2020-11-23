@@ -7,7 +7,7 @@ namespace VenelinIliev\Borica3ds\Tests;
 
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
-use VenelinIliev\Borica3ds\Sale;
+use VenelinIliev\Borica3ds\SaleRequest;
 
 class SaleTest extends TestCase
 {
@@ -17,7 +17,7 @@ class SaleTest extends TestCase
      */
     public function testSignature()
     {
-        $sale = (new Sale())
+        $sale = (new SaleRequest())
             ->setAmount(1)
             ->setCurrency('BGN')
             ->setOrder(145659)
@@ -43,7 +43,7 @@ class SaleTest extends TestCase
      */
     public function testData()
     {
-        $saleData = (new Sale())
+        $saleData = (new SaleRequest())
             ->setAmount(1)
             ->setCurrency('BGN')
             ->setOrder(145659)

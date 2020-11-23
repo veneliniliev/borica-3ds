@@ -5,7 +5,7 @@
 
 namespace VenelinIliev\Borica3ds\Tests;
 
-use VenelinIliev\Borica3ds\Sale;
+use VenelinIliev\Borica3ds\SaleRequest;
 
 class BaseTest extends TestCase
 {
@@ -14,7 +14,7 @@ class BaseTest extends TestCase
 	 */
 	public function testEnvironments()
 	{
-		$saleData = new Sale();
+		$saleData = new SaleRequest();
 
 		//init
 		$this->assertTrue($saleData->isProduction());
