@@ -111,13 +111,13 @@ Response codes table
 
 ```php
  $statusCheckRequest = (new StatusCheckRequest())
-            //->inDevelopment()
-            ->setPrivateKey('\<path to certificate.key>', '<password / or use method from bottom>')
-             ->setPublicKey('<path to public certificate.cer>')
-             ->setTerminalID('<TID - V*******>')
-            ->setOrder('<order>')
-            ->setOriginalTransactionType(TransactionType::SALE()) // transaction type
-            ->setNonce('<nonce>');
+    //->inDevelopment()
+    ->setPrivateKey('\<path to certificate.key>', '<password / or use method from bottom>')
+    ->setPublicKey('<path to public certificate.cer>')
+    ->setTerminalID('<TID - V*******>')
+    ->setOrder('<order>')
+    ->setOriginalTransactionType(TransactionType::SALE()); // transaction type
+
         
 //send to borica
 $statusCheckResponse = $statusCheckRequest->send();
