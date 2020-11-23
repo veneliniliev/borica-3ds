@@ -9,7 +9,7 @@ use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 use VenelinIliev\Borica3ds\SaleRequest;
 
-class SaleTest extends TestCase
+class SaleRequestTest extends TestCase
 {
     /**
      * @return void

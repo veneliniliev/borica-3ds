@@ -47,11 +47,6 @@ class SaleRequest extends Request implements RequestInterface
     protected $adCustBorOrderId;
 
     /**
-     * @var string
-     */
-    protected $nonce;
-
-    /**
      * Sale constructor.
      */
     public function __construct()
@@ -157,29 +152,6 @@ class SaleRequest extends Request implements RequestInterface
                 'TERMINAL' => $this->getTerminalID(),
                 'BACKREF' => $this->getBackRefUrl(),
             ] + $this->generateAdCustBorOrderId();
-    }
-
-    /**
-     * @return string
-     */
-    private function getNonce()
-    {
-        if (!empty($this->nonce)) {
-            return $this->nonce;
-        }
-        $this->setNonce(strtoupper(bin2hex(openssl_random_pseudo_bytes(16))));
-        return $this->nonce;
-    }
-
-    /**
-     * @param string $nonce Nonce.
-     *
-     * @return SaleRequest
-     */
-    public function setNonce($nonce)
-    {
-        $this->nonce = $nonce;
-        return $this;
     }
 
     /**

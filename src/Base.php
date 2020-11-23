@@ -49,6 +49,11 @@ abstract class Base
     private $environment = 'production';
 
     /**
+     * @var string
+     */
+    protected $publicKey;
+
+    /**
      * @return boolean
      */
     public function isProduction()
@@ -261,6 +266,34 @@ abstract class Base
     public function setPrivateKeyPassword($privateKeyPassword)
     {
         $this->privateKeyPassword = $privateKeyPassword;
+        return $this;
+    }
+
+    /**
+     * Get public key
+     *
+     * @return string
+     * @throws ParameterValidationException
+     */
+    public function getPublicKey()
+    {
+        if (empty($this->publicKey)) {
+            throw new ParameterValidationException('Please set public key first!');
+        }
+
+        return $this->publicKey;
+    }
+
+    /**
+     * Set public key
+     *
+     * @param string $publicKey Public key path.
+     *
+     * @return Base
+     */
+    public function setPublicKey($publicKey)
+    {
+        $this->publicKey = $publicKey;
         return $this;
     }
 }

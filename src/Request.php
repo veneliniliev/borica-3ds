@@ -50,7 +50,13 @@ abstract class Request extends Base
     private $order;
 
     /**
+     * @var string
+     */
+    private $nonce;
+
+    /**
      * Get description
+     *
      * @return mixed
      */
     public function getDescription()
@@ -60,7 +66,9 @@ abstract class Request extends Base
 
     /**
      * Set description
+     *
      * @param string $description Описание на поръчката.
+     *
      * @return Request
      * @throws ParameterValidationException
      */
@@ -75,6 +83,7 @@ abstract class Request extends Base
 
     /**
      * Get back ref url
+     *
      * @return string
      */
     public function getBackRefUrl()
@@ -84,7 +93,9 @@ abstract class Request extends Base
 
     /**
      * Set back ref url
+     *
      * @param string $backRefUrl URL на търговеца за изпращане на резултата от авторизацията.
+     *
      * @return Request
      */
     public function setBackRefUrl($backRefUrl)
@@ -95,6 +106,7 @@ abstract class Request extends Base
 
     /**
      * Get order
+     *
      * @return mixed
      */
     public function getOrder()
@@ -104,7 +116,9 @@ abstract class Request extends Base
 
     /**
      * Set order
+     *
      * @param mixed $order Номер на поръчката за търговеца, 6 цифри, който трябва да бъде уникален за деня.
+     *
      * @return Request
      * @throws ParameterValidationException
      */
@@ -120,6 +134,7 @@ abstract class Request extends Base
 
     /**
      * Get transaction type
+     *
      * @return TransactionType
      */
     public function getTransactionType()
@@ -129,7 +144,9 @@ abstract class Request extends Base
 
     /**
      * Set transaction type
+     *
      * @param TransactionType $transactionType Тип на транзакцията.
+     *
      * @return Request
      */
     public function setTransactionType(TransactionType $transactionType)
@@ -140,6 +157,7 @@ abstract class Request extends Base
 
     /**
      * Get amount
+     *
      * @return float|null
      */
     public function getAmount()
@@ -149,7 +167,9 @@ abstract class Request extends Base
 
     /**
      * Set amount
+     *
      * @param string|float|integer $amount Обща стойност на поръчката по стандарт ISO_4217 с десетичен разделител точка.
+     *
      * @return Request
      */
     public function setAmount($amount)
@@ -160,6 +180,7 @@ abstract class Request extends Base
 
     /**
      * Get currency
+     *
      * @return string
      */
     public function getCurrency()
@@ -169,7 +190,9 @@ abstract class Request extends Base
 
     /**
      * Set currency
+     *
      * @param string $currency Валута на поръчката: три буквен код на валута по стандарт ISO 4217.
+     *
      * @return Request
      * @throws ParameterValidationException
      */
@@ -184,6 +207,7 @@ abstract class Request extends Base
 
     /**
      * Get signature timestamp
+     *
      * @return string
      */
     public function getSignatureTimestamp()
@@ -197,7 +221,9 @@ abstract class Request extends Base
 
     /**
      * Set signature timestamp
+     *
      * @param string|null $signatureTimestamp Дата на подпис/изпращане на данните.
+     *
      * @return Request
      */
     public function setSignatureTimestamp($signatureTimestamp = null)
@@ -208,6 +234,29 @@ abstract class Request extends Base
         }
 
         $this->signatureTimestamp = $signatureTimestamp;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNonce()
+    {
+        if (!empty($this->nonce)) {
+            return $this->nonce;
+        }
+        $this->setNonce(strtoupper(bin2hex(openssl_random_pseudo_bytes(16))));
+        return $this->nonce;
+    }
+
+    /**
+     * @param string $nonce Nonce.
+     *
+     * @return Request
+     */
+    public function setNonce($nonce)
+    {
+        $this->nonce = $nonce;
         return $this;
     }
 }

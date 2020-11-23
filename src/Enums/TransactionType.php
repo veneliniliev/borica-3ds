@@ -11,6 +11,7 @@ use MyCLabs\Enum\Enum;
  * Class TransactionType
  * @package VenelinIliev\Borica3ds\Enums
  * @method static SALE()
+ * @method static TRANSACTION_STATUS_CHECK()
  */
 class TransactionType extends Enum
 {

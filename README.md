@@ -7,6 +7,8 @@
 - PHP >= 5.6 (including 8.0)
 - ext-mbstring
 - ext-openssl
+- ext-curl
+- ext-json
 
 ## Installation
 
@@ -104,6 +106,28 @@ Response codes table
 |"65"              | Soft Decline |
 |"91"              | Issuer or switch is inoperative |
 |"96"              | System Malfunction |   
+
+### Transaction status check
+
+```php
+ $statusCheckRequest = (new StatusCheckRequest())
+            //->inDevelopment()
+            ->setPrivateKey('\<path to certificate.key>', '<password / or use method from bottom>')
+             ->setPublicKey('<path to public certificate.cer>')
+             ->setTerminalID('<TID - V*******>')
+            ->setOrder('<order>')
+            ->setOriginalTransactionType(TransactionType::SALE()) // transaction type
+            ->setNonce('<nonce>');
+        
+//send to borica
+$statusCheckResponse = $statusCheckRequest->send();
+ 
+// get data from borica response
+$verifiedResponseData = $statusCheckResponse->getResponseData();
+
+// get field from borica response
+$statusCheckResponse->getVerifiedData('<field from response. ex: ACTION');
+```
 
 ### Methods
 
