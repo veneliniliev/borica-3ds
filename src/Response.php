@@ -74,11 +74,16 @@ abstract class Response extends Base
 
         $dateToVerify = [];
 
+        /**
+         * Response from borica
+         */
+        $responseFromBorica = $this->getResponseData(false);
+
         /*
          * Check required data
          */
         foreach (array_merge($verifyingFields, ['P_SIGN']) as $key) {
-            if (!array_key_exists($key, $this->responseData)) {
+            if (!array_key_exists($key, $responseFromBorica)) {
                 throw new ParameterValidationException($key . ' is missing in response data!');
             }
             if ($key != 'P_SIGN') {
@@ -87,15 +92,15 @@ abstract class Response extends Base
                  * това нямам идея защо така са го направили... но да :/
                  * @see 5.2 от документацията
                  */
-                if ($key == 'CURRENCY' && empty($this->responseData[$key])) {
-                    $this->responseData['CURRENCY'] = 'USD';
+                if ($key == 'CURRENCY' && empty($responseFromBorica[$key])) {
+                    $responseFromBorica['CURRENCY'] = 'USD';
                 }
 
-                $dateToVerify[] = $this->responseData[$key];
+                $dateToVerify[] = $responseFromBorica[$key];
             }
         }
 
-        $this->verifyPublicSignature($dateToVerify, $this->responseData['P_SIGN']);
+        $this->verifyPublicSignature($dateToVerify, $responseFromBorica['P_SIGN']);
 
         $this->dataIsVerified = true;
     }
@@ -155,16 +160,23 @@ abstract class Response extends Base
      * Get response data
      *
      * @note If response data is not set - set data to $_POST
+     *
+     * @param boolean $verify Verify data before return.
+     *
      * @return array
-     * @throws Exceptions\SignatureException
      * @throws ParameterValidationException
+     * @throws SignatureException
      */
-    public function getResponseData()
+    public function getResponseData($verify = true)
     {
         if (empty($this->responseData)) {
             $this->setResponseData($_POST);
         }
-        $this->verifyData();
+
+        if ($verify) {
+            $this->verifyData();
+        }
+
         return $this->responseData;
     }
 
