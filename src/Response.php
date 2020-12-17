@@ -91,8 +91,9 @@ abstract class Response extends Base
                 /**
                  * това нямам идея защо така са го направили... но да :/
                  * @see 5.2 от документацията
+                 * @note прави се само за TRTYPE = 90!
                  */
-                if ($key == 'CURRENCY' && empty($responseFromBorica[$key])) {
+                if ($key == 'CURRENCY' && empty($responseFromBorica[$key]) && $responseFromBorica['TRTYPE'] == 90) {
                     $responseFromBorica['CURRENCY'] = 'USD';
                 }
 
