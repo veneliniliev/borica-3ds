@@ -23,8 +23,10 @@ For more methods, read [api documentation](API.md).
 ### Generate private key
 
 ```shell script
-openssl genrsa -out real.key -aes256 2048
-openssl genrsa -out test.key -aes256 2048
+# Production key
+openssl genrsa -out production.key -aes256 2048
+# Development key
+openssl genrsa -out development.key -aes256 2048
 ```
 
 ### Generate CSR
@@ -32,8 +34,10 @@ openssl genrsa -out test.key -aes256 2048
 **IMPORTANT**: in `Organizational Unit Name (eg, section)` enter your  terminal ID and in `Common Name (eg, fully qualified host name)` enter your domain name.
 
 ```shell script
-openssl req -new -key real.key -out real.csr
-openssl req -new -key test.key -out test.csr
+# Production csr
+openssl req -new -key production.key -out VNNNNNNN_YYYYMMDD_P.csr
+# Development csr
+openssl req -new -key development.key -out VNNNNNNN_YYYYMMDD_D.csr
 ```
 
 Имената на файловете се създават по следната конвенция: **VNNNNNNN_YYYYMMDD_T**, където:
