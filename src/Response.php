@@ -72,7 +72,7 @@ abstract class Response extends Base
             'NONCE',
         ];
 
-        $dateToVerify = [];
+        $dataToVerify = [];
 
         /**
          * Response from borica
@@ -97,11 +97,11 @@ abstract class Response extends Base
                     $responseFromBorica['CURRENCY'] = 'USD';
                 }
 
-                $dateToVerify[] = $responseFromBorica[$key];
+                $dataToVerify[] = $responseFromBorica[$key];
             }
         }
 
-        $this->verifyPublicSignature($dateToVerify, $responseFromBorica['P_SIGN']);
+        $this->verifyPublicSignature($dataToVerify, $responseFromBorica['P_SIGN']);
 
         $this->dataIsVerified = true;
     }
