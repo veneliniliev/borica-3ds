@@ -47,6 +47,13 @@ openssl req -new -key development.key -out VNNNNNNN_YYYYMMDD_D.csr
 
 ## Usage
 
+**IMPORTANT**: Switch signing schema MAC_EXTENDED / MAC_ADVANCED with methods:
+````php
+$saleRequest->setSigningSchemaMacExtended(); // use MAC_EXTENDED
+$saleRequest->setSigningSchemaMacAdvanced(); // use MAC_ADVANCED
+````
+Default signing schema is **MAC_ADVANCED**!
+
 ### Sale request
 
 ````php
@@ -61,6 +68,8 @@ $saleRequest = (new SaleRequest())
     ->setTerminalID('<TID - V*******>')
     ->setMerchantId('<MID - 15 chars>')
     ->setPrivateKey('\<path to certificate.key>', '<password / or use method from bottom>')
+    //->setSigningSchemaMacExtended(); // use MAC_EXTENDED
+    //->setSigningSchemaMacAdvanced(); // use MAC_ADVANCED
     ->setPrivateKeyPassword('test');
 
 $formHtml = $saleRequest->generateForm(); // only generate hidden html form with filled inputs 

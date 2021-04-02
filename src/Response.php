@@ -55,22 +55,7 @@ abstract class Response extends Base
             return;
         }
 
-        $verifyingFields = [
-            'ACTION',
-            'RC',
-            'APPROVAL',
-            'TERMINAL',
-            'TRTYPE',
-            'AMOUNT',
-            'CURRENCY',
-            'ORDER',
-            'RRN',
-            'INT_REF',
-            'PARES_STATUS',
-            'ECI',
-            'TIMESTAMP',
-            'NONCE',
-        ];
+        $verifyingFields = $this->getVerifyingFields();
 
         $dataToVerify = [];
 
@@ -90,7 +75,8 @@ abstract class Response extends Base
 
                 /**
                  * това нямам идея защо така са го направили... но да :/
-                 * @see 5.2 от документацията
+                 *
+                 * @see  5.2 от документацията
                  * @note прави се само за TRTYPE = 90!
                  */
                 if ($key == 'CURRENCY' && empty($responseFromBorica[$key]) && $responseFromBorica['TRTYPE'] == 90) {
@@ -104,6 +90,67 @@ abstract class Response extends Base
         $this->verifyPublicSignature($dataToVerify, $responseFromBorica['P_SIGN']);
 
         $this->dataIsVerified = true;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getVerifyingFields()
+    {
+        return [
+            'ACTION',
+            'RC',
+            'APPROVAL',
+            'TERMINAL',
+            'TRTYPE',
+            'AMOUNT',
+            'CURRENCY',
+            'ORDER',
+            'RRN',
+            'INT_REF',
+            'PARES_STATUS',
+            'ECI',
+            'TIMESTAMP',
+            'NONCE',
+        ];
+    }
+
+    /**
+     * Get response data
+     *
+     * @note If response data is not set - set data to $_POST
+     *
+     * @param boolean $verify Verify data before return.
+     *
+     * @return array
+     * @throws ParameterValidationException
+     * @throws SignatureException
+     */
+    public function getResponseData($verify = true)
+    {
+        if (empty($this->responseData)) {
+            $this->setResponseData($_POST);
+        }
+
+        if ($verify) {
+            $this->verifyData();
+        }
+
+        return $this->responseData;
+    }
+
+    /**
+     * Set response data
+     *
+     * @param array $responseData Response data from borica.
+     *
+     * @return Response
+     */
+    public function setResponseData(array $responseData)
+    {
+        $this->dataIsVerified = false;
+        $this->responseData = $responseData;
+        return $this;
     }
 
     /**
@@ -155,43 +202,5 @@ abstract class Response extends Base
              */
             openssl_pkey_free($publicKey);
         }
-    }
-
-    /**
-     * Get response data
-     *
-     * @note If response data is not set - set data to $_POST
-     *
-     * @param boolean $verify Verify data before return.
-     *
-     * @return array
-     * @throws ParameterValidationException
-     * @throws SignatureException
-     */
-    public function getResponseData($verify = true)
-    {
-        if (empty($this->responseData)) {
-            $this->setResponseData($_POST);
-        }
-
-        if ($verify) {
-            $this->verifyData();
-        }
-
-        return $this->responseData;
-    }
-
-    /**
-     * Set response data
-     *
-     * @param array $responseData Response data from borica.
-     *
-     * @return Response
-     */
-    public function setResponseData(array $responseData)
-    {
-        $this->dataIsVerified = false;
-        $this->responseData = $responseData;
-        return $this;
     }
 }

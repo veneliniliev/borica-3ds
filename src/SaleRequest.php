@@ -164,6 +164,20 @@ class SaleRequest extends Request implements RequestInterface
     public function generateSignature()
     {
         $this->validateRequiredParameters();
+
+        if ($this->isSigningSchemaMacAdvanced()) {
+            return $this->getPrivateSignature([
+                $this->getTerminalID(),
+                $this->getTransactionType()->getValue(),
+                $this->getAmount(),
+                $this->getCurrency(),
+                $this->getOrder(),
+                $this->getSignatureTimestamp(),
+                $this->getNonce()
+            ]);
+        }
+
+        // MAC_EXTENDED
         return $this->getPrivateSignature([
             $this->getTerminalID(),
             $this->getTransactionType()->getValue(),

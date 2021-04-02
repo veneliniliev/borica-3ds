@@ -14,10 +14,25 @@ use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 abstract class Base
 {
 
+    const SIGNING_SCHEMA_MAC_ADVANCED = 'MAC_ADVANCED';
+    const SIGNING_SCHEMA_MAC_EXTENDED = 'MAC_EXTENDED';
+
+    /**
+     * Default signing schema
+     *
+     * @var string
+     */
+    protected $signingSchema = self::SIGNING_SCHEMA_MAC_ADVANCED;
+
     /**
      * @var string
      */
     protected $merchantId;
+
+    /**
+     * @var string
+     */
+    protected $publicKey;
 
     /**
      * @var string
@@ -44,14 +59,10 @@ abstract class Base
 
     /**
      * In develop mode of application
+     *
      * @var string
      */
     private $environment = 'production';
-
-    /**
-     * @var string
-     */
-    protected $publicKey;
 
     /**
      * @return boolean
@@ -82,6 +93,7 @@ abstract class Base
 
     /**
      * Switch environment to development/production
+     *
      * @param boolean $production True - production / false - development.
      *
      * @return Base
@@ -98,6 +110,7 @@ abstract class Base
 
     /**
      * Switch to production mode
+     *
      * @return Base
      */
     public function inProduction()
@@ -108,6 +121,7 @@ abstract class Base
 
     /**
      * Switch to development mode
+     *
      * @return Base
      */
     public function inDevelopment()
@@ -118,6 +132,7 @@ abstract class Base
 
     /**
      * Get terminal ID
+     *
      * @return mixed
      */
     public function getTerminalID()
@@ -127,7 +142,9 @@ abstract class Base
 
     /**
      * Set terminal ID
+     *
      * @param string $terminalID Terminal ID.
+     *
      * @return Base
      * @throws ParameterValidationException
      */
@@ -168,104 +185,24 @@ abstract class Base
     }
 
     /**
-     * Generate signature of data with private key
-     * @param array $data Данни върху които да генерира подписа.
-     * @return string
-     * @throws SignatureException
-     */
-    protected function getPrivateSignature(array $data)
-    {
-        $signature = $this->getSignatureSource($data);
-
-        /*
-         * sign signature
-         */
-        $privateKey = openssl_get_privatekey('file://' . $this->getPrivateKey(), $this->getPrivateKeyPassword());
-        if (!$privateKey) {
-            throw new SignatureException(openssl_error_string());
-        }
-
-        $openSignStatus = openssl_sign($signature, $signature, $privateKey, OPENSSL_ALGO_SHA256);
-        if (!$openSignStatus) {
-            throw new SignatureException(openssl_error_string());
-        }
-
-        if (PHP_MAJOR_VERSION < 8) {
-            /**
-             * @deprecated in PHP 8.0
-             * @note The openssl_pkey_free() function is deprecated and no longer has an effect,
-             * instead the OpenSSLAsymmetricKey instance is automatically destroyed if it is no
-             * longer referenced.
-             * @see https://github.com/php/php-src/blob/master/UPGRADING#L397
-             */
-            openssl_pkey_free($privateKey);
-        }
-
-        return strtoupper(bin2hex($signature));
-    }
-
-    /**
-     * Generate signature source
-     * @param array   $data       Data of signature.
-     * @param boolean $isResponse Generate signature from response.
-     * @return string
-     */
-    protected function getSignatureSource(array $data, $isResponse = false)
-    {
-        $signature = '';
-        foreach ($data as $value) {
-            if ($isResponse && mb_strlen($value) == 0) {
-                $signature .= '-';
-                continue;
-            }
-            $signature .= mb_strlen($value) . $value;
-        }
-        return $signature;
-    }
-
-    /**
-     * Get private key
-     * @return string
-     */
-    public function getPrivateKey()
-    {
-        return $this->privateKey;
-    }
-
-    /**
-     * Set private key
-     * @param string      $privateKeyPath Път до файла на частният ключ.
-     * @param string|null $password       Парола на частният ключ.
+     * Switch signing schema to MAC_ADVANCED
+     *
      * @return Base
      */
-    public function setPrivateKey($privateKeyPath, $password = null)
+    public function setSigningSchemaMacAdvanced()
     {
-        $this->privateKey = $privateKeyPath;
-
-        if (!empty($password)) {
-            $this->setPrivateKeyPassword($password);
-        }
-
+        $this->signingSchema = self::SIGNING_SCHEMA_MAC_ADVANCED;
         return $this;
     }
 
     /**
-     * Get private key password
-     * @return string|null
-     */
-    public function getPrivateKeyPassword()
-    {
-        return $this->privateKeyPassword;
-    }
-
-    /**
-     * Set private key password
-     * @param string|null $privateKeyPassword Парола на частният ключ.
+     * Switch signing schema to MAC_EXTENDED
+     *
      * @return Base
      */
-    public function setPrivateKeyPassword($privateKeyPassword)
+    public function setSigningSchemaMacExtended()
     {
-        $this->privateKeyPassword = $privateKeyPassword;
+        $this->signingSchema = self::SIGNING_SCHEMA_MAC_EXTENDED;
         return $this;
     }
 
@@ -294,6 +231,128 @@ abstract class Base
     public function setPublicKey($publicKey)
     {
         $this->publicKey = $publicKey;
+        return $this;
+    }
+
+    /**
+     * Is MAC_ADVANCE signing schema?
+     *
+     * @return boolean
+     */
+    protected function isSigningSchemaMacAdvanced()
+    {
+        return $this->signingSchema == self::SIGNING_SCHEMA_MAC_ADVANCED;
+    }
+
+    /**
+     * Generate signature of data with private key
+     *
+     * @param array $data Данни върху които да генерира подписа.
+     *
+     * @return string
+     * @throws SignatureException
+     */
+    protected function getPrivateSignature(array $data)
+    {
+        $signature = $this->getSignatureSource($data);
+
+        /*
+         * sign signature
+         */
+        $privateKey = openssl_get_privatekey('file://' . $this->getPrivateKey(), $this->getPrivateKeyPassword());
+        if (!$privateKey) {
+            throw new SignatureException(openssl_error_string());
+        }
+
+        $openSignStatus = openssl_sign($signature, $signature, $privateKey, OPENSSL_ALGO_SHA256);
+        if (!$openSignStatus) {
+            throw new SignatureException(openssl_error_string());
+        }
+
+        if (PHP_MAJOR_VERSION < 8) {
+            /**
+             * @deprecated in PHP 8.0
+             * @note       The openssl_pkey_free() function is deprecated and no longer has an effect,
+             * instead the OpenSSLAsymmetricKey instance is automatically destroyed if it is no
+             * longer referenced.
+             * @see        https://github.com/php/php-src/blob/master/UPGRADING#L397
+             */
+            openssl_pkey_free($privateKey);
+        }
+
+        return strtoupper(bin2hex($signature));
+    }
+
+    /**
+     * Generate signature source
+     *
+     * @param array   $data       Data of signature.
+     * @param boolean $isResponse Generate signature from response.
+     *
+     * @return string
+     */
+    protected function getSignatureSource(array $data, $isResponse = false)
+    {
+        $signature = '';
+        foreach ($data as $value) {
+            if ($isResponse && mb_strlen($value) == 0) {
+                $signature .= '-';
+                continue;
+            }
+            $signature .= mb_strlen($value) . $value;
+        }
+        return $signature;
+    }
+
+    /**
+     * Get private key
+     *
+     * @return string
+     */
+    public function getPrivateKey()
+    {
+        return $this->privateKey;
+    }
+
+    /**
+     * Set private key
+     *
+     * @param string      $privateKeyPath Път до файла на частният ключ.
+     * @param string|null $password       Парола на частният ключ.
+     *
+     * @return Base
+     */
+    public function setPrivateKey($privateKeyPath, $password = null)
+    {
+        $this->privateKey = $privateKeyPath;
+
+        if (!empty($password)) {
+            $this->setPrivateKeyPassword($password);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get private key password
+     *
+     * @return string|null
+     */
+    public function getPrivateKeyPassword()
+    {
+        return $this->privateKeyPassword;
+    }
+
+    /**
+     * Set private key password
+     *
+     * @param string|null $privateKeyPassword Парола на частният ключ.
+     *
+     * @return Base
+     */
+    public function setPrivateKeyPassword($privateKeyPassword)
+    {
+        $this->privateKeyPassword = $privateKeyPassword;
         return $this;
     }
 }
