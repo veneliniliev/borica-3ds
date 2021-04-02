@@ -80,9 +80,12 @@
 | public | <strong>setPrivateKey(</strong><em>string</em> <strong>$privateKeyPath</strong>, <em>string/null</em> <strong>$password=null</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Base](#class-venelinilievborica3dsbase-abstract)</em><br /><em>Set private key</em> |
 | public | <strong>setPrivateKeyPassword(</strong><em>string/null</em> <strong>$privateKeyPassword</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Base](#class-venelinilievborica3dsbase-abstract)</em><br /><em>Set private key password</em> |
 | public | <strong>setPublicKey(</strong><em>string</em> <strong>$publicKey</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Base](#class-venelinilievborica3dsbase-abstract)</em><br /><em>Set public key</em> |
+| public | <strong>setSigningSchemaMacAdvanced()</strong> : <em>[\VenelinIliev\Borica3ds\Base](#class-venelinilievborica3dsbase-abstract)</em><br /><em>Switch signing schema to MAC_ADVANCED</em> |
+| public | <strong>setSigningSchemaMacExtended()</strong> : <em>[\VenelinIliev\Borica3ds\Base](#class-venelinilievborica3dsbase-abstract)</em><br /><em>Switch signing schema to MAC_EXTENDED</em> |
 | public | <strong>setTerminalID(</strong><em>string</em> <strong>$terminalID</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Base](#class-venelinilievborica3dsbase-abstract)</em><br /><em>Set terminal ID</em> |
 | protected | <strong>getPrivateSignature(</strong><em>array</em> <strong>$data</strong>)</strong> : <em>string</em><br /><em>Generate signature of data with private key</em> |
 | protected | <strong>getSignatureSource(</strong><em>array</em> <strong>$data</strong>, <em>bool/boolean</em> <strong>$isResponse=false</strong>)</strong> : <em>string</em><br /><em>Generate signature source</em> |
+| protected | <strong>isSigningSchemaMacAdvanced()</strong> : <em>boolean</em><br /><em>Is MAC_ADVANCE signing schema?</em> |
 
 <hr />
 
@@ -101,9 +104,10 @@
 
 | Visibility | Function |
 |:-----------|:---------|
-| public | <strong>getResponseData()</strong> : <em>array</em><br /><em>Get response data</em> |
+| public | <strong>getResponseData(</strong><em>bool/boolean</em> <strong>$verify=true</strong>)</strong> : <em>array</em><br /><em>Get response data</em> |
 | public | <strong>getVerifiedData(</strong><em>string</em> <strong>$key</strong>)</strong> : <em>mixed</em><br /><em>Get verified data by key</em> |
 | public | <strong>setResponseData(</strong><em>array</em> <strong>$responseData</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Response](#class-venelinilievborica3dsresponse-abstract)</em><br /><em>Set response data</em> |
+| protected | <strong>getVerifyingFields()</strong> : <em>string[]</em> |
 | protected | <strong>verifyData()</strong> : <em>void</em><br /><em>Verify data with public certificate</em> |
 | protected | <strong>verifyPublicSignature(</strong><em>array</em> <strong>$data</strong>, <em>string</em> <strong>$publicSignature</strong>)</strong> : <em>void</em><br /><em>Verify data with public certificate</em> |
 
