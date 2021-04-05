@@ -1,6 +1,7 @@
 <?php
 /*
- * Copyright (c) 2020. Venelin Iliev.
+ * Copyright (c) 2021. Venelin Iliev.
+ * https://veneliniliev.com
  */
 
 namespace VenelinIliev\Borica3ds\Tests;
