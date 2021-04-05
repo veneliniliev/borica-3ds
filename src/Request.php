@@ -97,9 +97,14 @@ abstract class Request extends Base
      * @param string $backRefUrl URL на търговеца за изпращане на резултата от авторизацията.
      *
      * @return Request
+     * @throws ParameterValidationException
      */
     public function setBackRefUrl($backRefUrl)
     {
+        if (!filter_var($backRefUrl, FILTER_VALIDATE_URL)) {
+            throw new ParameterValidationException('Backref url is not valid!');
+        }
+
         $this->backRefUrl = $backRefUrl;
         return $this;
     }
