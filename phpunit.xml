@@ -3,18 +3,15 @@
   ~ Copyright (c) 2021. Venelin Iliev.
   ~ https://veneliniliev.com
   -->
-
-<phpunit bootstrap="vendor/autoload.php" backupGlobals="false" colors="true">
-    <filter>
-        <whitelist
-                addUncoveredFilesFromWhitelist="true"
-                processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./tests/</directory>
-        </whitelist>
-    </filter>
-    <testsuites>
-        <testsuite name="Borica3ds">
-            <directory suffix=".php">./tests/</directory>
-        </testsuite>
-    </testsuites>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" backupGlobals="false" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage includeUncoveredFiles="true" processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./tests/</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="Borica3ds">
+      <directory suffix=".php">./tests/</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>

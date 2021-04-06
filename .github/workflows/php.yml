@@ -13,13 +13,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        operating-system: [ ubuntu-20.04, ubuntu-18.04, ubuntu-16.04, windows-latest, macos-latest ]
+        operating-system: [ ubuntu-latest, windows-latest, macos-latest ]
         php-versions: [ '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1' ]
     env:
-      extensions: xdebug
+      extensions: xdebug, curl
       key: cache-v3
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
