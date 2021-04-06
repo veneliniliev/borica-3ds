@@ -35,7 +35,10 @@
     }
   },
   "scripts": {
-    "test": "vendor/bin/phpunit --coverage-text",
+    "test": [
+      "@putenv XDEBUG_MODE=coverage",
+      "vendor/bin/phpunit --coverage-text"
+    ],
     "docs": "vendor/bin/phpdoc-md generate src > API.md"
   }
 }
