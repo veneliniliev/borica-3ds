@@ -25,6 +25,7 @@ class SaleRequestTest extends TestCase
             ->setDescription('Детайли плащане.')
             ->setMerchantGMT('+03')
             ->setMerchantUrl('https://test.com')
+            ->setEmailAddress('test@test.com')
             ->setBackRefUrl('https://test.com/back-ref-url')
             ->setTerminalID(self::TERMINAL_ID)
             ->setMerchantId(self::MERCHANT_ID)
@@ -32,6 +33,7 @@ class SaleRequestTest extends TestCase
             ->setPrivateKeyPassword('test')
             ->setSignatureTimestamp('20201013115715')
             ->setNonce('FC8AC36A9FDADCB6127D273CD15DAEC3')
+            ->setAdCustBorOrderId('test')
             ->setSigningSchemaMacExtended();
 
         $this->assertEquals(
@@ -59,6 +61,8 @@ class SaleRequestTest extends TestCase
             ->setPrivateKeyPassword('test')
             ->setSignatureTimestamp('20201013115715')
             ->setNonce('FC8AC36A9FDADCB6127D273CD15DAEC3')
+            ->setEmailAddress('test@test.com')
+            ->setAdCustBorOrderId('test')
             ->setSigningSchemaMacExtended()
             ->getData();
 
@@ -74,8 +78,9 @@ class SaleRequestTest extends TestCase
             'TERMINAL' => self::TERMINAL_ID,
             'MERCH_URL' => 'https://test.com',
             'MERCH_NAME' => null,
+            'EMAIL' => 'test@test.com',
             'BACKREF' => 'https://test.com/back-ref-url',
-            'AD.CUST_BOR_ORDER_ID' => '145659145659',
+            'AD.CUST_BOR_ORDER_ID' => 'test',
             'ADDENDUM' => 'AD,TD',
             'NONCE' => 'FC8AC36A9FDADCB6127D273CD15DAEC3',
             'MERCHANT' => self::MERCHANT_ID,

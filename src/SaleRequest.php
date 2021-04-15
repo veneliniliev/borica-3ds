@@ -56,33 +56,6 @@ class SaleRequest extends Request implements RequestInterface
     }
 
     /**
-     * Get notification email address
-     *
-     * @return string
-     */
-    public function getEmailAddress()
-    {
-        return $this->emailAddress;
-    }
-
-    /**
-     * Set notification email address
-     *
-     * @param string $emailAddress E-mail адрес за уведомления.
-     *
-     * @return SaleRequest
-     * @throws ParameterValidationException
-     */
-    public function setEmailAddress($emailAddress)
-    {
-        if (mb_strlen($emailAddress) > 80) {
-            throw new ParameterValidationException('Email address for notifications must be maximum 80 characters');
-        }
-        $this->emailAddress = $emailAddress;
-        return $this;
-    }
-
-    /**
      * Send to borica. Generate form and auto submit with JS.
      *
      * @return void
@@ -144,6 +117,7 @@ class SaleRequest extends Request implements RequestInterface
                 'MERCHANT' => $this->getMerchantId(),
                 'MERCH_NAME' => $this->getMerchantName(),
                 'MERCH_URL' => $this->getMerchantUrl(),
+                'EMAIL' => $this->getEmailAddress(),
 
                 'ORDER' => $this->getOrder(),
                 'AMOUNT' => $this->getAmount(),
@@ -333,22 +307,49 @@ class SaleRequest extends Request implements RequestInterface
     }
 
     /**
+     * Get notification email address
+     *
+     * @return string
+     */
+    public function getEmailAddress()
+    {
+        return $this->emailAddress;
+    }
+
+    /**
+     * Set notification email address
+     *
+     * @param string $emailAddress E-mail адрес за уведомления.
+     *
+     * @return SaleRequest
+     * @throws ParameterValidationException
+     */
+    public function setEmailAddress($emailAddress)
+    {
+        if (mb_strlen($emailAddress) > 80) {
+            throw new ParameterValidationException('Email address for notifications must be maximum 80 characters');
+        }
+        $this->emailAddress = $emailAddress;
+        return $this;
+    }
+
+    /**
      * Generate AD.CUST_BOR_ORDER_ID borica field
      *
      * @return array
      */
     private function generateAdCustBorOrderId()
     {
-        $orderString = $this->getOrder();
+        $orderString = $this->getAdCustBorOrderId();
 
-        if (!empty($this->getAdCustBorOrderId())) {
-            $orderString .= $this->getAdCustBorOrderId();
+        if (empty($orderString)) {
+            $orderString = $this->getOrder();
         }
 
         /*
          * полето не трябва да съдържа символ “;”
          */
-        $orderString .= str_ireplace(';', '', $orderString);
+        $orderString = str_ireplace(';', '', $orderString);
 
         return [
             'AD.CUST_BOR_ORDER_ID' => mb_substr($orderString, 0, 16),
