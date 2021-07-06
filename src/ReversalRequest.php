@@ -13,13 +13,6 @@ use VenelinIliev\Borica3ds\Exceptions\SendingException;
 class ReversalRequest extends Request implements RequestInterface
 {
     /**
-     * Original transaction type / TRAN_TRTYPE
-     *
-     * @var TransactionType
-     */
-    private $originalTransactionType;
-
-    /**
      * @var array
      */
     private $sendResponse;
@@ -155,6 +148,14 @@ class ReversalRequest extends Request implements RequestInterface
 
         if (empty($this->getTerminalID())) {
             throw new ParameterValidationException('TerminalID is empty!');
+        }
+
+        if (empty($this->getIntRef())) {
+            throw new ParameterValidationException('Internal reference is empty!');
+        }
+
+        if (empty($this->getRrn())) {
+            throw new ParameterValidationException('Payment reference is empty!');
         }
     }
 
