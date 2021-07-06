@@ -13,6 +13,10 @@ use MyCLabs\Enum\Enum;
  * @package VenelinIliev\Borica3ds\Enums
  * @method static SALE()
  * @method static TRANSACTION_STATUS_CHECK()
+ * @method static REVERSAL()
+ * @method static REVERSAL_REQUEST()
+ * @method static REVERSAL_REQUESTREVERSAL_REQUEST()
+ * @method static DEFERRED_AUTHORIZATION()
  */
 class TransactionType extends Enum
 {
@@ -20,7 +24,6 @@ class TransactionType extends Enum
     const DEFERRED_AUTHORIZATION = 12;
     const COMPLETION_DEFERRED_AUTHORIZATION = 21;
     const REVERSAL_REQUEST = 22;
-    const REVERSAL_ADVICE = 24;
     const TRANSACTION_STATUS_CHECK = 90;
     const REVERSAL = 24;
 }

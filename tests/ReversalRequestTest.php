@@ -10,7 +10,7 @@ use VenelinIliev\Borica3ds\ReversalRequest;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 
-class ReversaslRequestTest extends TestCase
+class ReversalRequestTest extends TestCase
 {
     /**
      * @throws ParameterValidationException|SignatureException

@@ -93,6 +93,8 @@ $isSuccessfulPayment = (new SaleResponse())
 #### Get response code
 
 ```php
+use VenelinIliev\Borica3ds\SaleResponse;
+// ...
 $saleResponse= (new SaleResponse())
                ->setPublicKey('<path to public certificate.cer>');
 
@@ -123,6 +125,9 @@ Response codes table
 ### Transaction status check
 
 ```php
+ use VenelinIliev\Borica3ds\Enums\TransactionType;
+ use VenelinIliev\Borica3ds\StatusCheckRequest;
+ // ...
  $statusCheckRequest = (new StatusCheckRequest())
     //->inDevelopment()
     ->setPrivateKey('\<path to certificate.key>', '<password / or use method from bottom>')
@@ -146,6 +151,8 @@ $statusCheckResponse->getVerifiedData('<field from response. ex: ACTION');
 ### Reversal request
 
 ```php
+ use VenelinIliev\Borica3ds\ReversalRequest;
+ // ...
  $reversalRequest = (new ReversalRequest())
         //->inDevelopment()
         ->setPrivateKey('\<path to certificate.key>', '<password / or use method from bottom>')
@@ -166,7 +173,7 @@ $reversalRequestResponse = $reversalRequest->send();
 $verifiedResponseData = $reversalRequestResponse->getResponseData();
 
 // get field from borica reversal response
-$reversalRequestResponse->getVerifiedData('STATUSMSG')
+$reversalRequestResponse->getVerifiedData('STATUSMSG');
 ```
 
 

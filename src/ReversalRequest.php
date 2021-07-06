@@ -13,11 +13,6 @@ use VenelinIliev\Borica3ds\Exceptions\SendingException;
 class ReversalRequest extends Request implements RequestInterface
 {
     /**
-     * @var array
-     */
-    private $sendResponse;
-
-    /**
      * @var string
      */
     protected $rrn;
@@ -43,7 +38,7 @@ class ReversalRequest extends Request implements RequestInterface
     /**
      * Send data to borica
      *
-     * @return StatusCheckResponse
+     * @return ReversalResponse
      * @throws Exceptions\SignatureException|ParameterValidationException|SendingException
      */
     public function send()
@@ -63,7 +58,7 @@ class ReversalRequest extends Request implements RequestInterface
         }
         curl_close($ch);
 
-        return (new StatusCheckResponse())
+        return (new ReversalResponse())
             ->setResponseData(json_decode($response, true))
             ->setPublicKey($this->getPublicKey());
     }
@@ -160,7 +155,7 @@ class ReversalRequest extends Request implements RequestInterface
     }
 
     /**
-     * @return mixed|void
+     * @return array
      * @throws Exceptions\SignatureException
      * @throws ParameterValidationException
      */

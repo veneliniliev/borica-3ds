@@ -2,11 +2,13 @@
 
 - [\VenelinIliev\Borica3ds\SaleResponse](#class-venelinilievborica3dssaleresponse)
 - [\VenelinIliev\Borica3ds\Request (abstract)](#class-venelinilievborica3dsrequest-abstract)
+- [\VenelinIliev\Borica3ds\ReversalRequest](#class-venelinilievborica3dsreversalrequest)
 - [\VenelinIliev\Borica3ds\Base (abstract)](#class-venelinilievborica3dsbase-abstract)
 - [\VenelinIliev\Borica3ds\StatusCheckResponse](#class-venelinilievborica3dsstatuscheckresponse)
 - [\VenelinIliev\Borica3ds\Response (abstract)](#class-venelinilievborica3dsresponse-abstract)
 - [\VenelinIliev\Borica3ds\StatusCheckRequest](#class-venelinilievborica3dsstatuscheckrequest)
 - [\VenelinIliev\Borica3ds\SaleRequest](#class-venelinilievborica3dssalerequest)
+- [\VenelinIliev\Borica3ds\ReversalResponse](#class-venelinilievborica3dsreversalresponse)
 - [\VenelinIliev\Borica3ds\ResponseInterface (interface)](#interface-venelinilievborica3dsresponseinterface)
 - [\VenelinIliev\Borica3ds\RequestInterface (interface)](#interface-venelinilievborica3dsrequestinterface)
 - [\VenelinIliev\Borica3ds\Enums\TransactionType](#class-venelinilievborica3dsenumstransactiontype)
@@ -56,6 +58,29 @@
 | public | <strong>setTransactionType(</strong><em>[\VenelinIliev\Borica3ds\Enums\TransactionType](#class-venelinilievborica3dsenumstransactiontype)</em> <strong>$transactionType</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set transaction type</em> |
 
 *This class extends [\VenelinIliev\Borica3ds\Base](#class-venelinilievborica3dsbase-abstract)*
+
+<hr />
+
+### Class: \VenelinIliev\Borica3ds\ReversalRequest
+
+| Visibility | Function |
+|:-----------|:---------|
+| public | <strong>__construct()</strong> : <em>void</em><br /><em>StatusCheckRequest constructor.</em> |
+| public | <strong>generateForm()</strong> : <em>array</em> |
+| public | <strong>generateSignature()</strong> : <em>string</em> |
+| public | <strong>getData()</strong> : <em>array</em> |
+| public | <strong>getIntRef()</strong> : <em>string</em> |
+| public | <strong>getMerchantName()</strong> : <em>string</em> |
+| public | <strong>getRrn()</strong> : <em>string</em> |
+| public | <strong>send()</strong> : <em>[\VenelinIliev\Borica3ds\ReversalResponse](#class-venelinilievborica3dsreversalresponse)</em><br /><em>Send data to borica</em> |
+| public | <strong>setIntRef(</strong><em>string</em> <strong>$intRef</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\ReversalRequest](#class-venelinilievborica3dsreversalrequest)</em><br /><em>Set transaction internal reference.</em> |
+| public | <strong>setMerchantName(</strong><em>string</em> <strong>$merchantName</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\ReversalRequest](#class-venelinilievborica3dsreversalrequest)</em> |
+| public | <strong>setRrn(</strong><em>string</em> <strong>$rrn</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\ReversalRequest](#class-venelinilievborica3dsreversalrequest)</em><br /><em>Set transaction reference.</em> |
+| public | <strong>validateRequiredParameters()</strong> : <em>void</em> |
+
+*This class extends [\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)*
+
+*This class implements [\VenelinIliev\Borica3ds\RequestInterface](#interface-venelinilievborica3dsrequestinterface)*
 
 <hr />
 
@@ -162,6 +187,19 @@
 *This class extends [\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)*
 
 *This class implements [\VenelinIliev\Borica3ds\RequestInterface](#interface-venelinilievborica3dsrequestinterface)*
+
+<hr />
+
+### Class: \VenelinIliev\Borica3ds\ReversalResponse
+
+> Class ReversalResponse
+
+| Visibility | Function |
+|:-----------|:---------|
+
+*This class extends [\VenelinIliev\Borica3ds\Response](#class-venelinilievborica3dsresponse-abstract)*
+
+*This class implements [\VenelinIliev\Borica3ds\ResponseInterface](#interface-venelinilievborica3dsresponseinterface)*
 
 <hr />
 
