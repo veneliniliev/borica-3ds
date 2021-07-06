@@ -22,4 +22,5 @@ class TransactionType extends Enum
     const REVERSAL_REQUEST = 22;
     const REVERSAL_ADVICE = 24;
     const TRANSACTION_STATUS_CHECK = 90;
+    const REVERSAL = 24;
 }

@@ -140,7 +140,35 @@ $verifiedResponseData = $statusCheckResponse->getResponseData();
 
 // get field from borica response
 $statusCheckResponse->getVerifiedData('<field from response. ex: ACTION');
+
 ```
+
+### Reversal request
+
+```php
+ $reversalRequest = (new ReversalRequest())
+        //->inDevelopment()
+        ->setPrivateKey('\<path to certificate.key>', '<password / or use method from bottom>')
+        ->setPublicKey('<path to public certificate.cer>')
+        ->setTerminalID('<TID - V*******>')
+        ->setAmount(123.32)
+        ->setOrder(123456)
+        ->setDescription('test reversal')
+        ->setMerchantId('<MID - 15 chars>')
+        ->setRrn('<RRN - Original transaction reference (From the sale response data)>')
+        ->setIntRef('<INT_REF - Internal reference (From the sale response data)>')
+    ;
+        
+//send reversal request to borica
+$reversalRequestResponse = $reversalRequest->send();
+
+// get data from borica reversal response
+$verifiedResponseData = $reversalRequestResponse->getResponseData();
+
+// get field from borica reversal response
+$reversalRequestResponse->getVerifiedData('STATUSMSG')
+```
+
 
 ### Methods
 
