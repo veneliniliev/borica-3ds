@@ -352,7 +352,7 @@ class SaleRequest extends Request implements RequestInterface
         $orderString = str_ireplace(';', '', $orderString);
 
         return [
-            'AD.CUST_BOR_ORDER_ID' => mb_substr($orderString, 0, 16),
+            'AD.CUST_BOR_ORDER_ID' => mb_substr($orderString, 0, 22),
             'ADDENDUM' => 'AD,TD',
         ];
     }
