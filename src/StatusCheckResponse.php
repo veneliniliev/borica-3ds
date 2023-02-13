@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2021. Venelin Iliev.
+ * Copyright (c) 2023. Venelin Iliev.
  * https://veneliniliev.com
  */
 
