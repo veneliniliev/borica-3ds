@@ -182,7 +182,7 @@ abstract class Response extends Base
          */
         $publicKey = openssl_get_publickey($publicKeyContent);
         if (!$publicKey) {
-            throw new SignatureException(openssl_error_string());
+            throw new SignatureException('Open public key error: '.openssl_error_string());
         }
 
         /*
@@ -190,7 +190,7 @@ abstract class Response extends Base
          */
         $verifyStatus = openssl_verify($signature, hex2bin($publicSignature), $publicKey, OPENSSL_ALGO_SHA256);
         if ($verifyStatus !== 1) {
-            throw new SignatureException(openssl_error_string());
+            throw new SignatureException('Data signature verify error! Error: ' . openssl_error_string());
         }
 
         if (PHP_MAJOR_VERSION < 8) {

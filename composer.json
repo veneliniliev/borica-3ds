@@ -39,6 +39,9 @@
       "@putenv XDEBUG_MODE=coverage",
       "vendor/bin/phpunit --coverage-text"
     ],
+    "format": [
+      "vendor/bin/phpcbf"
+    ],
     "docs": "vendor/bin/phpdoc-md generate src > API.md"
   }
 }

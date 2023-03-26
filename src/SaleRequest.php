@@ -140,6 +140,19 @@ class SaleRequest extends Request implements RequestInterface
     {
         $this->validateRequiredParameters();
 
+        if ($this->isSigningSchemaMacExtended()) {
+            return $this->getPrivateSignature([
+                $this->getTerminalID(),
+                $this->getTransactionType()->getValue(),
+                $this->getAmount(),
+                $this->getCurrency(),
+                $this->getOrder(),
+                $this->getMerchantId(),
+                $this->getSignatureTimestamp(),
+                $this->getNonce()
+            ]);
+        }
+
         if ($this->isSigningSchemaMacAdvanced()) {
             return $this->getPrivateSignature([
                 $this->getTerminalID(),
@@ -152,16 +165,22 @@ class SaleRequest extends Request implements RequestInterface
             ]);
         }
 
-        // MAC_EXTENDED
+        // Default MAC_ADVANCED
         return $this->getPrivateSignature([
             $this->getTerminalID(),
             $this->getTransactionType()->getValue(),
             $this->getAmount(),
             $this->getCurrency(),
             $this->getOrder(),
-            $this->getMerchantId(),
             $this->getSignatureTimestamp(),
-            $this->getNonce()
+            $this->getNonce(),
+            /**
+             * ВАЖНО: В настоящата версия на интерфейса значението на поле RFU (Reserved
+             * for Future Use) в символния низ за подписване е един байт 0x2D (знак минус "-").
+             * Поле RFU е запазено за бъдещо ползване в символния низ за подпис и не участва
+             * в заявката или отговора към/от APGW
+             */
+            '-'
         ]);
     }
 

@@ -4,13 +4,14 @@
  * https://veneliniliev.com
  */
 
-namespace VenelinIliev\Borica3ds\Tests;
+namespace VenelinIliev\Borica3ds\Tests\Unit;
 
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\DataMissingException;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 use VenelinIliev\Borica3ds\SaleResponse;
+use VenelinIliev\Borica3ds\Tests\TestCase;
 
 class SaleResponseTest extends TestCase
 {
@@ -42,8 +43,42 @@ class SaleResponseTest extends TestCase
         $this->expectException(SignatureException::class);
 
         (new SaleResponse())
-            ->setPublicKey(__DIR__ . '/certificates/public.cer')
+            ->setPublicKey(__DIR__ . '/../certificates/public.cer')
             ->setResponseData($post)
             ->isSuccessful();
+    }
+
+    /**
+     * @throws DataMissingException
+     * @throws ParameterValidationException|SignatureException
+     */
+    public function testSuccessMacGeneralResponse()
+    {
+        $this->markTestSkipped('Да се провери защо не верифицира добре подписа!');
+
+        $post = [
+            'ACTION' => 0,
+            'RC' => '00',
+            'APPROVAL' => 'S19527',
+            'TERMINAL' => self::TERMINAL_ID,
+            'TRTYPE' => TransactionType::SALE,
+            'AMOUNT' => '1.00',
+            'CURRENCY' => 'BGN',
+            'ORDER' => '170403',
+            'RRN' => '028701253242',
+            'INT_REF' => 'B7A68A9F37E8586E',
+            'PARES_STATUS' => '',
+            'ECI' => '',
+            'TIMESTAMP' => '20201013140707',
+            'NONCE' => '22EA51788AFE61A9D814B771A8FA6379',
+            'P_SIGN' => '31C6507191249D361086E1CA70A2A0374ACF9191D765055E10ACB93D720E934FEBE44E59D41D19C7B976CF358FA572B12EB08556EA602141E983F6FC93F106B0249780C192FAD7BC6411C33E966317804681D692CCDAF42F7494B1B7A7ED8AB23CB8DE5F0621E0C3582671BD222A3E5409538D9BD93F11B150B75D0C59AAC5E77D439FE14A6B494C8FECB1C23867A77D291E34425B5F1A6E9CBA9B92E3BC344E2C9AFAD45E2AE2D1313200A80DE26C2DD870E63AFEADA9EDAEF4DF5B32AD533D68665CB8F7F6E42D8ED7FFE31415FFAED25B3BA159063A9FC542FA958719016697CE9760954A58A2AF077BA049D1DD2216242D80572AA0EA98A39CD7C8DDB5BE'
+        ];
+
+        $isSuccess = (new SaleResponse())
+            ->setPublicKey(__DIR__ . '/../certificates/public.cer')
+            ->setResponseData($post)
+            ->isSuccessful();
+
+        $this->assertTrue($isSuccess);
     }
 }

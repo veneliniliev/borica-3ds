@@ -123,7 +123,7 @@ abstract class Request extends Base
     /**
      * Set order
      *
-     * @param mixed $order Номер на поръчката за търговеца, 6 цифри, който трябва да бъде уникален за деня.
+     * @param string|integer $order Номер на поръчката за търговеца, 6 цифри, който трябва да бъде уникален за деня.
      *
      * @return Request
      * @throws ParameterValidationException
