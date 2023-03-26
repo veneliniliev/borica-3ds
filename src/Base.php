@@ -14,16 +14,16 @@ use VenelinIliev\Borica3ds\Exceptions\SignatureException;
  */
 abstract class Base
 {
-
     const SIGNING_SCHEMA_MAC_ADVANCED = 'MAC_ADVANCED';
     const SIGNING_SCHEMA_MAC_EXTENDED = 'MAC_EXTENDED';
+    const SIGNING_SCHEMA_MAC_GENERAL = 'MAC_GENERAL';
 
     /**
      * Default signing schema
      *
      * @var string
      */
-    protected $signingSchema = self::SIGNING_SCHEMA_MAC_ADVANCED;
+    protected $signingSchema = self::SIGNING_SCHEMA_MAC_GENERAL;
 
     /**
      * @var string
@@ -171,7 +171,7 @@ abstract class Base
     /**
      * Set merchant ID
      *
-     * @param mixed $merchantId Merchant ID.
+     * @param string|integer $merchantId Merchant ID.
      *
      * @return Base
      * @throws ParameterValidationException
@@ -208,6 +208,17 @@ abstract class Base
     }
 
     /**
+     * Switch signing schema to MAC_GENERAL
+     *
+     * @return Base
+     */
+    public function setSigningSchemaMacGeneral()
+    {
+        $this->signingSchema = self::SIGNING_SCHEMA_MAC_GENERAL;
+        return $this;
+    }
+
+    /**
      * Get public key
      *
      * @return string
@@ -236,6 +247,24 @@ abstract class Base
     }
 
     /**
+     * @return string
+     */
+    public function getSigningSchema()
+    {
+        return $this->signingSchema;
+    }
+
+    /**
+     * Is MAC_EXTENDED signing schema?
+     *
+     * @return boolean
+     */
+    protected function isSigningSchemaMacExtended()
+    {
+        return $this->signingSchema == self::SIGNING_SCHEMA_MAC_EXTENDED;
+    }
+
+    /**
      * Is MAC_ADVANCE signing schema?
      *
      * @return boolean
@@ -243,6 +272,16 @@ abstract class Base
     protected function isSigningSchemaMacAdvanced()
     {
         return $this->signingSchema == self::SIGNING_SCHEMA_MAC_ADVANCED;
+    }
+
+    /**
+     * Is MAC_GENERAL signing schema?
+     *
+     * @return boolean
+     */
+    protected function isSigningSchemaMacGeneral()
+    {
+        return $this->signingSchema == self::SIGNING_SCHEMA_MAC_GENERAL;
     }
 
     /**
@@ -300,8 +339,19 @@ abstract class Base
                 $signature .= '-';
                 continue;
             }
+            if (!$isResponse && $this->isSigningSchemaMacGeneral() && $value == '-') {
+                // да не слага броя символи! Заради тъпото поле RFU (Reserved for Future Use)
+                $signature .= $value;
+                continue;
+            }
             $signature .= mb_strlen($value) . $value;
         }
+
+        if ($isResponse && $this->isSigningSchemaMacGeneral()) {
+            // Отново заради тъпото поле RFU (Reserved for Future Use)
+            $signature .= '-';
+        }
+
         return $signature;
     }
 

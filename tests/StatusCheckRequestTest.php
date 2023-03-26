@@ -12,6 +12,7 @@ use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SendingException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 use VenelinIliev\Borica3ds\StatusCheckRequest;
+use VenelinIliev\Borica3ds\StatusCheckResponse;
 
 class StatusCheckRequestTest extends TestCase
 {
@@ -64,5 +65,38 @@ class StatusCheckRequestTest extends TestCase
         $this->assertEquals('90', $statusCheckResponse->getVerifiedData('TRTYPE'));
         $this->assertEquals('114233', $statusCheckResponse->getVerifiedData('ORDER'));
         $this->assertEquals('622CAAA8BF20C5A21A917DCB8401C336', $statusCheckResponse->getVerifiedData('NONCE'));
+    }
+
+    /**
+     * @throws ParameterValidationException
+     * @throws SignatureException
+     */
+    public function testResponseMacGeneral()
+    {
+        $post = [
+            'ACTION' => 0,
+            'RC' => '00',
+            'APPROVAL' => 'S78952',
+            'TERMINAL' => self::TERMINAL_ID,
+            'TRTYPE' => TransactionType::TRANSACTION_STATUS_CHECK,
+            'AMOUNT' => '1.00',
+            'CURRENCY' => 'BGN',
+            'ORDER' => '114233',
+            'RRN' => '029001254078',
+            'INT_REF' => '4C9B34468610CF9F',
+            'PARES_STATUS' => 'Y',
+            'ECI' => '05',
+            'TIMESTAMP' => '20201016084515',
+            'NONCE' => '7A9A2E5CD173AF3F69A87F06E1F602ED',
+            'P_SIGN' => 'A20DE81C5723E3A92D8D1B73C7C2B8848A42D3380E9DF9951127E5878AF989E6951F595A52C16CC9B9F690BDC0165DE8E4CF2FA5892A17C5F8026011D604AF5723DF4C35486AA0094C1C23AE9617F8BE2C11F448EA40CDB332EBAB73DE2D33A01AC1BEE83108B788D22D8653F86DFAE8BAEB17048869156D2876FD7F8E232BDB1311D5D4EB63C630EC4941EDBFC70802508F86147714CD7E671014EC8D56882070B6B203FFECE07A67FED6D20C9F4E4637E8EA5B0FE274AD4D8965CB7025BD205F259E41EAF2E48E5566099842B02FB89E7534081CFD4289F6F5F7727DAAB7EBB472FDFD9D091F57616120190732BF635D49EF9519B4CEE26D8DFBB34C2D033B'
+        ];
+
+        $rc = (new StatusCheckResponse())
+            ->setPublicKey(__DIR__ . '/certificates/public.cer')
+            ->setResponseData($post)
+            ->getResponseData('RC');
+
+        $this->assertEquals('00', $rc);
+
     }
 }
