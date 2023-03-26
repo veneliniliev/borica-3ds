@@ -4,11 +4,12 @@
  * https://veneliniliev.com
  */
 
-namespace VenelinIliev\Borica3ds\Tests;
+namespace VenelinIliev\Borica3ds\Tests\Unit;
 
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 use VenelinIliev\Borica3ds\SaleRequest;
+use VenelinIliev\Borica3ds\Tests\TestCase;
 
 class SaleRequestTest extends TestCase
 {
@@ -29,7 +30,7 @@ class SaleRequestTest extends TestCase
             ->setBackRefUrl('https://test.com/back-ref-url')
             ->setTerminalID(self::TERMINAL_ID)
             ->setMerchantId(self::MERCHANT_ID)
-            ->setPrivateKey(__DIR__ . '/certificates/test.key')
+            ->setPrivateKey(__DIR__ . '/../certificates/test.key')
             ->setPrivateKeyPassword('test')
             ->setSignatureTimestamp('20201013115715')
             ->setNonce('FC8AC36A9FDADCB6127D273CD15DAEC3')
@@ -59,7 +60,7 @@ class SaleRequestTest extends TestCase
             ->setBackRefUrl('https://test.com/back-ref-url')
             ->setTerminalID(self::TERMINAL_ID)
             ->setMerchantId(self::MERCHANT_ID)
-            ->setPrivateKey(__DIR__ . '/certificates/test.key')
+            ->setPrivateKey(__DIR__ . '/../certificates/test.key')
             ->setPrivateKeyPassword('test')
             ->setSignatureTimestamp('20201013115715')
             ->setNonce('FC8AC36A9FDADCB6127D273CD15DAEC3')
@@ -87,7 +88,7 @@ class SaleRequestTest extends TestCase
             ->setBackRefUrl('https://test.com/back-ref-url')
             ->setTerminalID(self::TERMINAL_ID)
             ->setMerchantId(self::MERCHANT_ID)
-            ->setPrivateKey(__DIR__ . '/certificates/test.key')
+            ->setPrivateKey(__DIR__ . '/../certificates/test.key')
             ->setPrivateKeyPassword('test')
             ->setSignatureTimestamp('20201013115715')
             ->setNonce('FC8AC36A9FDADCB6127D273CD15DAEC3')
@@ -133,7 +134,7 @@ class SaleRequestTest extends TestCase
             ->setBackRefUrl('https://test.com/back-ref-url')
             ->setTerminalID(self::TERMINAL_ID)
             ->setMerchantId(self::MERCHANT_ID)
-            ->setPrivateKey(__DIR__ . '/certificates/test.key')
+            ->setPrivateKey(__DIR__ . '/../certificates/test.key')
             ->setPrivateKeyPassword('test')
             ->setSignatureTimestamp('20201013115715')
             ->setNonce('FC8AC36A9FDADCB6127D273CD15DAEC3')

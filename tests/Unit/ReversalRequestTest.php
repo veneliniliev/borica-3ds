@@ -4,11 +4,12 @@
  * https://veneliniliev.com
  */
 
-namespace VenelinIliev\Borica3ds\Tests;
+namespace VenelinIliev\Borica3ds\Tests\Unit;
 
-use VenelinIliev\Borica3ds\ReversalRequest;
-use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
+use VenelinIliev\Borica3ds\Exceptions\SignatureException;
+use VenelinIliev\Borica3ds\ReversalRequest;
+use VenelinIliev\Borica3ds\Tests\TestCase;
 
 class ReversalRequestTest extends TestCase
 {
@@ -25,13 +26,13 @@ class ReversalRequestTest extends TestCase
             ->setTerminalID(self::TERMINAL_ID)
             ->setMerchantId(self::MERCHANT_ID)
             ->setMerchantName('Some Company Ltd.')
-            ->setPrivateKey(__DIR__ . '/certificates/test.key')
+            ->setPrivateKey(__DIR__ . '/../certificates/test.key')
             ->setPrivateKeyPassword('test')
             ->setSignatureTimestamp('20201013115715')
             ->setRrn('118601289138')
             ->setIntRef('CEAD95D777876F81')
             ->setNonce('FC8AC36A9FDADCB6127D273CD15DAEC3')
-            ->setPublicKey(__DIR__ . '/certificates/public.cer')
+            ->setPublicKey(__DIR__ . '/../certificates/public.cer')
             ->setSigningSchemaMacExtended()
             ->getData();
 
@@ -65,13 +66,13 @@ class ReversalRequestTest extends TestCase
             ->setTerminalID(self::TERMINAL_ID)
             ->setMerchantId(self::MERCHANT_ID)
             ->setMerchantName('Some Company Ltd.')
-            ->setPrivateKey(__DIR__ . '/certificates/test.key')
+            ->setPrivateKey(__DIR__ . '/../certificates/test.key')
             ->setPrivateKeyPassword('test')
             ->setSignatureTimestamp('20201014095541')
             ->setRrn('028701253242')
             ->setIntRef('B7A68A9F37E8586E')
             ->setNonce('7D51498A3C22B86DD57EFB699A175714')
-            ->setPublicKey(__DIR__ . '/certificates/public.cer')
+            ->setPublicKey(__DIR__ . '/../certificates/public.cer')
             ->setSigningSchemaMacGeneral()
             ->getData();
 

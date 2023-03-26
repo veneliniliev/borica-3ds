@@ -4,7 +4,7 @@
  * https://veneliniliev.com
  */
 
-namespace VenelinIliev\Borica3ds\Tests;
+namespace VenelinIliev\Borica3ds\Tests\Unit;
 
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\DataMissingException;
@@ -13,6 +13,7 @@ use VenelinIliev\Borica3ds\Exceptions\SendingException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 use VenelinIliev\Borica3ds\StatusCheckRequest;
 use VenelinIliev\Borica3ds\StatusCheckResponse;
+use VenelinIliev\Borica3ds\Tests\TestCase;
 
 class StatusCheckRequestTest extends TestCase
 {
@@ -24,9 +25,9 @@ class StatusCheckRequestTest extends TestCase
     public function testSigning()
     {
         $statusCheckRequest = (new StatusCheckRequest())
-            ->setPrivateKey(__DIR__ . '/certificates/test.key')
+            ->setPrivateKey(__DIR__ . '/../certificates/test.key')
             ->setPrivateKeyPassword('test')
-            ->setPublicKey(__DIR__ . '/certificates/public.cer')
+            ->setPublicKey(__DIR__ . '/../certificates/public.cer')
             ->setTerminalID(self::TERMINAL_ID)
             ->setOrder('114233')
             ->setOriginalTransactionType(TransactionType::SALE())
@@ -50,9 +51,9 @@ class StatusCheckRequestTest extends TestCase
     {
         $statusCheckRequest = (new StatusCheckRequest())
             ->inDevelopment()
-            ->setPrivateKey(__DIR__ . '/certificates/test.key')
+            ->setPrivateKey(__DIR__ . '/../certificates/test.key')
             ->setPrivateKeyPassword('test')
-            ->setPublicKey(__DIR__ . '/certificates/public.cer')
+            ->setPublicKey(__DIR__ . '/../certificates/public.cer')
             ->setTerminalID(self::TERMINAL_ID)
             ->setOrder('114233')
             ->setOriginalTransactionType(TransactionType::SALE())
@@ -94,7 +95,7 @@ class StatusCheckRequestTest extends TestCase
         ];
 
         $rc = (new StatusCheckResponse())
-            ->setPublicKey(__DIR__ . '/certificates/public.cer')
+            ->setPublicKey(__DIR__ . '/../certificates/public.cer')
             ->setResponseData($post)
             ->getResponseData('RC');
 

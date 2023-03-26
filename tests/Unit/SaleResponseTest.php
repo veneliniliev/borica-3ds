@@ -4,13 +4,14 @@
  * https://veneliniliev.com
  */
 
-namespace VenelinIliev\Borica3ds\Tests;
+namespace VenelinIliev\Borica3ds\Tests\Unit;
 
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\DataMissingException;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 use VenelinIliev\Borica3ds\SaleResponse;
+use VenelinIliev\Borica3ds\Tests\TestCase;
 
 class SaleResponseTest extends TestCase
 {
@@ -42,7 +43,7 @@ class SaleResponseTest extends TestCase
         $this->expectException(SignatureException::class);
 
         (new SaleResponse())
-            ->setPublicKey(__DIR__ . '/certificates/public.cer')
+            ->setPublicKey(__DIR__ . '/../certificates/public.cer')
             ->setResponseData($post)
             ->isSuccessful();
     }
@@ -74,7 +75,7 @@ class SaleResponseTest extends TestCase
         ];
 
         $isSuccess = (new SaleResponse())
-            ->setPublicKey(__DIR__ . '/certificates/public.cer')
+            ->setPublicKey(__DIR__ . '/../certificates/public.cer')
             ->setResponseData($post)
             ->isSuccessful();
 

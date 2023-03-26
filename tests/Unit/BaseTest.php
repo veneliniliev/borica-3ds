@@ -4,7 +4,7 @@
  * https://veneliniliev.com
  */
 
-namespace VenelinIliev\Borica3ds\Tests;
+namespace VenelinIliev\Borica3ds\Tests\Unit;
 
 use VenelinIliev\Borica3ds\Request;
 use VenelinIliev\Borica3ds\ReversalRequest;
@@ -13,6 +13,7 @@ use VenelinIliev\Borica3ds\SaleRequest;
 use VenelinIliev\Borica3ds\SaleResponse;
 use VenelinIliev\Borica3ds\StatusCheckRequest;
 use VenelinIliev\Borica3ds\StatusCheckResponse;
+use VenelinIliev\Borica3ds\Tests\TestCase;
 
 class BaseTest extends TestCase
 {
