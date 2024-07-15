@@ -56,6 +56,10 @@ abstract class Request extends Base
     private $nonce;
 
     /**
+     * @array
+     */
+    private $mInfo;
+    /**
      * Get description
      *
      * @return mixed
@@ -263,6 +267,25 @@ abstract class Request extends Base
     public function setNonce($nonce)
     {
         $this->nonce = $nonce;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMInfo()
+    {
+        return $this->mInfo;
+    }
+
+    /**
+     * @param string $nonce Nonce.
+     *
+     * @return Request
+     */
+    public function setMInfo($mInfo)
+    {
+        $this->mInfo = $mInfo;
         return $this;
     }
 }
