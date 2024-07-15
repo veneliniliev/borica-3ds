@@ -275,7 +275,10 @@ abstract class Request extends Base
      */
     public function getMInfo()
     {
-        return $this->mInfo;
+        if (!empty($this->mInfo)) {
+            return base64_encode(json_encode($this->mInfo));
+        }
+        return '';
     }
 
     /**

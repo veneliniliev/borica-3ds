@@ -48,11 +48,6 @@ class SaleRequest extends Request implements RequestInterface
     protected $adCustBorOrderId;
 
     /**
-     * @array
-     */
-    protected $mInfo;
-
-    /**
      * Sale constructor.
      */
     public function __construct()
@@ -110,7 +105,7 @@ class SaleRequest extends Request implements RequestInterface
      */
     public function getData()
     {
-        return [
+        return array_filter([
                 'NONCE' => $this->getNonce(),
                 'P_SIGN' => $this->generateSignature(),
 
@@ -132,8 +127,9 @@ class SaleRequest extends Request implements RequestInterface
                 'TERMINAL' => $this->getTerminalID(),
                 'BACKREF' => $this->getBackRefUrl(),
 
-                'M_INFO' => base64_encode(json_encode($this->getMInfo())),
-            ] + $this->generateAdCustBorOrderId();
+                'M_INFO' => $this->getMInfo(),
+
+            ]) + $this->generateAdCustBorOrderId();
     }
 
     /**

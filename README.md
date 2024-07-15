@@ -76,10 +76,14 @@ $saleRequest = (new SaleRequest())
     ->setTerminalID('<TID - V*******>')
     ->setMerchantId('<MID - 15 chars>')
     ->setPrivateKey('\<path to certificate.key>', '<password / or use method from bottom>')
-    ->setMInfo(array(
-        'email'=>'test@test.com',
-        'cardholderName'=>'Ivan Ivanov',
-        'mobilePhone'=>'359888123456'
+    ->setMInfo(array( // Mandatory cardholderName and ( email or MobilePhone )
+        'email'=>'user@sample.com',
+        'cardholderName'=>'CARDHOLDER NAME', // Max 45 chars
+        'mobilePhone'=> array( 
+            'cc'=>'359', // Country code
+            'subscriber'=>'8939999888', // Subscriber number
+        ),
+        'threeDSRequestorChallengeInd'=>'04', //  Optional for Additional Authentication
     ))
     //->setSigningSchemaMacGeneral(); // use MAC_GENERAL
     //->setSigningSchemaMacExtended(); // use MAC_EXTENDED
