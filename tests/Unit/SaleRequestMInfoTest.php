@@ -7,10 +7,14 @@
 namespace VenelinIliev\Borica3ds\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\SaleRequest;
 
 class SaleRequestMInfoTest extends TestCase
 {
+    /**
+     * @throws ParameterValidationException
+     */
     public function testGetMInfo()
     {
         $request = new  SaleRequest();
@@ -27,7 +31,7 @@ class SaleRequestMInfoTest extends TestCase
 
     public function testMInfoWithInvalidEmail()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ParameterValidationException::class);
 
         $request = new SaleRequest();
         $request->setMInfo([
@@ -38,7 +42,7 @@ class SaleRequestMInfoTest extends TestCase
 
     public function testMInfoWithInvalidCardholderNameLength()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ParameterValidationException::class);
 
         $request = new SaleRequest();
         $request->setMInfo([
@@ -49,7 +53,7 @@ class SaleRequestMInfoTest extends TestCase
 
     public function testMInfoWithMissingRequiredFields()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ParameterValidationException::class);
 
         $request = new SaleRequest();
         $request->setMInfo(['email' => 'johndoe@example.com']);
@@ -57,7 +61,7 @@ class SaleRequestMInfoTest extends TestCase
 
     public function testMInfoWithInvalidMobilePhoneStructure()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ParameterValidationException::class);
 
         $request = new SaleRequest();
         $request->setMInfo([
