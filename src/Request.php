@@ -6,6 +6,7 @@
 
 namespace VenelinIliev\Borica3ds;
 
+use InvalidArgumentException;
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 
@@ -59,10 +60,11 @@ abstract class Request extends Base
      * @array
      */
     private $mInfo;
+
     /**
      * Get description
      *
-     * @return mixed
+     * @return string
      */
     public function getDescription()
     {
@@ -72,7 +74,7 @@ abstract class Request extends Base
     /**
      * Set description
      *
-     * @param string $description Описание на поръчката.
+     * @param  string $description Описание на поръчката.
      *
      * @return Request
      * @throws ParameterValidationException
@@ -99,7 +101,7 @@ abstract class Request extends Base
     /**
      * Set back ref url
      *
-     * @param string $backRefUrl URL на търговеца за изпращане на резултата от авторизацията.
+     * @param  string $backRefUrl URL на търговеца за изпращане на резултата от авторизацията.
      *
      * @return Request
      * @throws ParameterValidationException
@@ -127,7 +129,7 @@ abstract class Request extends Base
     /**
      * Set order
      *
-     * @param string|integer $order Номер на поръчката за търговеца, 6 цифри, който трябва да бъде уникален за деня.
+     * @param  string|integer $order Номер на поръчката за търговеца, 6 цифри, който трябва да бъде уникален за деня.
      *
      * @return Request
      * @throws ParameterValidationException
@@ -155,7 +157,7 @@ abstract class Request extends Base
     /**
      * Set transaction type
      *
-     * @param TransactionType $transactionType Тип на транзакцията.
+     * @param  TransactionType $transactionType Тип на транзакцията.
      *
      * @return Request
      */
@@ -178,7 +180,7 @@ abstract class Request extends Base
     /**
      * Set amount
      *
-     * @param string|float|integer $amount Обща стойност на поръчката по стандарт ISO_4217 с десетичен разделител точка.
+     * @param  string|float|integer $amount Обща стойност на поръчката по стандарт ISO_4217 с десетичен разделител точка.
      *
      * @return Request
      */
@@ -201,7 +203,7 @@ abstract class Request extends Base
     /**
      * Set currency
      *
-     * @param string $currency Валута на поръчката: три буквен код на валута по стандарт ISO 4217.
+     * @param  string $currency Валута на поръчката: три буквен код на валута по стандарт ISO 4217.
      *
      * @return Request
      * @throws ParameterValidationException
@@ -232,7 +234,7 @@ abstract class Request extends Base
     /**
      * Set signature timestamp
      *
-     * @param string|null $signatureTimestamp Дата на подпис/изпращане на данните.
+     * @param  string|null $signatureTimestamp Дата на подпис/изпращане на данните.
      *
      * @return Request
      */
@@ -260,7 +262,7 @@ abstract class Request extends Base
     }
 
     /**
-     * @param string $nonce Nonce.
+     * @param  string $nonce Nonce.
      *
      * @return Request
      */
@@ -271,7 +273,7 @@ abstract class Request extends Base
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getMInfo()
     {
@@ -282,12 +284,35 @@ abstract class Request extends Base
     }
 
     /**
-     * @param string $nonce Nonce.
+     * @param  array $mInfo
      *
      * @return Request
      */
     public function setMInfo($mInfo)
     {
+        // Check for required fields (cardholderName and email or mobilePhone)
+        if (!isset($mInfo['cardholderName']) ||
+            (!isset($mInfo['email']) && !isset($mInfo['mobilePhone']))) {
+            throw new InvalidArgumentException('CardholderName and email or MobilePhone must be provided');
+        }
+
+        // Check the maximum length of cardholderName
+        if (strlen($mInfo['cardholderName']) > 45) {
+            throw new InvalidArgumentException('CardHolderName must be at most 45 characters');
+        }
+
+        // Check for a valid email address format
+        if (isset($mInfo['email']) && !filter_var($mInfo['email'], FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidArgumentException('Email must be a valid email address');
+        }
+
+        // Check the structure for the mobile phone
+        if (isset($mInfo['mobilePhone'])) {
+            if (!isset($mInfo['mobilePhone']['cc']) || !isset($mInfo['mobilePhone']['subscriber'])) {
+                throw new InvalidArgumentException('MobilePhone must contain both cc and subscriber');
+            }
+        }
+
         $this->mInfo = $mInfo;
         return $this;
     }
