@@ -105,7 +105,7 @@ class SaleRequest extends Request implements RequestInterface
      */
     public function getData()
     {
-        return [
+        return array_filter([
                 'NONCE' => $this->getNonce(),
                 'P_SIGN' => $this->generateSignature(),
 
@@ -126,7 +126,10 @@ class SaleRequest extends Request implements RequestInterface
 
                 'TERMINAL' => $this->getTerminalID(),
                 'BACKREF' => $this->getBackRefUrl(),
-            ] + $this->generateAdCustBorOrderId();
+
+                'M_INFO' => $this->getMInfo(),
+
+            ]) + $this->generateAdCustBorOrderId();
     }
 
     /**
