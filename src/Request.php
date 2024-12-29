@@ -6,7 +6,7 @@
 
 namespace VenelinIliev\Borica3ds;
 
-use InvalidArgumentException;
+use VenelinIliev\Borica3ds\Enums\Language;
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 
@@ -19,7 +19,6 @@ abstract class Request extends Base
      * @var mixed
      */
     private $signatureTimestamp;
-
 
     /**
      * @var string
@@ -60,6 +59,13 @@ abstract class Request extends Base
      * @array
      */
     private $mInfo;
+
+    /**
+     * Transaction language.
+     *
+     * @var null|string
+     */
+    private $lang = null;
 
     /**
      * Get description
@@ -315,6 +321,43 @@ abstract class Request extends Base
         }
 
         $this->mInfo = $mInfo;
+        return $this;
+    }
+
+    /**
+     * Get the language of the transaction.
+     *
+     * @return string
+     */
+    public function getLang()
+    {
+        return $this->lang;
+    }
+
+    /**
+     * Set the language of the transaction.
+     *
+     * The selected language of the form where the user will enter the payment info.
+     * Supported languages are listed in VenelinIliev\Borica3ds\Enums\Language.
+     *
+     * @param  string|null $lang Two letter language code.
+     * @return $this
+     * @throws ParameterValidationException
+     */
+    public function setLang($lang)
+    {
+        if (empty($lang)) {
+            $this->lang = null;
+        } else {
+            if (mb_strlen($lang) != 2) {
+                throw new ParameterValidationException('2 character language code');
+            }
+            $lang = mb_strtoupper($lang);
+            if (!Language::isValid($lang)) {
+                throw new ParameterValidationException('Not a valid language code');
+            }
+            $this->lang = $lang;
+        }
         return $this;
     }
 }

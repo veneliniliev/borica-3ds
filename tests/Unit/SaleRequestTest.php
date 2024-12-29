@@ -6,6 +6,7 @@
 
 namespace VenelinIliev\Borica3ds\Tests\Unit;
 
+use VenelinIliev\Borica3ds\Enums\Language;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 use VenelinIliev\Borica3ds\SaleRequest;
@@ -74,6 +75,41 @@ class SaleRequestTest extends TestCase
     }
 
     /**
+     * Set the language for the request.
+     *
+     * The signature must be same as without setting a language, because the language value is not included in signature.
+     *
+     * @return void
+     * @throws ParameterValidationException|SignatureException
+     */
+    public function testSignatureMacGeneralWithLang()
+    {
+        $sale = (new SaleRequest())
+            ->setAmount(1)
+            ->setCurrency('BGN')
+            ->setOrder(145659)
+            ->setDescription('Детайли плащане.')
+            ->setMerchantGMT('+03')
+            ->setMerchantUrl('https://test.com')
+            ->setEmailAddress('test@test.com')
+            ->setBackRefUrl('https://test.com/back-ref-url')
+            ->setTerminalID(self::TERMINAL_ID)
+            ->setMerchantId(self::MERCHANT_ID)
+            ->setPrivateKey(__DIR__ . '/../certificates/test.key')
+            ->setPrivateKeyPassword('test')
+            ->setSignatureTimestamp('20201013115715')
+            ->setNonce('FC8AC36A9FDADCB6127D273CD15DAEC3')
+            ->setAdCustBorOrderId('test')
+            ->setLang(Language::BG)
+            ->setSigningSchemaMacGeneral();
+
+        $this->assertEquals(
+            '95B299B9706ED8D9FDA2F3EC3ADCBF0346A1299C512CFB498321DB8AFAE853F6A96BE472B54A75231F894D19F488E2BD3803D893E0924B678BD9777DDF922BCB0BD8F38E887E2FDEF675C428E7C023C420679D93E72A90A51B9B21E2209C5751813754F3ACC30F35BA3E61298D43BFBB2902B59B3B226F71BFA2DB8A17488B42FB60466983B421442DD4C9799C612579DECC32192153B62EF2AF02C24BD3433BE02AE7AB5976C7B769666DE5984293AE1CA814C9FB2E0D2B45FA098F0B08591832AEC8A334C6783A274F4C2D25E1B0296139439D41B313E1CDB4C730DBC2E32812135FE7E7F0CB97E535D1742EBA848B5F6D20259D364B46D9449955CE46B335',
+            $sale->generateSignature()
+        );
+    }
+
+    /**
      * @throws ParameterValidationException|SignatureException
      */
     public function testDataMacGeneral()
@@ -94,6 +130,7 @@ class SaleRequestTest extends TestCase
             ->setNonce('FC8AC36A9FDADCB6127D273CD15DAEC3')
             ->setEmailAddress('test@test.com')
             ->setAdCustBorOrderId('test')
+            ->setLang(Language::BG)
             ->setSigningSchemaMacGeneral()
             ->getData();
 
@@ -112,6 +149,7 @@ class SaleRequestTest extends TestCase
             'EMAIL' => 'test@test.com',
             'BACKREF' => 'https://test.com/back-ref-url',
             'AD.CUST_BOR_ORDER_ID' => 'test',
+            'LANG' => Language::BG,
             'ADDENDUM' => 'AD,TD',
             'NONCE' => 'FC8AC36A9FDADCB6127D273CD15DAEC3',
             'MERCHANT' => self::MERCHANT_ID,
