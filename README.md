@@ -221,6 +221,37 @@ $saleRequest->isProduction(); // check is production environment?
 $saleRequest->isDevelopment(); // check is development environment?
 ```
 
+#### Configure language
+
+The library supports setting the language for the user payment form. Use the `setLang` method to set a specific language based on the enum `VenelinIliev\Borica3ds\Enums\Language`. Supported languages are **Bulgarian (BG)** and **English (EN)**.
+
+```php
+use VenelinIliev\Borica3ds\SaleRequest;
+use VenelinIliev\Borica3ds\Enums\Language;
+
+$saleRequest = (new SaleRequest())
+    ->setAmount(100.50) // Transaction amount.
+    ->setOrder('123456') // Unique order number.
+    ->setDescription('Test product purchase') // Order description.
+    ->setTerminalID('<TID - V*******>') // Terminal ID.
+    ->setMerchantId('<MID - 15 chars>') // Merchant ID.
+    ->setPrivateKey('<path to private key>', '<password>')
+    ->setLang(Language::EN()); // Set transaction language to English.
+
+// Alternatively, set the language to Bulgarian.
+$saleRequest->setLang(Language::BG());
+```
+
+If an invalid language code is provided, the library will throw a `ParameterValidationException`.
+
+Example with an invalid language code:
+
+```php
+$saleRequest->setLang('DE'); // Throws exception because 'DE' is not supported.
+```
+
+Using `setLang` ensures that users are presented with a language-specific payment form, delivering a more user-friendly experience.
+
 ### Credit cards for testing
 
 #### Cards
