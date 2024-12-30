@@ -112,6 +112,7 @@ class SaleRequest extends Request implements RequestInterface
                 'TRTYPE' => $this->getTransactionType()->getValue(),
                 'COUNTRY' => $this->getCountryCode(),
                 'CURRENCY' => $this->getCurrency(),
+                'LANG' => $this->getLang(),
 
                 'MERCH_GMT' => $this->getMerchantGMT(),
                 'MERCHANT' => $this->getMerchantId(),

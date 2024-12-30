@@ -11,6 +11,7 @@
 - [\VenelinIliev\Borica3ds\ReversalResponse](#class-venelinilievborica3dsreversalresponse)
 - [\VenelinIliev\Borica3ds\ResponseInterface (interface)](#interface-venelinilievborica3dsresponseinterface)
 - [\VenelinIliev\Borica3ds\RequestInterface (interface)](#interface-venelinilievborica3dsrequestinterface)
+- [\VenelinIliev\Borica3ds\Enums\Language](#class-venelinilievborica3dsenumslanguage)
 - [\VenelinIliev\Borica3ds\Enums\TransactionType](#class-venelinilievborica3dsenumstransactiontype)
 - [\VenelinIliev\Borica3ds\Exceptions\SendingException](#class-venelinilievborica3dsexceptionssendingexception)
 - [\VenelinIliev\Borica3ds\Exceptions\DataMissingException](#class-venelinilievborica3dsexceptionsdatamissingexception)
@@ -38,24 +39,26 @@
 
 > Borica request
 
-| Visibility | Function |
-|:-----------|:---------|
-| public | <strong>getAmount()</strong> : <em>float/null</em><br /><em>Get amount</em> |
-| public | <strong>getBackRefUrl()</strong> : <em>string</em><br /><em>Get back ref url</em> |
-| public | <strong>getCurrency()</strong> : <em>string</em><br /><em>Get currency</em> |
-| public | <strong>getDescription()</strong> : <em>mixed</em><br /><em>Get description</em> |
-| public | <strong>getNonce()</strong> : <em>string</em> |
-| public | <strong>getOrder()</strong> : <em>mixed</em><br /><em>Get order</em> |
-| public | <strong>getSignatureTimestamp()</strong> : <em>string</em><br /><em>Get signature timestamp</em> |
-| public | <strong>getTransactionType()</strong> : <em>[\VenelinIliev\Borica3ds\Enums\TransactionType](#class-venelinilievborica3dsenumstransactiontype)</em><br /><em>Get transaction type</em> |
-| public | <strong>setAmount(</strong><em>string/float/integer</em> <strong>$amount</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set amount</em> |
-| public | <strong>setBackRefUrl(</strong><em>string</em> <strong>$backRefUrl</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set back ref url</em> |
-| public | <strong>setCurrency(</strong><em>string</em> <strong>$currency</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set currency</em> |
-| public | <strong>setDescription(</strong><em>string</em> <strong>$description</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set description</em> |
-| public | <strong>setNonce(</strong><em>string</em> <strong>$nonce</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em> |
-| public | <strong>setOrder(</strong><em>mixed</em> <strong>$order</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set order</em> |
-| public | <strong>setSignatureTimestamp(</strong><em>string/null</em> <strong>$signatureTimestamp=null</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set signature timestamp</em> |
-| public | <strong>setTransactionType(</strong><em>[\VenelinIliev\Borica3ds\Enums\TransactionType](#class-venelinilievborica3dsenumstransactiontype)</em> <strong>$transactionType</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set transaction type</em> |
+| Visibility | Function                                                                                                                                                                                                                                                                                                                 |
+|:-----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| public     | <strong>getAmount()</strong> : <em>float/null</em><br /><em>Get amount</em>                                                                                                                                                                                                                                              |
+| public     | <strong>getBackRefUrl()</strong> : <em>string</em><br /><em>Get back ref url</em>                                                                                                                                                                                                                                        |
+| public     | <strong>getCurrency()</strong> : <em>string</em><br /><em>Get currency</em>                                                                                                                                                                                                                                              |
+| public     | <strong>getDescription()</strong> : <em>mixed</em><br /><em>Get description</em>                                                                                                                                                                                                                                         |
+| public     | <strong>getLang()</strong> : <em>null/string</em><br /><em>Get language</em>                                                                                                                                                                                                                                             |
+| public     | <strong>getNonce()</strong> : <em>string</em>                                                                                                                                                                                                                                                                            |
+| public     | <strong>getOrder()</strong> : <em>mixed</em><br /><em>Get order</em>                                                                                                                                                                                                                                                     |
+| public     | <strong>getSignatureTimestamp()</strong> : <em>string</em><br /><em>Get signature timestamp</em>                                                                                                                                                                                                                         |
+| public     | <strong>getTransactionType()</strong> : <em>[\VenelinIliev\Borica3ds\Enums\TransactionType](#class-venelinilievborica3dsenumstransactiontype)</em><br /><em>Get transaction type</em>                                                                                                                                    |
+| public     | <strong>setAmount(</strong><em>string/float/integer</em> <strong>$amount</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set amount</em>                                                                                                          |
+| public     | <strong>setBackRefUrl(</strong><em>string</em> <strong>$backRefUrl</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set back ref url</em>                                                                                                          |
+| public     | <strong>setCurrency(</strong><em>string</em> <strong>$currency</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set currency</em>                                                                                                                  |
+| public     | <strong>setDescription(</strong><em>string</em> <strong>$description</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set description</em>                                                                                                         |
+| public     | <strong>setLang(</strong><em>null/string</em> <strong>$lang</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set language</em>                                                                                                                     |
+| public     | <strong>setNonce(</strong><em>string</em> <strong>$nonce</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em>                                                                                                                                                   |
+| public     | <strong>setOrder(</strong><em>mixed</em> <strong>$order</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set order</em>                                                                                                                            |
+| public     | <strong>setSignatureTimestamp(</strong><em>string/null</em> <strong>$signatureTimestamp=null</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set signature timestamp</em>                                                                         |
+| public     | <strong>setTransactionType(</strong><em>[\VenelinIliev\Borica3ds\Enums\TransactionType](#class-venelinilievborica3dsenumstransactiontype)</em> <strong>$transactionType</strong>)</strong> : <em>[\VenelinIliev\Borica3ds\Request](#class-venelinilievborica3dsrequest-abstract)</em><br /><em>Set transaction type</em> |
 
 *This class extends [\VenelinIliev\Borica3ds\Base](#class-venelinilievborica3dsbase-abstract)*
 
@@ -225,6 +228,19 @@
 | public | <strong>getData()</strong> : <em>array</em><br /><em>Get data with post inputs</em> |
 | public | <strong>send()</strong> : <em>void/[\VenelinIliev\Borica3ds\Response](#class-venelinilievborica3dsresponse-abstract)</em><br /><em>Generate html form and send request with js</em> |
 | public | <strong>validateRequiredParameters()</strong> : <em>void</em><br /><em>Validate required data before sending</em> |
+
+<hr />
+
+### Class: \VenelinIliev\Borica3ds\Enums\Language
+
+> Class Language
+
+| Visibility | Function |
+|:-----------|:---------|
+
+*This class extends \MyCLabs\Enum\Enum*
+
+*This class implements \JsonSerializable*
 
 <hr />
 
