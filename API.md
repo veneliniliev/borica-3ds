@@ -27,6 +27,7 @@
 | Visibility | Function |
 |:-----------|:---------|
 | public | <strong>getResponseCode()</strong> : <em>string</em><br /><em>Get response code - value of 'RC' field</em> |
+| public | <strong>getAction()</strong> : <em>string</em><br /><em>Get action - value of 'ACTION' field</em> |
 | public | <strong>isSuccessful()</strong> : <em>boolean</em><br /><em>Is success payment?</em> |
 
 *This class extends [\VenelinIliev\Borica3ds\Response](#class-venelinilievborica3dsresponse-abstract)*

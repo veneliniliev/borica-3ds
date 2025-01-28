@@ -26,7 +26,8 @@ class SaleResponse extends Response implements ResponseInterface
      */
     public function isSuccessful()
     {
-        return $this->getResponseCode() === '00';
+        return $this->getResponseCode() === '00' &&
+            $this->getAction() === '0';
     }
 
     /**
@@ -38,5 +39,16 @@ class SaleResponse extends Response implements ResponseInterface
     public function getResponseCode()
     {
         return $this->getVerifiedData('RC');
+    }
+
+    /**
+     * Get action - value of 'ACTION' field
+     *
+     * @return string
+     * @throws Exceptions\SignatureException|ParameterValidationException|DataMissingException
+     */
+    public function getAction()
+    {
+        return $this->getVerifiedData('ACTION');
     }
 }
