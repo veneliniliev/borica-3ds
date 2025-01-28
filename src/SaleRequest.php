@@ -169,7 +169,7 @@ class SaleRequest extends Request implements RequestInterface
             ]);
         }
 
-        // Default MAC_ADVANCED
+        // Default MAC_GENERAL
         return $this->getPrivateSignature([
             $this->getTerminalID(),
             $this->getTransactionType()->getValue(),

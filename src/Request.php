@@ -56,7 +56,7 @@ abstract class Request extends Base
     private $nonce;
 
     /**
-     * @array
+     * @var array
      */
     private $mInfo;
 
