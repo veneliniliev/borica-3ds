@@ -21,11 +21,6 @@ class StatusCheckRequest extends Request implements RequestInterface
     private $originalTransactionType;
 
     /**
-     * @var array
-     */
-    private $sendResponse;
-
-    /**
      * StatusCheckRequest constructor.
      */
     public function __construct()

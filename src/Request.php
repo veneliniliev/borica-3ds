@@ -381,7 +381,7 @@ abstract class Request extends Base
      * Supported languages are listed in VenelinIliev\Borica3ds\Enums\Language.
      *
      * @param  string|null $lang Two letter language code.
-     * @return $this
+     * @return Request
      * @throws ParameterValidationException
      */
     public function setLang($lang)
