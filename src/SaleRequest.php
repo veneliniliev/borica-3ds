@@ -8,6 +8,7 @@ namespace VenelinIliev\Borica3ds;
 
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
+use VenelinIliev\Borica3ds\RequestTypes\HtmlForm;
 
 /**
  * Class Sale
@@ -22,6 +23,7 @@ class SaleRequest extends Request implements RequestInterface
     public function __construct()
     {
         $this->setTransactionType(TransactionType::SALE());
+        $this->setRequestType(new HtmlForm());
     }
 
     /**
@@ -32,38 +34,8 @@ class SaleRequest extends Request implements RequestInterface
      */
     public function send()
     {
-        $html = $this->generateForm();
-
-        $html .= '<script>
-            document.getElementById("borica3dsRedirectForm").submit()
-        </script>';
-
+        $html = parent::send();
         die($html);
-    }
-
-    /**
-     * Generate HTML hidden form
-     *
-     * @return string
-     * @throws Exceptions\SignatureException|ParameterValidationException
-     */
-    public function generateForm()
-    {
-        $html = '<form 
-	        action="' . $this->getEnvironmentUrl() . '" 
-	        style="display: none;" 
-	        method="POST" 
-	        id="borica3dsRedirectForm"
-        >';
-
-        $inputs = $this->getData();
-        foreach ($inputs as $key => $value) {
-            $html .= '<input type="hidden" name="' . $key . '" value="' . $value . '">';
-        }
-
-        $html .= '</form>';
-
-        return $html;
     }
 
     /**

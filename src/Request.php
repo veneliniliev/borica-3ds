@@ -9,6 +9,8 @@ namespace VenelinIliev\Borica3ds;
 use VenelinIliev\Borica3ds\Enums\Language;
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
+use VenelinIliev\Borica3ds\Exceptions\SendingException;
+use VenelinIliev\Borica3ds\RequestTypes\RequestType;
 
 /**
  * Borica request
@@ -106,6 +108,11 @@ abstract class Request extends Base
      * @var string
      */
     private $intRef;
+
+    /**
+     * @var RequestType
+     */
+    private $requestType;
 
     /**
      * Get description
@@ -711,5 +718,50 @@ abstract class Request extends Base
         if (empty($this->getTerminalID())) {
             throw new ParameterValidationException('TerminalID is empty!');
         }
+    }
+
+    /**
+     * @return RequestType
+     */
+    public function getRequestType()
+    {
+        return $this->requestType;
+    }
+
+    /**
+     * @param  RequestType  $requestType
+     * @return Request
+     */
+    public function setRequestType($requestType)
+    {
+        $this->requestType = $requestType;
+        return $this;
+    }
+
+    /**
+     * @return string|void
+     * @throws Exceptions\SignatureException
+     * @throws ParameterValidationException
+     */
+    public function generateForm()
+    {
+        return $this->getRequestType()
+            ->setUrl($this->getEnvironmentUrl())
+            ->setData($this->getData())
+            ->generateForm();
+    }
+
+    /**
+     * Send data to borica
+     *
+     * @return void|string|Response
+     * @throws Exceptions\SignatureException|ParameterValidationException|SendingException
+     */
+    public function send()
+    {
+        return $this->requestType
+            ->setUrl($this->getEnvironmentUrl())
+            ->setData($this->getData())
+            ->send();
     }
 }

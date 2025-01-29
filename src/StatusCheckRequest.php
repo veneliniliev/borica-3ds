@@ -9,6 +9,7 @@ namespace VenelinIliev\Borica3ds;
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SendingException;
+use VenelinIliev\Borica3ds\RequestTypes\Direct;
 
 class StatusCheckRequest extends Request implements RequestInterface
 {
@@ -26,6 +27,7 @@ class StatusCheckRequest extends Request implements RequestInterface
     public function __construct()
     {
         $this->setTransactionType(TransactionType::TRANSACTION_STATUS_CHECK());
+        $this->setRequestType(new Direct());
     }
 
     /**
@@ -36,20 +38,7 @@ class StatusCheckRequest extends Request implements RequestInterface
      */
     public function send()
     {
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, $this->getEnvironmentUrl());
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($this->getData()));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-
-        $response = curl_exec($ch);
-        if (curl_error($ch)) {
-            throw new SendingException(curl_error($ch));
-        }
-        curl_close($ch);
+        $response = parent::send();
 
         return (new StatusCheckResponse())
             ->setResponseData(json_decode($response, true))
@@ -136,15 +125,5 @@ class StatusCheckRequest extends Request implements RequestInterface
         if (empty($this->getTerminalID())) {
             throw new ParameterValidationException('TerminalID is empty!');
         }
-    }
-
-    /**
-     * @return mixed|void
-     * @throws Exceptions\SignatureException
-     * @throws ParameterValidationException
-     */
-    public function generateForm()
-    {
-        return $this->getData();
     }
 }
