@@ -16,12 +16,19 @@ use MyCLabs\Enum\Enum;
  * @method static REVERSAL()
  * @method static REVERSAL_REQUEST()
  * @method static REVERSAL_REQUESTREVERSAL_REQUEST()
- * @method static DEFERRED_AUTHORIZATION()
+ * @method static PRE_AUTHORISATION()
  */
 class TransactionType extends Enum
 {
     const SALE = 1;
+
+    //TODO Update with correct version
+    /**
+     * @deprecated 2.1.1 Name in sync with the Borica documentation
+     * @see PRE_AUTHORISATION
+     */
     const DEFERRED_AUTHORIZATION = 12;
+    const PRE_AUTHORISATION = 12;
     const COMPLETION_DEFERRED_AUTHORIZATION = 21;
     const REVERSAL_REQUEST = 22;
     const TRANSACTION_STATUS_CHECK = 90;
