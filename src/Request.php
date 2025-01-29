@@ -616,4 +616,100 @@ abstract class Request extends Base
     {
         return $this->intRef;
     }
+
+    /**
+     * Generate signature of data
+     *
+     * @return string
+     * @throws Exceptions\SignatureException
+     * @throws ParameterValidationException
+     */
+    public function generateSignature()
+    {
+        $this->validateRequiredParameters();
+
+        if ($this->isSigningSchemaMacExtended()) {
+            return $this->getPrivateSignature([
+                $this->getTerminalID(),
+                $this->getTransactionType()->getValue(),
+                $this->getAmount(),
+                $this->getCurrency(),
+                $this->getOrder(),
+                $this->getMerchantId(),
+                $this->getSignatureTimestamp(),
+                $this->getNonce()
+            ]);
+        }
+
+        if ($this->isSigningSchemaMacAdvanced()) {
+            return $this->getPrivateSignature([
+                $this->getTerminalID(),
+                $this->getTransactionType()->getValue(),
+                $this->getAmount(),
+                $this->getCurrency(),
+                $this->getOrder(),
+                $this->getSignatureTimestamp(),
+                $this->getNonce()
+            ]);
+        }
+
+        // Default MAC_GENERAL
+        return $this->getPrivateSignature([
+            $this->getTerminalID(),
+            $this->getTransactionType()->getValue(),
+            $this->getAmount(),
+            $this->getCurrency(),
+            $this->getOrder(),
+            $this->getSignatureTimestamp(),
+            $this->getNonce(),
+            /**
+             * ВАЖНО: В настоящата версия на интерфейса значението на поле RFU (Reserved
+             * for Future Use) в символния низ за подписване е един байт 0x2D (знак минус "-").
+             * Поле RFU е запазено за бъдещо ползване в символния низ за подпис и не участва
+             * в заявката или отговора към/от APGW
+             */
+            '-'
+        ]);
+    }
+
+    /**
+     * Validate required fields to post
+     *
+     * @return void
+     * @throws ParameterValidationException
+     */
+    public function validateRequiredParameters()
+    {
+        if (empty($this->getTransactionType())) {
+            throw new ParameterValidationException('Transaction type is empty!');
+        }
+
+        if (empty($this->getAmount())) {
+            throw new ParameterValidationException('Amount is empty!');
+        }
+
+        if (empty($this->getCurrency())) {
+            throw new ParameterValidationException('Currency is empty!');
+        }
+
+        if (empty($this->getOrder())) {
+            throw new ParameterValidationException('Order is empty!');
+        }
+
+        if (empty($this->getDescription())) {
+            throw new ParameterValidationException('Description is empty!');
+        }
+
+        if (empty($this->getBackRefUrl()) && $this->isDevelopment()) {
+            throw new ParameterValidationException('Back ref url is empty! (required in development)');
+        }
+
+        if (empty($this->getMerchantId())) {
+            throw new ParameterValidationException('Merchant ID is empty!');
+        }
+
+        if (empty($this->getTerminalID())) {
+            throw new ParameterValidationException('TerminalID is empty!');
+        }
+    }
 }

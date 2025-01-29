@@ -93,22 +93,7 @@ class ReversalRequest extends Request implements RequestInterface
             ]);
         }
 
-        return $this->getPrivateSignature([
-            $this->getTerminalID(),
-            $this->getTransactionType()->getValue(),
-            $this->getAmount(),
-            $this->getCurrency(),
-            $this->getOrder(),
-            $this->getSignatureTimestamp(),
-            $this->getNonce(),
-            /**
-             * ВАЖНО: В настоящата версия на интерфейса значението на поле RFU (Reserved
-             * for Future Use) в символния низ за подписване е един байт 0x2D (знак минус "-").
-             * Поле RFU е запазено за бъдещо ползване в символния низ за подпис и не участва
-             * в заявката или отговора към/от APGW
-             */
-            '-'
-        ]);
+        return parent::generateSignature();
     }
 
     /**
@@ -117,20 +102,8 @@ class ReversalRequest extends Request implements RequestInterface
      */
     public function validateRequiredParameters()
     {
-        if (empty($this->getTransactionType())) {
-            throw new ParameterValidationException('Transaction type is empty!');
-        }
-
-        if (empty($this->getOrder())) {
-            throw new ParameterValidationException('Order is empty!');
-        }
-
         if (empty($this->getPublicKey())) {
             throw new ParameterValidationException('Please set public key for validation response!');
-        }
-
-        if (empty($this->getTerminalID())) {
-            throw new ParameterValidationException('TerminalID is empty!');
         }
 
         if (empty($this->getIntRef())) {
@@ -140,6 +113,8 @@ class ReversalRequest extends Request implements RequestInterface
         if (empty($this->getRrn())) {
             throw new ParameterValidationException('Payment reference is empty!');
         }
+
+        parent::validateRequiredParameters();
     }
 
     /**
