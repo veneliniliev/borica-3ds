@@ -6,6 +6,7 @@
 
 namespace VenelinIliev\Borica3ds\Tests\Unit;
 
+use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 use VenelinIliev\Borica3ds\ReversalRequest;
@@ -37,7 +38,7 @@ class ReversalRequestTest extends TestCase
             ->getData();
 
         $this->assertEquals([
-            'TRTYPE' => 24,
+            'TRTYPE' => TransactionType::REVERSAL,
             'CURRENCY' => 'BGN',
             'ORDER' => '145659',
             'AMOUNT' => '1.00',
@@ -77,7 +78,7 @@ class ReversalRequestTest extends TestCase
             ->getData();
 
         $this->assertEquals([
-            'TRTYPE' => 24,
+            'TRTYPE' => TransactionType::REVERSAL,
             'CURRENCY' => 'BGN',
             'ORDER' => '145659',
             'AMOUNT' => '1.00',

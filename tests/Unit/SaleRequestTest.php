@@ -7,6 +7,7 @@
 namespace VenelinIliev\Borica3ds\Tests\Unit;
 
 use VenelinIliev\Borica3ds\Enums\Language;
+use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
 use VenelinIliev\Borica3ds\SaleRequest;
@@ -135,7 +136,7 @@ class SaleRequestTest extends TestCase
             ->getData();
 
         $this->assertEquals([
-            'TRTYPE' => 1,
+            'TRTYPE' => TransactionType::SALE,
             //'COUNTRY' => null,
             'CURRENCY' => 'BGN',
             'MERCH_GMT' => '+03',
@@ -182,7 +183,7 @@ class SaleRequestTest extends TestCase
             ->getData();
 
         $this->assertEquals([
-            'TRTYPE' => 1,
+            'TRTYPE' => TransactionType::SALE,
             //'COUNTRY' => null,
             'CURRENCY' => 'BGN',
             'MERCH_GMT' => '+03',
@@ -239,7 +240,7 @@ class SaleRequestTest extends TestCase
             ->getData();
 
         $this->assertEquals([
-            'TRTYPE' => 1,
+            'TRTYPE' => TransactionType::SALE,
             //'COUNTRY' => null,
             'CURRENCY' => 'BGN',
             'MERCH_GMT' => '+03',
