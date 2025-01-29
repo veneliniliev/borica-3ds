@@ -68,6 +68,46 @@ abstract class Request extends Base
     private $lang = null;
 
     /**
+     * @var string
+     */
+    private $merchantUrl;
+
+    /**
+     * @var string
+     */
+    private $merchantName;
+
+    /**
+     * @var string
+     */
+    private $emailAddress;
+
+    /**
+     * @var string
+     */
+    private $countryCode;
+
+    /**
+     * @var string
+     */
+    private $merchantGMT;
+
+    /**
+     * @var string
+     */
+    private $adCustBorOrderId;
+
+    /**
+     * @var string
+     */
+    private $rrn;
+
+    /**
+     * @var string
+     */
+    private $intRef;
+
+    /**
      * Get description
      *
      * @return string
@@ -359,5 +399,221 @@ abstract class Request extends Base
             $this->lang = $lang;
         }
         return $this;
+    }
+
+    /**
+     * Get country code
+     *
+     * @return string
+     */
+    public function getCountryCode()
+    {
+        return $this->countryCode;
+    }
+
+    /**
+     * Set country code
+     *
+     * @param string $countryCode Двубуквен код на държавата, където се намира магазинът на търговеца.
+     *
+     * @return Request
+     * @throws ParameterValidationException
+     */
+    public function setCountryCode($countryCode)
+    {
+        if (mb_strlen($countryCode) != 2) {
+            throw new ParameterValidationException('Country code must be exact 2 characters (ISO2)');
+        }
+        $this->countryCode = strtoupper($countryCode);
+        return $this;
+    }
+
+    /**
+     * Get merchant GMT
+     *
+     * @return string|null
+     */
+    public function getMerchantGMT()
+    {
+        if (empty($this->merchantGMT)) {
+            $this->setMerchantGMT(date('O'));
+        }
+        return $this->merchantGMT;
+    }
+
+    /**
+     * Set merchant GMT
+     *
+     * @param string $merchantGMT Отстояние на часовата зона на търговеца от UTC/GMT  (напр. +03).
+     *
+     * @return Request
+     */
+    public function setMerchantGMT($merchantGMT)
+    {
+        $this->merchantGMT = $merchantGMT;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMerchantName()
+    {
+        return $this->merchantName;
+    }
+
+    /**
+     * @param string $merchantName Merchant name.
+     *
+     * @return Request
+     */
+    public function setMerchantName($merchantName)
+    {
+        $this->merchantName = $merchantName;
+        return $this;
+    }
+
+    /**
+     * Get merchant URL
+     *
+     * @return string
+     */
+    public function getMerchantUrl()
+    {
+        return $this->merchantUrl;
+    }
+
+    /**
+     * Set merchant URL
+     *
+     * @param string $merchantUrl URL на web сайта на търговеца.
+     *
+     * @return Request
+     * @throws ParameterValidationException
+     */
+    public function setMerchantUrl($merchantUrl)
+    {
+        if (mb_strlen($merchantUrl) > 250) {
+            throw new ParameterValidationException('Merchant URL must be maximum 250 characters');
+        }
+
+        $this->merchantUrl = $merchantUrl;
+        return $this;
+    }
+
+    /**
+     * Get notification email address
+     *
+     * @return string
+     */
+    public function getEmailAddress()
+    {
+        return $this->emailAddress;
+    }
+
+    /**
+     * Set notification email address
+     *
+     * @param string $emailAddress E-mail адрес за уведомления.
+     *
+     * @return Request
+     * @throws ParameterValidationException
+     */
+    public function setEmailAddress($emailAddress)
+    {
+        if (mb_strlen($emailAddress) > 80) {
+            throw new ParameterValidationException('Email address for notifications must be maximum 80 characters');
+        }
+        $this->emailAddress = $emailAddress;
+        return $this;
+    }
+
+    /**
+     * Generate AD.CUST_BOR_ORDER_ID borica field
+     *
+     * @return array
+     */
+    protected function generateAdCustBorOrderId()
+    {
+        $orderString = $this->getAdCustBorOrderId();
+
+        if (empty($orderString)) {
+            $orderString = $this->getOrder();
+        }
+
+        /*
+         * полето не трябва да съдържа символ “;”
+         */
+        $orderString = str_ireplace(';', '', $orderString);
+
+        return [
+            'AD.CUST_BOR_ORDER_ID' => mb_substr($orderString, 0, 22),
+            'ADDENDUM' => 'AD,TD',
+        ];
+    }
+
+    /**
+     * Get 'AD.CUST_BOR_ORDER_ID' field
+     *
+     * @return string
+     */
+    public function getAdCustBorOrderId()
+    {
+        return $this->adCustBorOrderId;
+    }
+
+    /**
+     * Set 'AD.CUST_BOR_ORDER_ID' field
+     *
+     * @param string $adCustBorOrderId Идентификатор на поръчката за Банката на търговеца във финансовите файлове.
+     *
+     * @return Request
+     */
+    public function setAdCustBorOrderId($adCustBorOrderId)
+    {
+        $this->adCustBorOrderId = $adCustBorOrderId;
+        return $this;
+    }
+
+    /**
+     * Set transaction reference.
+     *
+     * @param string $rrn Референция на транзакцията.
+     *
+     * @return Request
+     */
+    public function setRrn($rrn)
+    {
+        $this->rrn = $rrn;
+        return $this;
+    }
+
+    /**
+     * Set transaction internal reference.
+     *
+     * @param string $intRef Вътрешна референция на транзакцията.
+     *
+     * @return Request
+     */
+    public function setIntRef($intRef)
+    {
+        $this->intRef = $intRef;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRrn()
+    {
+        return $this->rrn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntRef()
+    {
+        return $this->intRef;
     }
 }

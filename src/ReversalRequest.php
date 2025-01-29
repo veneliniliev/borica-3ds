@@ -13,21 +13,6 @@ use VenelinIliev\Borica3ds\Exceptions\SendingException;
 class ReversalRequest extends Request implements RequestInterface
 {
     /**
-     * @var string
-     */
-    protected $rrn;
-
-    /**
-     * @var string
-     */
-    protected $intRef;
-
-    /**
-     * @var string
-     */
-    protected $merchantName;
-
-    /**
      * StatusCheckRequest constructor.
      */
     public function __construct()
@@ -85,22 +70,6 @@ class ReversalRequest extends Request implements RequestInterface
             'NONCE' => $this->getNonce(),
             'P_SIGN' => $this->generateSignature(),
         ];
-    }
-
-    /**
-     * @return string
-     */
-    public function getRrn()
-    {
-        return $this->rrn;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIntRef()
-    {
-        return $this->intRef;
     }
 
     /**
@@ -181,50 +150,5 @@ class ReversalRequest extends Request implements RequestInterface
     public function generateForm()
     {
         return $this->getData();
-    }
-
-    /**
-     * Set transaction reference.
-     *
-     * @param string $rrn Референция на транзакцията.
-     *
-     * @return ReversalRequest
-     */
-    public function setRrn($rrn)
-    {
-        $this->rrn = $rrn;
-        return $this;
-    }
-
-    /**
-     * Set transaction internal reference.
-     *
-     * @param string $intRef Вътрешна референция на транзакцията.
-     *
-     * @return ReversalRequest
-     */
-    public function setIntRef($intRef)
-    {
-        $this->intRef = $intRef;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMerchantName()
-    {
-        return $this->merchantName;
-    }
-
-    /**
-     * @param string $merchantName Merchant name.
-     *
-     * @return ReversalRequest
-     */
-    public function setMerchantName($merchantName)
-    {
-        $this->merchantName = $merchantName;
-        return $this;
     }
 }
