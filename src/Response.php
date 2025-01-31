@@ -6,6 +6,7 @@
 
 namespace VenelinIliev\Borica3ds;
 
+use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\DataMissingException;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
@@ -21,6 +22,46 @@ abstract class Response extends Base
      * @var array
      */
     private $responseData;
+
+    /**
+     * Determine the repose class.
+     *
+     * Return the correct response class instance based on the response data. If response data is not
+     * provided it will use the data from $_POST
+     *
+     * @param array $responseData Response data from Borica.
+     * @return PreAuthorisationResponse|ReversalResponse|SaleResponse|StatusCheckResponse
+     * @throws DataMissingException
+     */
+    public static function determineResponse(array $responseData = null)
+    {
+        if (is_null($responseData)) {
+            $responseData = $_POST;
+        }
+
+        if (empty($responseData['TRTYPE'])) {
+            throw new DataMissingException('TRTYPE missing or empty in response data');
+        }
+
+        switch ($responseData['TRTYPE']) {
+            case TransactionType::SALE:
+                $response = new SaleResponse();
+                break;
+            case TransactionType::PRE_AUTHORISATION:
+                $response = new PreAuthorisationResponse();
+                break;
+            case TransactionType::REVERSAL:
+                $response = new ReversalResponse();
+                break;
+            case TransactionType::TRANSACTION_STATUS_CHECK:
+                $response = new StatusCheckResponse();
+                break;
+            default:
+                throw new DataMissingException('Unknown transaction type');
+        }
+
+        return $response->setResponseData($responseData);
+    }
 
     /**
      * Get verified data by key
