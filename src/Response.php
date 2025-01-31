@@ -6,6 +6,7 @@
 
 namespace VenelinIliev\Borica3ds;
 
+use VenelinIliev\Borica3ds\Enums\ResponseCode;
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\DataMissingException;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
@@ -256,7 +257,7 @@ abstract class Response extends Base
      */
     public function isSuccessful()
     {
-        return $this->getResponseCode() === '00';
+        return $this->getResponseCode() === ResponseCode::SUCCESS;
     }
 
     /**

@@ -7,7 +7,7 @@
 namespace VenelinIliev\Borica3ds;
 
 /**
- * Class Sale
+ * Class SaleResponse
  *
  * @package VenelinIliev\Borica3ds
  */

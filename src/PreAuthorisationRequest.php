@@ -11,7 +11,7 @@ use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\RequestTypes\HtmlForm;
 
 /**
- * Class Sale
+ * Class PreAuthorisationRequest
  *
  * @package VenelinIliev\Borica3ds
  */
