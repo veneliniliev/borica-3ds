@@ -245,4 +245,28 @@ abstract class Response extends Base
             openssl_pkey_free($publicKey);
         }
     }
+
+    /**
+     * Is corresponding request was successful?
+     *
+     * @return boolean
+     * @throws DataMissingException
+     * @throws ParameterValidationException
+     * @throws Exceptions\SignatureException
+     */
+    public function isSuccessful()
+    {
+        return $this->getResponseCode() === '00';
+    }
+
+    /**
+     * Get response code - value of 'RC' field
+     *
+     * @return string
+     * @throws Exceptions\SignatureException|ParameterValidationException|DataMissingException
+     */
+    public function getResponseCode()
+    {
+        return $this->getVerifiedData('RC');
+    }
 }
