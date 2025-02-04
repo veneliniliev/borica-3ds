@@ -141,11 +141,10 @@ abstract class Request extends Base
         return $this;
     }
 
-    //TODO Update the version
     /**
      * Get back ref url
      *
-     * @deprecated 2.2 This is missing from the Borica documentation v5.0 / 29.05.2024 and it is not working anymore.
+     * @deprecated This is missing from the Borica documentation v5.0 / 29.05.2024, and it is not working anymore.
      * @return string
      */
     public function getBackRefUrl()
@@ -153,11 +152,10 @@ abstract class Request extends Base
         return $this->backRefUrl;
     }
 
-    //TODO Update the version
     /**
      * Set back ref url
      *
-     * @deprecated 2.2 This is missing from the Borica documentation v5.0 / 29.05.2024 and it is not working anymore.
+     * @deprecated This is missing from the Borica documentation v5.0 / 29.05.2024, and it is not working anymore.
      * @param  string $backRefUrl URL на търговеца за изпращане на резултата от авторизацията.
      * @return Request
      * @throws ParameterValidationException
