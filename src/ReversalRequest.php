@@ -44,7 +44,7 @@ class ReversalRequest extends Request implements RequestInterface
      */
     public function getData()
     {
-        return [
+        return array_filter([
             'TERMINAL' => $this->getTerminalID(),
             'TRTYPE' => $this->getTransactionType()->getValue(),
             'AMOUNT' => $this->getAmount(),
@@ -53,12 +53,17 @@ class ReversalRequest extends Request implements RequestInterface
             'DESC' => $this->getDescription(),
             'MERCHANT' => $this->getMerchantId(),
             'MERCH_NAME' => $this->getMerchantName(),
+            'MERCH_URL' => $this->getMerchantUrl(),
+            'EMAIL' => $this->getEmailAddress(),
+            'COUNTRY' => $this->getCountryCode(),
+            'MERCH_GMT' => $this->getMerchantGMT(),
+            'LANG' => $this->getLang(),
             'RRN' => $this->getRrn(),
             'INT_REF' => $this->getIntRef(),
             'TIMESTAMP' => $this->getSignatureTimestamp(),
             'NONCE' => $this->getNonce(),
             'P_SIGN' => $this->generateSignature(),
-        ];
+        ]) + $this->generateAdCustBorOrderId();
     }
 
     /**
