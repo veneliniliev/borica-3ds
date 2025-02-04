@@ -54,6 +54,9 @@ abstract class Response extends Base
             case TransactionType::PRE_AUTHORISATION_COMPLETION:
                 $response = new PreAuthorisationCompletionResponse();
                 break;
+            case TransactionType::PRE_AUTHORISATION_REVERSAL:
+                $response = new PreAuthorisationReversalResponse();
+                break;
             case TransactionType::REVERSAL:
                 $response = new ReversalResponse();
                 break;
