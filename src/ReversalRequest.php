@@ -14,7 +14,7 @@ use VenelinIliev\Borica3ds\RequestTypes\Direct;
 class ReversalRequest extends Request implements RequestInterface
 {
     /**
-     * StatusCheckRequest constructor.
+     * ReversalRequest constructor.
      */
     public function __construct()
     {

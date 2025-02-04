@@ -31,7 +31,7 @@ abstract class Response extends Base
      * provided it will use the data from $_POST
      *
      * @param array $responseData Response data from Borica.
-     * @return PreAuthorisationResponse|ReversalResponse|SaleResponse|StatusCheckResponse
+     * @return Response
      * @throws DataMissingException
      */
     public static function determineResponse(array $responseData = null)

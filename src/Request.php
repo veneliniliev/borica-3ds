@@ -720,6 +720,8 @@ abstract class Request extends Base
     }
 
     /**
+     * Return the request type.
+     *
      * @return RequestType
      */
     public function getRequestType()
@@ -728,7 +730,9 @@ abstract class Request extends Base
     }
 
     /**
-     * @param  RequestType  $requestType
+     * Set the request type
+     *
+     * @param RequestType $requestType
      * @return Request
      */
     public function setRequestType($requestType)
@@ -738,7 +742,7 @@ abstract class Request extends Base
     }
 
     /**
-     * @return string|void
+     * @return string|array
      * @throws Exceptions\SignatureException
      * @throws ParameterValidationException
      */
