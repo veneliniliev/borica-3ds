@@ -14,7 +14,7 @@ use VenelinIliev\Borica3ds\RequestTypes\Direct;
 class PreAuthorisationCompletionRequest extends Request implements RequestInterface
 {
     /**
-     * StatusCheckRequest constructor.
+     * PreAuthorisationCompletionRequest constructor.
      */
     public function __construct()
     {
