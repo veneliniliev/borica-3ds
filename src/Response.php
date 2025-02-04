@@ -17,12 +17,12 @@ abstract class Response extends Base
     /**
      * @var boolean
      */
-    private $dataIsVerified = false;
+    protected $dataIsVerified = false;
 
     /**
      * @var array
      */
-    private $responseData;
+    protected $responseData;
 
     /**
      * Determine the repose class.

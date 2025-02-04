@@ -20,99 +20,99 @@ abstract class Request extends Base
     /**
      * @var mixed
      */
-    private $signatureTimestamp;
+    protected $signatureTimestamp;
 
     /**
      * @var string
      */
-    private $backRefUrl;
+    protected $backRefUrl;
 
     /**
      * @var string|float|integer
      */
-    private $amount = null;
+    protected $amount = null;
 
     /**
      * @var string
      */
-    private $currency = 'BGN';
+    protected $currency = 'BGN';
 
     /**
      * @var string
      */
-    private $description;
+    protected $description;
 
     /**
      * @var TransactionType
      */
-    private $transactionType;
+    protected $transactionType;
 
     /**
      * @var mixed
      */
-    private $order;
+    protected $order;
 
     /**
      * @var string
      */
-    private $nonce;
+    protected $nonce;
 
     /**
      * @var array
      */
-    private $mInfo;
+    protected $mInfo;
 
     /**
      * Transaction language.
      *
      * @var null|string
      */
-    private $lang = null;
+    protected $lang = null;
 
     /**
      * @var string
      */
-    private $merchantUrl;
+    protected $merchantUrl;
 
     /**
      * @var string
      */
-    private $merchantName;
+    protected $merchantName;
 
     /**
      * @var string
      */
-    private $emailAddress;
+    protected $emailAddress;
 
     /**
      * @var string
      */
-    private $countryCode;
+    protected $countryCode;
 
     /**
      * @var string
      */
-    private $merchantGMT;
+    protected $merchantGMT;
 
     /**
      * @var string
      */
-    private $adCustBorOrderId;
+    protected $adCustBorOrderId;
 
     /**
      * @var string
      */
-    private $rrn;
+    protected $rrn;
 
     /**
      * @var string
      */
-    private $intRef;
+    protected $intRef;
 
     /**
      * @var RequestType
      */
-    private $requestType;
+    protected $requestType;
 
     /**
      * Get description
