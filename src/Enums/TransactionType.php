@@ -15,7 +15,6 @@ use MyCLabs\Enum\Enum;
  * @method static TRANSACTION_STATUS_CHECK()
  * @method static REVERSAL()
  * @method static REVERSAL_REQUEST()
- * @method static REVERSAL_REQUESTREVERSAL_REQUEST()
  * @method static PRE_AUTHORISATION()
  */
 class TransactionType extends Enum

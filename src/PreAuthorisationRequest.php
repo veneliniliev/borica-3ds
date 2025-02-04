@@ -18,7 +18,7 @@ use VenelinIliev\Borica3ds\RequestTypes\HtmlForm;
 class PreAuthorisationRequest extends Request implements RequestInterface
 {
     /**
-     * Sale constructor.
+     * PreAuthorisationRequest constructor.
      */
     public function __construct()
     {
