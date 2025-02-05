@@ -21,26 +21,8 @@ use MyCLabs\Enum\Enum;
 class TransactionType extends Enum
 {
     const SALE = 1;
-
-    /**
-     * @deprecated Name in sync with the Borica documentation
-     * @see PRE_AUTHORISATION
-     */
-    const DEFERRED_AUTHORIZATION = 12;
     const PRE_AUTHORISATION = 12;
-
-    /**
-     * @deprecated Name in sync with the Borica documentation
-     * @see PRE_AUTHORISATION_COMPLETION
-     */
-    const COMPLETION_DEFERRED_AUTHORIZATION = 21;
     const PRE_AUTHORISATION_COMPLETION = 21;
-
-    /**
-     * @deprecated Name in sync with the Borica documentation
-     * @see PRE_AUTHORISATION_REVERSAL
-     */
-    const REVERSAL_REQUEST = 22;
     const PRE_AUTHORISATION_REVERSAL = 22;
     const TRANSACTION_STATUS_CHECK = 90;
     const REVERSAL = 24;

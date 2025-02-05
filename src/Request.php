@@ -23,11 +23,6 @@ abstract class Request extends Base
     protected $signatureTimestamp;
 
     /**
-     * @var string
-     */
-    protected $backRefUrl;
-
-    /**
      * @var string|float|integer
      */
     protected $amount = null;
@@ -138,35 +133,6 @@ abstract class Request extends Base
             throw new ParameterValidationException('Description must be max 50 digits');
         }
         $this->description = $description;
-        return $this;
-    }
-
-    /**
-     * Get back ref url
-     *
-     * @deprecated This is missing from the Borica documentation v5.0 / 29.05.2024, and it is not working anymore.
-     * @return string
-     */
-    public function getBackRefUrl()
-    {
-        return $this->backRefUrl;
-    }
-
-    /**
-     * Set back ref url
-     *
-     * @deprecated This is missing from the Borica documentation v5.0 / 29.05.2024, and it is not working anymore.
-     * @param  string $backRefUrl URL на търговеца за изпращане на резултата от авторизацията.
-     * @return Request
-     * @throws ParameterValidationException
-     */
-    public function setBackRefUrl($backRefUrl)
-    {
-        if (!filter_var($backRefUrl, FILTER_VALIDATE_URL)) {
-            throw new ParameterValidationException('Backref url is not valid!');
-        }
-
-        $this->backRefUrl = $backRefUrl;
         return $this;
     }
 

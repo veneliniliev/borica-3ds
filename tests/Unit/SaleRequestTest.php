@@ -29,7 +29,6 @@ class SaleRequestTest extends TestCase
             ->setMerchantGMT('+03')
             ->setMerchantUrl('https://test.com')
             ->setEmailAddress('test@test.com')
-            ->setBackRefUrl('https://test.com/back-ref-url')
             ->setTerminalID(self::TERMINAL_ID)
             ->setMerchantId(self::MERCHANT_ID)
             ->setPrivateKey(__DIR__ . '/../certificates/test.key')
@@ -59,7 +58,6 @@ class SaleRequestTest extends TestCase
             ->setMerchantGMT('+03')
             ->setMerchantUrl('https://test.com')
             ->setEmailAddress('test@test.com')
-            ->setBackRefUrl('https://test.com/back-ref-url')
             ->setTerminalID(self::TERMINAL_ID)
             ->setMerchantId(self::MERCHANT_ID)
             ->setPrivateKey(__DIR__ . '/../certificates/test.key')
@@ -93,7 +91,6 @@ class SaleRequestTest extends TestCase
             ->setMerchantGMT('+03')
             ->setMerchantUrl('https://test.com')
             ->setEmailAddress('test@test.com')
-            ->setBackRefUrl('https://test.com/back-ref-url')
             ->setTerminalID(self::TERMINAL_ID)
             ->setMerchantId(self::MERCHANT_ID)
             ->setPrivateKey(__DIR__ . '/../certificates/test.key')
@@ -122,7 +119,6 @@ class SaleRequestTest extends TestCase
             ->setDescription('Детайли плащане.')
             ->setMerchantGMT('+03')
             ->setMerchantUrl('https://test.com')
-            ->setBackRefUrl('https://test.com/back-ref-url')
             ->setTerminalID(self::TERMINAL_ID)
             ->setMerchantId(self::MERCHANT_ID)
             ->setPrivateKey(__DIR__ . '/../certificates/test.key')
@@ -148,7 +144,6 @@ class SaleRequestTest extends TestCase
             'MERCH_URL' => 'https://test.com',
             //'MERCH_NAME' => null,
             'EMAIL' => 'test@test.com',
-            'BACKREF' => 'https://test.com/back-ref-url',
             'AD.CUST_BOR_ORDER_ID' => 'test',
             'LANG' => Language::BG,
             'ADDENDUM' => 'AD,TD',
@@ -170,7 +165,6 @@ class SaleRequestTest extends TestCase
             ->setDescription('Детайли плащане.')
             ->setMerchantGMT('+03')
             ->setMerchantUrl('https://test.com')
-            ->setBackRefUrl('https://test.com/back-ref-url')
             ->setTerminalID(self::TERMINAL_ID)
             ->setMerchantId(self::MERCHANT_ID)
             ->setPrivateKey(__DIR__ . '/../certificates/test.key')
@@ -195,7 +189,6 @@ class SaleRequestTest extends TestCase
             'MERCH_URL' => 'https://test.com',
             //'MERCH_NAME' => null,
             'EMAIL' => 'test@test.com',
-            'BACKREF' => 'https://test.com/back-ref-url',
             'AD.CUST_BOR_ORDER_ID' => 'test',
             'ADDENDUM' => 'AD,TD',
             'NONCE' => 'FC8AC36A9FDADCB6127D273CD15DAEC3',
@@ -226,7 +219,6 @@ class SaleRequestTest extends TestCase
             ->setDescription('Детайли плащане.')
             ->setMerchantGMT('+03')
             ->setMerchantUrl('https://test.com')
-            ->setBackRefUrl('https://test.com/back-ref-url')
             ->setTerminalID(self::TERMINAL_ID)
             ->setMerchantId(self::MERCHANT_ID)
             ->setPrivateKey(__DIR__ . '/../certificates/test.key')
@@ -252,7 +244,6 @@ class SaleRequestTest extends TestCase
             'MERCH_URL' => 'https://test.com',
             //'MERCH_NAME' => null,
             'EMAIL' => 'test@test.com',
-            'BACKREF' => 'https://test.com/back-ref-url',
             'AD.CUST_BOR_ORDER_ID' => 'test',
             'ADDENDUM' => 'AD,TD',
             'NONCE' => 'FC8AC36A9FDADCB6127D273CD15DAEC3',
@@ -260,17 +251,5 @@ class SaleRequestTest extends TestCase
             'M_INFO' => 'eyJlbWFpbCI6InVzZXJAc2FtcGxlLmNvbSIsImNhcmRob2xkZXJOYW1lIjoiQ0FSREhPTERFUiBOQU1FIiwibW9iaWxlUGhvbmUiOnsiY2MiOiIzNTkiLCJzdWJzY3JpYmVyIjoiODkzOTk5OTg4OCJ9LCJ0aHJlZURTUmVxdWVzdG9yQ2hhbGxlbmdlSW5kIjoiMDQifQ==',
             'P_SIGN' => '8125E0E604B8BC6430B03B1365B63D91ACB7210F2777776D7587A633D222368CB36936855090C81020318503998499503595EBB32092014A2843C7E6DB75C1AD7FCB018BB4CDA98B379B411E74C62881529A7787B73D8D0E00D1406E1D2A64ADD1A298CCDF3B5A13C14825990010541444122F4A8FBB23BB3747B962BEFB5C57C5737FCF8DC9E61F377777B661B04FFE604EE5E49EB87CA49737FD39AA27639DE0CEF11B527B630070BE97ECC81F0D14D355F37C5C684A040C615563C962CE137A0B7C7F0B3567DEB0A05C4D79F373D7938D4CBFCE86CA6AA5DBAC99081F3AB4C52E0A3B35748A7600ECE4278060B14F5D3ACE5D964A73F49CF8844B6C86E10E'
         ], $saleData);
-    }
-
-    /**
-     * @return void
-     * @throws ParameterValidationException|SignatureException
-     */
-    public function testBackRefValidation()
-    {
-        $this->expectException(ParameterValidationException::class);
-
-        (new SaleRequest())
-            ->setBackRefUrl('wrong url value');
     }
 }

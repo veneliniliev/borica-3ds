@@ -67,7 +67,6 @@ class PreAuthorisationRequest extends Request implements RequestInterface
                 'TIMESTAMP' => $this->getSignatureTimestamp(),
 
                 'TERMINAL' => $this->getTerminalID(),
-                'BACKREF' => $this->getBackRefUrl(),
 
                 'M_INFO' => $this->getMInfo(),
 
