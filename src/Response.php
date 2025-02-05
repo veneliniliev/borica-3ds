@@ -6,6 +6,7 @@
 
 namespace VenelinIliev\Borica3ds;
 
+use VenelinIliev\Borica3ds\Enums\Action;
 use VenelinIliev\Borica3ds\Enums\ResponseCode;
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\DataMissingException;
@@ -263,7 +264,8 @@ abstract class Response extends Base
      */
     public function isSuccessful()
     {
-        return $this->getResponseCode() === ResponseCode::SUCCESS;
+        return $this->getResponseCode() === ResponseCode::SUCCESS &&
+            $this->getAction() === Action::SUCCESS;
     }
 
     /**
@@ -275,5 +277,16 @@ abstract class Response extends Base
     public function getResponseCode()
     {
         return $this->getVerifiedData('RC');
+    }
+
+    /**
+     * Get action - value of 'ACTION' field
+     *
+     * @return string
+     * @throws Exceptions\SignatureException|ParameterValidationException|DataMissingException
+     */
+    public function getAction()
+    {
+        return $this->getVerifiedData('ACTION');
     }
 }
