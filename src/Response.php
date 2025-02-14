@@ -6,6 +6,9 @@
 
 namespace VenelinIliev\Borica3ds;
 
+use VenelinIliev\Borica3ds\Enums\Action;
+use VenelinIliev\Borica3ds\Enums\ResponseCode;
+use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\DataMissingException;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SignatureException;
@@ -15,12 +18,58 @@ abstract class Response extends Base
     /**
      * @var boolean
      */
-    private $dataIsVerified = false;
+    protected $dataIsVerified = false;
 
     /**
      * @var array
      */
-    private $responseData;
+    protected $responseData;
+
+    /**
+     * Determine the repose class.
+     *
+     * Return the correct response class instance based on the response data. If response data is not
+     * provided it will use the data from $_POST
+     *
+     * @param array $responseData Response data from Borica.
+     * @return Response
+     * @throws DataMissingException
+     */
+    public static function determineResponse(array $responseData = null)
+    {
+        if (is_null($responseData)) {
+            $responseData = $_POST;
+        }
+
+        if (empty($responseData['TRTYPE'])) {
+            throw new DataMissingException('TRTYPE missing or empty in response data');
+        }
+
+        switch ($responseData['TRTYPE']) {
+            case TransactionType::SALE:
+                $response = new SaleResponse();
+                break;
+            case TransactionType::PRE_AUTHORISATION:
+                $response = new PreAuthorisationResponse();
+                break;
+            case TransactionType::PRE_AUTHORISATION_COMPLETION:
+                $response = new PreAuthorisationCompletionResponse();
+                break;
+            case TransactionType::PRE_AUTHORISATION_REVERSAL:
+                $response = new PreAuthorisationReversalResponse();
+                break;
+            case TransactionType::REVERSAL:
+                $response = new ReversalResponse();
+                break;
+            case TransactionType::TRANSACTION_STATUS_CHECK:
+                $response = new StatusCheckResponse();
+                break;
+            default:
+                throw new DataMissingException('Unknown transaction type');
+        }
+
+        return $response->setResponseData($responseData);
+    }
 
     /**
      * Get verified data by key
@@ -203,5 +252,41 @@ abstract class Response extends Base
              */
             openssl_pkey_free($publicKey);
         }
+    }
+
+    /**
+     * Is corresponding request was successful?
+     *
+     * @return boolean
+     * @throws DataMissingException
+     * @throws ParameterValidationException
+     * @throws Exceptions\SignatureException
+     */
+    public function isSuccessful()
+    {
+        return $this->getResponseCode() === ResponseCode::SUCCESS &&
+            $this->getAction() === Action::SUCCESS;
+    }
+
+    /**
+     * Get response code - value of 'RC' field
+     *
+     * @return string
+     * @throws Exceptions\SignatureException|ParameterValidationException|DataMissingException
+     */
+    public function getResponseCode()
+    {
+        return $this->getVerifiedData('RC');
+    }
+
+    /**
+     * Get action - value of 'ACTION' field
+     *
+     * @return string
+     * @throws Exceptions\SignatureException|ParameterValidationException|DataMissingException
+     */
+    public function getAction()
+    {
+        return $this->getVerifiedData('ACTION');
     }
 }

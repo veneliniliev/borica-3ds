@@ -6,6 +6,8 @@
 
 namespace VenelinIliev\Borica3ds\Tests\Unit;
 
+use VenelinIliev\Borica3ds\Enums\Action;
+use VenelinIliev\Borica3ds\Enums\ResponseCode;
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\DataMissingException;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
@@ -23,8 +25,8 @@ class SaleResponseTest extends TestCase
     public function testSuccessFalseResponse()
     {
         $post = [
-            'ACTION' => 1,
-            'RC' => '00',
+            'ACTION' => Action::DUPLICATE,
+            'RC' => ResponseCode::SUCCESS,
             'APPROVAL' => 'S97539',
             'TERMINAL' => self::TERMINAL_ID,
             'TRTYPE' => TransactionType::SALE,
@@ -57,8 +59,8 @@ class SaleResponseTest extends TestCase
         $this->markTestSkipped('Да се провери защо не верифицира добре подписа!');
 
         $post = [
-            'ACTION' => 0,
-            'RC' => '00',
+            'ACTION' => Action::SUCCESS,
+            'RC' => ResponseCode::SUCCESS,
             'APPROVAL' => 'S19527',
             'TERMINAL' => self::TERMINAL_ID,
             'TRTYPE' => TransactionType::SALE,

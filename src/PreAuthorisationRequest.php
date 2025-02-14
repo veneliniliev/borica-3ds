@@ -11,18 +11,18 @@ use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\RequestTypes\HtmlForm;
 
 /**
- * Class Sale
+ * Class PreAuthorisationRequest
  *
  * @package VenelinIliev\Borica3ds
  */
-class SaleRequest extends Request implements RequestInterface
+class PreAuthorisationRequest extends Request implements RequestInterface
 {
     /**
-     * Sale constructor.
+     * PreAuthorisationRequest constructor.
      */
     public function __construct()
     {
-        $this->setTransactionType(TransactionType::SALE());
+        $this->setTransactionType(TransactionType::PRE_AUTHORISATION());
         $this->setRequestType(new HtmlForm());
     }
 

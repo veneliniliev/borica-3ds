@@ -72,7 +72,6 @@ $saleRequest = (new SaleRequest())
     ->setOrder(123456)
     ->setDescription('test')
     ->setMerchantUrl('https://test.com') // optional
-    ->setBackRefUrl('https://test.com/back-ref-url') // optional / required for development
     ->setTerminalID('<TID - V*******>')
     ->setMerchantId('<MID - 15 chars>')
     ->setPrivateKey('\<path to certificate.key>', '<password / or use method from bottom>')
@@ -97,7 +96,7 @@ $saleRequest->send(); // generate and send form with js
 
 ### Sale response
 
-Catch response from borica on `BACKREF` url (*$saleRequest->setBackRefUrl('\<url>')*)
+Catch response from borica on `BACKREF` url
 
 ```php
 use VenelinIliev\Borica3ds\SaleResponse;
@@ -203,6 +202,97 @@ $verifiedResponseData = $reversalRequestResponse->getResponseData();
 
 // get field from borica reversal response
 $reversalRequestResponse->getVerifiedData('STATUSMSG');
+```
+### Pre-authorisation
+
+You can also send pre-authorisation requests like this 
+
+````php
+use VenelinIliev\Borica3ds\PreAuthorisationRequest;
+// ...
+$preAuthorisationRequest = (new PreAuthorisationRequest())
+    ->setAmount(123.32)
+    ->setOrder(123456)
+    ->setDescription('test')
+    ->setMerchantUrl('https://test.com') // optional
+    ->setTerminalID('<TID - V*******>')
+    ->setMerchantId('<MID - 15 chars>')
+    ->setPrivateKey('\<path to certificate.key>', '<password / or use method from bottom>')
+    ->setMInfo(array( // Mandatory cardholderName and ( email or MobilePhone )
+        'email'=>'user@sample.com',
+        'cardholderName'=>'CARDHOLDER NAME', // Max 45 chars
+        'mobilePhone'=> array( 
+            'cc'=>'359', // Country code
+            'subscriber'=>'8939999888', // Subscriber number
+        ),
+        'threeDSRequestorChallengeInd'=>'04', //  Optional for Additional Authentication
+    ))
+    //->setSigningSchemaMacGeneral(); // use MAC_GENERAL
+    //->setSigningSchemaMacExtended(); // use MAC_EXTENDED
+    //->setSigningSchemaMacAdvanced(); // use MAC_ADVANCED
+    ->setPrivateKeyPassword('test');
+
+$formHtml = $preAuthorisationRequest->generateForm(); // only generate hidden html form with filled inputs 
+// OR
+$preAuthorisationRequest->send(); // generate and send form with js 
+````
+
+### Pre-authorisation completion
+
+After successful pre-authorisation in 30 days you can make only successful/failed completion.
+
+```php
+ $response = (new PreAuthorisationCompletionRequest())
+    //->inDevelopment()
+    ->setPrivateKey('\<path to certificate.key>', '<password / or use method from bottom>')
+    ->setPublicKey('<path to public certificate.cer>')
+    ->setTerminalID('<TID - V*******>')
+    ->setAmount(123.32)
+    ->setOrder(123456)
+    ->setDescription('test reversal')
+    ->setMerchantId('<MID - 15 chars>')
+    ->setRrn('<RRN - Original transaction reference (From the sale response data)>')
+    ->setIntRef('<INT_REF - Internal reference (From the sale response data)>')
+    //->setSigningSchemaMacGeneral(); // use MAC_GENERAL
+    //->setSigningSchemaMacExtended(); // use MAC_EXTENDED
+    //->setSigningSchemaMacAdvanced(); // use MAC_ADVANCED
+    ->send();
+
+$isSuccessful = $response->getVerifiedData('ACTION') === Action::SUCCESS &&
+    $response->isSuccessful();
+```
+### Pre-authorisation reversal
+
+The pre-authorisation reversal request is almost the same as completion request. But this request require the amount to
+be the same as the amount of the pre-authorisation.
+```php
+$response = (new PreAuthorisationReversalRequest())
+    //->inDevelopment()
+    ->setPrivateKey('\<path to certificate.key>', '<password / or use method from bottom>')
+    ->setPublicKey('<path to public certificate.cer>')
+    ->setTerminalID('<TID - V*******>')
+    ->setAmount(123.32)
+    ->setOrder(123456)
+    ->setDescription('test reversal')
+    ->setMerchantId('<MID - 15 chars>')
+    ->setRrn('<RRN - Original transaction reference (From the sale response data)>')
+    ->setIntRef('<INT_REF - Internal reference (From the sale response data)>')
+    //->setSigningSchemaMacGeneral(); // use MAC_GENERAL
+    //->setSigningSchemaMacExtended(); // use MAC_EXTENDED
+    //->setSigningSchemaMacAdvanced(); // use MAC_ADVANCED
+    ->send();
+
+$isSuccessful = $response->getVerifiedData('ACTION') === Action::SUCCESS &&
+    $response->isSuccessful();
+```
+
+### Determine the response
+
+You can use the determineResponse() get the instance of correct response class. If you do not provide an array with data
+it will take the data from $_POST.
+
+```php
+$boricaResponse = (Response::determineResponse())
 ```
 
 ### Methods

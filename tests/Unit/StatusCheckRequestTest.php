@@ -6,6 +6,8 @@
 
 namespace VenelinIliev\Borica3ds\Tests\Unit;
 
+use VenelinIliev\Borica3ds\Enums\Action;
+use VenelinIliev\Borica3ds\Enums\ResponseCode;
 use VenelinIliev\Borica3ds\Enums\TransactionType;
 use VenelinIliev\Borica3ds\Exceptions\DataMissingException;
 use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
@@ -61,9 +63,9 @@ class StatusCheckRequestTest extends TestCase
 
         $statusCheckResponse = $statusCheckRequest->send();
 
-        $this->assertEquals('3', $statusCheckResponse->getVerifiedData('ACTION'));
-        $this->assertEquals('-24', $statusCheckResponse->getVerifiedData('RC'));
-        $this->assertEquals('90', $statusCheckResponse->getVerifiedData('TRTYPE'));
+        $this->assertEquals(Action::PROCESSING_ERROR, $statusCheckResponse->getVerifiedData('ACTION'));
+        $this->assertEquals(ResponseCode::TRANSACTION_DATA_MISMATCH, $statusCheckResponse->getVerifiedData('RC'));
+        $this->assertEquals(TransactionType::TRANSACTION_STATUS_CHECK, $statusCheckResponse->getVerifiedData('TRTYPE'));
         $this->assertEquals('114233', $statusCheckResponse->getVerifiedData('ORDER'));
         $this->assertEquals('622CAAA8BF20C5A21A917DCB8401C336', $statusCheckResponse->getVerifiedData('NONCE'));
     }
@@ -77,8 +79,8 @@ class StatusCheckRequestTest extends TestCase
         $this->markTestSkipped('Да се провери защо не верифицира добре подписа!');
 
         $post = [
-            'ACTION' => 0,
-            'RC' => '00',
+            'ACTION' => Action::SUCCESS,
+            'RC' => ResponseCode::SUCCESS,
             'APPROVAL' => 'S78952',
             'TERMINAL' => self::TERMINAL_ID,
             'TRTYPE' => TransactionType::TRANSACTION_STATUS_CHECK,
@@ -99,7 +101,7 @@ class StatusCheckRequestTest extends TestCase
             ->setResponseData($post)
             ->getResponseData('RC');
 
-        $this->assertEquals('00', $rc);
+        $this->assertEquals(ResponseCode::SUCCESS, $rc);
 
     }
 }

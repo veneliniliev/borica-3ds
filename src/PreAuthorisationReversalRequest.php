@@ -11,28 +11,28 @@ use VenelinIliev\Borica3ds\Exceptions\ParameterValidationException;
 use VenelinIliev\Borica3ds\Exceptions\SendingException;
 use VenelinIliev\Borica3ds\RequestTypes\Direct;
 
-class ReversalRequest extends Request implements RequestInterface
+class PreAuthorisationReversalRequest extends Request implements RequestInterface
 {
     /**
-     * ReversalRequest constructor.
+     * PreAuthorisationReversalRequest constructor.
      */
     public function __construct()
     {
-        $this->setTransactionType(TransactionType::REVERSAL());
+        $this->setTransactionType(TransactionType::PRE_AUTHORISATION_REVERSAL());
         $this->requestType = new Direct();
     }
 
     /**
      * Send data to borica
      *
-     * @return ReversalResponse
+     * @return PreAuthorisationReversalResponse
      * @throws Exceptions\SignatureException|ParameterValidationException|SendingException
      */
     public function send()
     {
         $response = parent::send();
 
-        return (new ReversalResponse())
+        return (new PreAuthorisationReversalResponse())
             ->setResponseData(json_decode($response, true))
             ->setPublicKey($this->getPublicKey());
     }
@@ -64,30 +64,6 @@ class ReversalRequest extends Request implements RequestInterface
             'NONCE' => $this->getNonce(),
             'P_SIGN' => $this->generateSignature(),
         ]) + $this->generateAdCustBorOrderId();
-    }
-
-    /**
-     * @return string
-     * @throws Exceptions\SignatureException
-     * @throws ParameterValidationException
-     */
-    public function generateSignature()
-    {
-        $this->validateRequiredParameters();
-        if (!$this->isSigningSchemaMacGeneral()) {
-            return $this->getPrivateSignature([
-                $this->getTerminalID(),
-                $this->getTransactionType()->getValue(),
-                $this->getAmount(),
-                $this->getCurrency(),
-                $this->getOrder(),
-                $this->getMerchantId(),
-                $this->getSignatureTimestamp(),
-                $this->getNonce()
-            ]);
-        }
-
-        return parent::generateSignature();
     }
 
     /**
