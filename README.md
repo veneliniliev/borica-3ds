@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- PHP >= 5.6 (including 8.2)
+- PHP >= 5.6 (including 8.4)
 - ext-mbstring
 - ext-openssl
 - ext-curl
