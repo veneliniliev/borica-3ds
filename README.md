@@ -21,6 +21,8 @@ composer require veneliniliev/borica-3ds
 
 For more methods, read [api documentation](API.md).
 
+For official Borica resources like their API documentation, public keys for validation and more visit https://3dsgate-dev.borica.bg/
+
 ## Certificates
 
 ### Generate private key
@@ -98,11 +100,13 @@ $saleRequest->send(); // generate and send form with js
 
 Catch response from borica on `BACKREF` url
 
+`->setPublicKey` is the Borica public key and not the one you've generated. You can download borica key for DEV and PROD environment from here: https://3dsgate-dev.borica.bg/
+
 ```php
 use VenelinIliev\Borica3ds\SaleResponse;
 // ....
 $isSuccessfulPayment = (new SaleResponse())
-            ->setPublicKey('<path to public certificate.cer>')
+            ->setPublicKey('<path to public certificate.cer>') # Borica public key for the specific env
             ->setResponseData($_POST) //Set POST data from borica response
             //->setSigningSchemaMacGeneral(); // use MAC_GENERAL
             //->setSigningSchemaMacExtended(); // use MAC_EXTENDED
@@ -116,7 +120,7 @@ $isSuccessfulPayment = (new SaleResponse())
 use VenelinIliev\Borica3ds\SaleResponse;
 // ...
 $saleResponse= (new SaleResponse())
-               ->setPublicKey('<path to public certificate.cer>')
+               ->setPublicKey('<path to public certificate.cer>')  # Borica public key for the specific env
                //->setSigningSchemaMacGeneral(); // use MAC_GENERAL
                //->setSigningSchemaMacExtended(); // use MAC_EXTENDED
                //->setSigningSchemaMacAdvanced(); // use MAC_ADVANCED
