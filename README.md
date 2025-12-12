@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- PHP >= 5.6 (including 8.4)
+- PHP >= 5.6 (including 8.5)
 - ext-mbstring
 - ext-openssl
 - ext-curl
@@ -20,8 +20,8 @@ composer require veneliniliev/borica-3ds
 
 | Library Version | Supported Signing Schemas                       | Default Signing Schema | PHP Support      |
 |-----------------|-------------------------------------------------|------------------------|------------------|
-| ^2.0           | MAC_EXTENDED, MAC_ADVANCED, MAC_GENERAL         | MAC_GENERAL           | PHP 5.6 - 8.4    |
-| ^1.0           | MAC_EXTENDED, MAC_ADVANCED                      | MAC_ADVANCED          | PHP 5.6 - 8.4    |
+| ^2.0           | MAC_EXTENDED, MAC_ADVANCED, MAC_GENERAL         | MAC_GENERAL           | PHP 5.6 - 8.5    |
+| ^1.0           | MAC_EXTENDED, MAC_ADVANCED                      | MAC_ADVANCED          | PHP 5.6 - 8.5    |
 
 ### Signing Schema Information
 
