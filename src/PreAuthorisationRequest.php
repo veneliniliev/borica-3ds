@@ -22,6 +22,7 @@ class PreAuthorisationRequest extends Request implements RequestInterface
      */
     public function __construct()
     {
+        parent::__construct();
         $this->setTransactionType(TransactionType::PRE_AUTHORISATION());
         $this->setRequestType(new HtmlForm());
     }

@@ -22,6 +22,7 @@ class SaleRequest extends Request implements RequestInterface
      */
     public function __construct()
     {
+        parent::__construct();
         $this->setTransactionType(TransactionType::SALE());
         $this->setRequestType(new HtmlForm());
     }

@@ -110,6 +110,16 @@ abstract class Request extends Base
     protected $requestType;
 
     /**
+     * @throws ParameterValidationException
+     */
+    public function __construct()
+    {
+        if (date('Y') > 2025) {
+            $this->setCurrency('EUR');
+        }
+    }
+
+    /**
      * Get description
      *
      * @return string

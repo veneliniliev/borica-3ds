@@ -26,6 +26,7 @@ class StatusCheckRequest extends Request implements RequestInterface
      */
     public function __construct()
     {
+        parent::__construct();
         $this->setTransactionType(TransactionType::TRANSACTION_STATUS_CHECK());
         $this->setRequestType(new Direct());
     }

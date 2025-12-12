@@ -18,6 +18,7 @@ class PreAuthorisationCompletionRequest extends Request implements RequestInterf
      */
     public function __construct()
     {
+        parent::__construct();
         $this->setTransactionType(TransactionType::PRE_AUTHORISATION_COMPLETION());
         $this->requestType = new Direct();
     }

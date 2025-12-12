@@ -18,6 +18,7 @@ class PreAuthorisationReversalRequest extends Request implements RequestInterfac
      */
     public function __construct()
     {
+        parent::__construct();
         $this->setTransactionType(TransactionType::PRE_AUTHORISATION_REVERSAL());
         $this->requestType = new Direct();
     }
