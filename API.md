@@ -339,6 +339,11 @@
 
 *This class implements \JsonSerializable*
 
+**Constants:**
+
+- `BG` = 'BG' - Bulgarian language
+- `EN` = 'EN' - English language
+
 <hr />
 
 ### Class: \VenelinIliev\Borica3ds\Enums\TransactionType
@@ -351,6 +356,39 @@
 *This class extends \MyCLabs\Enum\Enum*
 
 *This class implements \JsonSerializable*
+
+**Constants:**
+
+- `SALE` = 1 - Sale transaction type
+- `PRE_AUTHORISATION` = 12 - Pre-authorisation transaction type
+- `PRE_AUTHORISATION_COMPLETION` = 21 - Pre-authorisation completion transaction type
+- `PRE_AUTHORISATION_REVERSAL` = 22 - Pre-authorisation reversal transaction type
+- `TRANSACTION_STATUS_CHECK` = 90 - Transaction status check type
+- `REVERSAL` = 24 - Reversal transaction type
+
+<hr />
+
+### Class: \VenelinIliev\Borica3ds\Enums\Action
+
+> Class Action
+
+| Visibility | Function |
+|:-----------|:---------|
+
+*This class extends \MyCLabs\Enum\Enum*
+
+*This class implements \JsonSerializable*
+
+**Constants:**
+
+- `SUCCESS` = '0' - Transaction successfully completed
+- `DUPLICATE` = '1' - Duplicate transaction found
+- `DECLINE` = '2' - Transaction declined, original issuer's response is returned
+- `PROCESSING_ERROR` = '3' - Transaction processing error
+- `DUPLICATE_DECLINE` = '6' - Duplicate, declined transaction
+- `DUPLICATE_AUTHENTICATION_ERROR` = '7' - Duplicate, authentication error
+- `DUPLICATE_NO_RESPONSE` = '8' - Duplicate, no response
+- `SOFT_DECLINE` = '21' - Soft decline
 
 <hr />
 

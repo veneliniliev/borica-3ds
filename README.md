@@ -346,6 +346,246 @@ $saleRequest->setLang('DE'); // Throws exception because 'DE' is not supported.
 
 Using `setLang` ensures that users are presented with a language-specific payment form, delivering a more user-friendly experience.
 
+### Configure currency
+
+With Bulgaria joining the Eurozone, you can now set the currency to EUR using the `setCurrency` method.
+
+```php
+use VenelinIliev\Borica3ds\SaleRequest;
+
+$saleRequest = (new SaleRequest())
+    ->setAmount(100.50) // Transaction amount.
+    ->setOrder('123456') // Unique order number.
+    ->setDescription('Test product purchase') // Order description.
+    ->setTerminalID('<TID - V*******>') // Terminal ID.
+    ->setMerchantId('<MID - 15 chars>') // Merchant ID.
+    ->setPrivateKey('<path to private key>', '<password>')
+    ->setCurrency('EUR'); // Set transaction currency to Euro
+```
+
+This is especially important following Bulgaria's adoption of the Euro as its official currency.
+
+### Additional Configuration Options
+
+#### Set country code
+
+```php
+$saleRequest->setCountryCode('BG'); // Set the country code (2-letter ISO code)
+```
+
+#### Set merchant GMT timezone
+
+```php
+$saleRequest->setMerchantGMT('+02'); // Set the merchant's timezone offset
+```
+
+#### Set merchant name
+
+```php
+$saleRequest->setMerchantName('My Company Ltd.'); // Set the merchant's name
+```
+
+#### Set notification email
+
+```php
+$saleRequest->setEmailAddress('notification@mycompany.com'); // Set notification email address
+```
+
+#### Set 'AD.CUST_BOR_ORDER_ID' field
+
+```php
+$saleRequest->setAdCustBorOrderId('ORDER123456'); // Set identifier for the bank's financial files
+```
+
+### Advanced Transaction Types
+
+#### Pre-authorisation
+
+You can send pre-authorisation requests:
+
+```php
+use VenelinIliev\Borica3ds\PreAuthorisationRequest;
+
+$preAuthorisationRequest = (new PreAuthorisationRequest())
+    ->setAmount(123.32)
+    ->setOrder(123456)
+    ->setDescription('test pre-authorisation')
+    ->setMerchantUrl('https://test.com') // optional
+    ->setTerminalID('<TID - V*******>')
+    ->setMerchantId('<MID - 15 chars>')
+    ->setPrivateKey('\<path to certificate.key>', '<password>')
+    ->setMInfo(array( // Mandatory cardholderName and ( email or MobilePhone )
+        'email'=>'user@sample.com',
+        'cardholderName'=>'CARDHOLDER NAME', // Max 45 chars
+        'mobilePhone'=> array(
+            'cc'=>'359', // Country code
+            'subscriber'=>'8939999888', // Subscriber number
+        ),
+    ))
+    ->setPrivateKeyPassword('test');
+
+$formHtml = $preAuthorisationRequest->generateForm(); // only generate hidden html form with filled inputs
+// OR
+$preAuthorisationRequest->send(); // generate and send form with js
+```
+
+#### Pre-authorisation completion
+
+After successful pre-authorisation, you can complete the transaction within 30 days:
+
+```php
+use VenelinIliev\Borica3ds\PreAuthorisationCompletionRequest;
+
+$response = (new PreAuthorisationCompletionRequest())
+    //->inDevelopment()
+    ->setPrivateKey('\<path to certificate.key>', '<password>')
+    ->setPublicKey('<path to public certificate.cer>')
+    ->setTerminalID('<TID - V*******>')
+    ->setAmount(123.32)
+    ->setOrder(123456)
+    ->setDescription('pre-authorisation completion')
+    ->setMerchantId('<MID - 15 chars>')
+    ->setRrn('<RRN - Original transaction reference>')
+    ->setIntRef('<INT_REF - Internal reference>')
+    //->setSigningSchemaMacGeneral(); // use MAC_GENERAL
+    //->setSigningSchemaMacExtended(); // use MAC_EXTENDED
+    //->setSigningSchemaMacAdvanced(); // use MAC_ADVANCED
+    ->send();
+
+$isSuccessful = $response->getVerifiedData('ACTION') === \VenelinIliev\Borica3ds\Enums\Action::SUCCESS &&
+    $response->isSuccessful();
+```
+
+#### Pre-authorisation reversal
+
+You can reverse a pre-authorisation:
+
+```php
+use VenelinIliev\Borica3ds\PreAuthorisationReversalRequest;
+
+$response = (new PreAuthorisationReversalRequest())
+    //->inDevelopment()
+    ->setPrivateKey('\<path to certificate.key>', '<password>')
+    ->setPublicKey('<path to public certificate.cer>')
+    ->setTerminalID('<TID - V*******>')
+    ->setAmount(123.32)
+    ->setOrder(123456)
+    ->setDescription('pre-authorisation reversal')
+    ->setMerchantId('<MID - 15 chars>')
+    ->setRrn('<RRN - Original transaction reference>')
+    ->setIntRef('<INT_REF - Internal reference>')
+    //->setSigningSchemaMacGeneral(); // use MAC_GENERAL
+    //->setSigningSchemaMacExtended(); // use MAC_EXTENDED
+    //->setSigningSchemaMacAdvanced(); // use MAC_ADVANCED
+    ->send();
+
+$isSuccessful = $response->getVerifiedData('ACTION') === \VenelinIliev\Borica3ds\Enums\Action::SUCCESS &&
+    $response->isSuccessful();
+```
+
+#### Transaction status check
+
+Check the status of a transaction:
+
+```php
+use VenelinIliev\Borica3ds\Enums\TransactionType;
+use VenelinIliev\Borica3ds\StatusCheckRequest;
+
+$statusCheckRequest = (new StatusCheckRequest())
+    //->inDevelopment()
+    ->setPrivateKey('\<path to certificate.key>', '<password>')
+    ->setPublicKey('<path to public certificate.cer>')
+    ->setTerminalID('<TID - V*******>')
+    ->setOrder('<order>')
+    ->setOriginalTransactionType(TransactionType::SALE()) // transaction type
+    //->setSigningSchemaMacGeneral(); // use MAC_GENERAL
+    //->setSigningSchemaMacExtended(); // use MAC_EXTENDED
+    //->setSigningSchemaMacAdvanced(); // use MAC_ADVANCED
+
+//send to borica
+$statusCheckResponse = $statusCheckRequest->send();
+
+// get data from borica response
+$verifiedResponseData = $statusCheckResponse->getResponseData();
+
+// get field from borica response
+$statusCheckResponse->getVerifiedData('<field from response. ex: ACTION');
+```
+
+#### Reversal request
+
+Reverse a completed transaction:
+
+```php
+use VenelinIliev\Borica3ds\ReversalRequest;
+
+$reversalRequest = (new ReversalRequest())
+    //->inDevelopment()
+    ->setPrivateKey('\<path to certificate.key>', '<password>')
+    ->setPublicKey('<path to public certificate.cer>')
+    ->setTerminalID('<TID - V*******>')
+    ->setAmount(123.32)
+    ->setOrder(123456)
+    ->setDescription('reversal')
+    ->setMerchantId('<MID - 15 chars>')
+    ->setRrn('<RRN - Original transaction reference>')
+    ->setIntRef('<INT_REF - Internal reference>')
+    //->setSigningSchemaMacGeneral(); // use MAC_GENERAL
+    //->setSigningSchemaMacExtended(); // use MAC_EXTENDED
+    //->setSigningSchemaMacAdvanced(); // use MAC_ADVANCED
+
+//send reversal request to borica
+$reversalRequestResponse = $reversalRequest->send();
+
+// get data from borica reversal response
+$verifiedResponseData = $reversalRequestResponse->getResponseData();
+
+// get field from borica reversal response
+$reversalRequestResponse->getVerifiedData('STATUSMSG');
+```
+
+### Determine Response Type
+
+You can use the `determineResponse()` method to automatically get the correct response instance:
+
+```php
+use VenelinIliev\Borica3ds\Response;
+
+$boricaResponse = Response::determineResponse(); // Will auto-detect the response type from $_POST data
+// OR
+$boricaResponse = Response::determineResponse($customData); // Process with custom data array
+
+// The returned response object will be the correct type based on the transaction type
+// and can be used with all the standard response methods like isSuccessful(), getVerifiedData(), etc.
+```
+
+### Response Code and Action Enums
+
+The library includes enums for response codes and actions:
+
+```php
+// Action constants
+use VenelinIliev\Borica3ds\Enums\Action;
+
+// Action values:
+// Action::SUCCESS = '0' - Transaction successfully completed
+// Action::DUPLICATE = '1' - Duplicate transaction found
+// Action::DECLINE = '2' - Transaction declined
+// Action::PROCESSING_ERROR = '3' - Transaction processing error
+// Action::DUPLICATE_DECLINE = '6' - Duplicate, declined transaction
+// Action::DUPLICATE_AUTHENTICATION_ERROR = '7' - Duplicate, authentication error
+// Action::DUPLICATE_NO_RESPONSE = '8' - Duplicate, no response
+// Action::SOFT_DECLINE = '21' - Soft decline
+
+// TransactionType values:
+// TransactionType::SALE = 1
+// TransactionType::PRE_AUTHORISATION = 12
+// TransactionType::PRE_AUTHORISATION_COMPLETION = 21
+// TransactionType::PRE_AUTHORISATION_REVERSAL = 22
+// TransactionType::TRANSACTION_STATUS_CHECK = 90
+// TransactionType::REVERSAL = 24
+```
+
 ### Credit cards for testing
 
 #### Cards
