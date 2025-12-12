@@ -10,14 +10,29 @@
 
 ## Installation
 
-| version | Supported signing schemas                       | Default signing schema |
-|---------|-------------------------------------------------|------------------------|
-| ^2.0    | MAC_EXTENDED <br/>MAC_ADVANCED <br/>MAC_GENERAL | **MAC_GENERAL**       
-| ^1.0    | MAC_EXTENDED <br/>MAC_ADVANCED                     | **MAC_ADVANCED**       
+Install the package via Composer:
 
 ```shell script
 composer require veneliniliev/borica-3ds
 ```
+
+### Version Compatibility
+
+| Library Version | Supported Signing Schemas                       | Default Signing Schema | PHP Support      |
+|-----------------|-------------------------------------------------|------------------------|------------------|
+| ^2.0           | MAC_EXTENDED, MAC_ADVANCED, MAC_GENERAL         | MAC_GENERAL           | PHP 5.6 - 8.4    |
+| ^1.0           | MAC_EXTENDED, MAC_ADVANCED                      | MAC_ADVANCED          | PHP 5.6 - 8.4    |
+
+### Signing Schema Information
+
+- **MAC_GENERAL**: The latest schema with enhanced security (default in v2.0+)
+- **MAC_EXTENDED**: Extended schema with additional fields
+- **MAC_ADVANCED**: Advanced schema with specific field requirements
+
+You can switch between signing schemas using the following methods:
+- `setSigningSchemaMacGeneral()` - Use MAC_GENERAL schema
+- `setSigningSchemaMacExtended()` - Use MAC_EXTENDED schema
+- `setSigningSchemaMacAdvanced()` - Use MAC_ADVANCED schema
 
 For more methods, read [api documentation](API.md).
 
